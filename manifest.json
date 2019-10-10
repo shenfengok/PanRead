@@ -1,0 +1,33 @@
+{
+"name": "百度网盘媒体服务",
+"version": "0.0.1",
+"manifest_version": 2,
+"description": "百度网盘媒体服务",
+"icons": {
+"16": "images/icon16.png"
+},
+"browser_action": {
+"default_title": "百度网盘媒体服务",
+"default_icon": "images/icon16.png",
+"default_popup": "html/calc.html"
+},
+"content_scripts": [
+{
+"js": ["scripts/jquery-3.3.1.min.js","scripts/include.js"],
+"matches": [
+"http://pan.baidu.com/*",
+"https://pan.baidu.com/*"
+],
+"run_at": "document_end"
+}
+],
+"permissions": [
+"http://*/*",
+"https://*/*"
+],
+"content_security_policy": "script-src 'self'; object-src 'self'",
+
+  "web_accessible_resources": [
+    "html/flot.html"
+  ]
+}
