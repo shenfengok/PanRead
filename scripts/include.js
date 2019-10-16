@@ -17,98 +17,147 @@ jQuery.fn.fclick = function () {
 	});
 };
 
+fix_route = {}
+fix_route['zhuanlan_wj'] =['极客','geek完结','专栏-完结']
+fix_route['shipin_wj'] =['极客','geek完结','视频-完结']
+fix_route['zhuanlan_gx'] =['geek_all『极客』','geek_all『极客』','geek更新','专栏-更新']
+fix_route['shipin_gx'] =['geek_all『极客』','geek_all『极客』','geek更新','视频-更新']
 
-state = -2;
+//do ...
+go2filefactory()
+do_last_routing()
+loop_item_viewed_status()
+loop_item_listen_event()
+//do end...
+
+//status
 last = ''
 lastDownloadClick = new Date().getTime()
-route = {}
-route['zhuanlan0'] =['极客','geek完结','专栏-完结']
-route['shipin0'] =['极客','geek完结','视频-完结']
-route['zhuanlan1'] =['geek_all『极客』','geek_all『极客』','geek更新','专栏-更新']
-route['shipin1'] =['geek_all『极客』','geek_all『极客』','geek更新','视频-更新']
-if(localStorage['type'] == ''){
-	localStorage['type'] = 'zhuanlan1'
+
+// funcs
+function go2filefactory () {
+	do_job_steps(
+		function () {
+
+			if (window.location != 'https://pan.baidu.com/mbox/homepage#share/type=session' || $('li.session-list-item').length <= 1) {
+				console.log('not loading ready')
+				return false;
+			}
+			return true;
+		},
+		function () {
+			//未打开群组
+			if ($('.empty-start').length > 0) {
+				$('.user-name:contains(极客30)').parent().click();
+
+				console.log('open jike 30')
+				return true;
+			}
+			return false;
+		},
+		function () {
+			if ($('.file-factory').length > 0) {
+
+				$('.file-factory').click();
+				return true;
+			}
+			return false;
+		}
+	)
 }
 
-currentRount = route[localStorage['type']]
-function doCheckHasContent(){
-	console.log('coming' +state)
-	if(window.location !='https://pan.baidu.com/mbox/homepage#share/type=session' || $('li.session-list-item').length <=1){
-		console.log('not loading ready')
-		return;
+function do_last_routing() {
+	var last_route = get_last_route()
+	walkRoute(last_route)
+}
+
+function get_last_route() {
+	if(localStorage['last_route'] === undefined || localStorage['last_route'] === null || localStorage['last_route'] ==''){
+		localStorage['last_route'] = 'zhuanlan_gx'
 	}
-	//未打开群组
-	if($('.empty-start').length >0 && state == -2){
-		$('.user-name:contains(极客30)').parent().click();
-		state = -1;
-		console.log('open jike 30')
+	return fix_route[localStorage['last_route']]
+}
+function walkRoute(full_route){
+	function generate_route_step(currentRoute) {
+		return function () {
+			if($('.sharelist-item-title-name').find('a:contains('+currentRoute+')').length >0){
+				$('.sharelist-item-title-name').find('a:contains('+currentRoute+')').fclick();
+				return true;
+			}
+		}
 	}
-	if($('.file-factory').length > 0 && state == -1){
-
-		$('.file-factory').click();
-		state = 0;
-		console.log('open file factory' + state)
+	var jobs = []
+	for(var i=0;i<full_route.length;i++){
+		jobs.push(generate_route_step(full_route[i]))
 	}
+	do_job(jobs)
+}
 
-	walkRoute();
 
-
-	if(state > 0  ){
-
-		$('span.sharelist-item-title-name a').unbind('click').bind('click',bindEventAndShowStatus)
-
+function loop_item_viewed_status(){
+	do_job_steps(function () {
 		for (var i =0;i <$('span.sharelist-item-title-name').length;i ++ ){
 			var ti = $($('span.sharelist-item-title-name')[i]);
 			var title = ti.find('a').first().attr('title');
 			if(ti.attr('set-step') !="1"){
-				if(localStorage['his'+title]){
-					ti.append('<span>(' + localStorage['his'+title] + ')</span>')
+				if(localStorage['viewed_status'+title]){
+					ti.append('<span>(' + localStorage['viewed_status'+title] + ')</span>')
 				}
 				else {
 					ti.append('<span>(未观看)</span>')
-					localStorage['his'+title] = '未观看'
+					localStorage['viewed_status'+title] = '<span>未观看</span>'
 				}
 				ti.attr('set-step',"1");
 			}
 		}
+		return false;
+	})
+
+}
+
+function loop_item_listen_event(){
+	do_job_steps(function () {
+		$('span.sharelist-item-title-name a').unbind('click').bind('click',function () {
+			var item = $(this);
+			save_viewed_status(item)
+			download_html(item)
+			if(last != "" && isDir(last) && !isDir(item.attr('title'))){
+				save_last_viewed_item(item)
+			}
+
+		})
+		return false;
+	})
+
+}
+
+function save_viewed_status(item) {
+	var title = item.attr('title');
+	console.log(title)
+	localStorage['viewed_status'+last] = title
+	if(!isDir(title)){
+
+		localStorage['viewed_status'+title] = '已观看';
+		var el = item.siblings('span')
+		if(el != undefined && el.html()!= undefined ){
+			el.html(el.html().replace(/未观看/ig, '已观看'));
+		}
 	}
 
-
+	if(isDir(title)){
+		last = title
+	}
 }
 
-function bindEventAndShowStatus() {
-
-		var title = $(this).attr('title');
-
-		console.log(title)
-
-		localStorage['his'+last] = title
-		if(!isDir(title)){
-			if(last != ""){
-				addLog(last)
-			}
-
-			localStorage['his'+title] = '已观看';
-			var el = $(this).siblings('span')
-			if(el != undefined && el.html()!= undefined ){
-				el.html(el.html().replace(/未观看/ig, '已观看'));
-			}
-
-			if(new Date().getTime() -lastDownloadClick > 3000){
-				console.log('click down')
-				lastDownloadClick =new Date().getTime()
-				$(this).parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
-				$(this).attr("down","1")
-			}
-		}
-
-		if(isDir(title)){
-			last = title
-		}
-
-
-
+function download_html(item) {
+	if(new Date().getTime() -lastDownloadClick > 3000 && item.attr('title').search('.html') != -1){
+		console.log('click down')
+		lastDownloadClick =new Date().getTime()
+		item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
+		item.attr("down","1")
+	}
 }
+
 
 function isDir(title){
 	if(title.search(".pdf") != -1 || title.search(".mp3") != -1
@@ -120,48 +169,97 @@ function isDir(title){
 }
 
 
-
-function addLog(keyword){
-	var logs ={}
-	if (localStorage['logs']  === undefined || localStorage['logs'] =="" ) {
-
-	}else{
-		logs = JSON.parse(localStorage['logs'])
+function save_last_viewed_item(item){
+	var last_viewed_item ={}
+	// if (localStorage['last_viewed_routes']  === undefined || localStorage['last_viewed_routes'] =="" ) {
+	//
+	// }else{
+	// 	last_viewed_routes = JSON.parse(localStorage['last_viewed_routes'])
+	// }
+	last_viewed_item.title = item.attr('title')
+	last_viewed_item.fix_route = localStorage['last_route']
+	last_viewed_item.series = last;
+	// last_viewed_routes[title] = true
+	// localStorage['last_viewed_routes'] = JSON.stringify(last_viewed_routes)
+	var title_list = get_title_list(item)
+	var current = title_list.indexOf(item.attr('title'))
+	if(current > 1){
+		last_viewed_item.prev = title_list[current-1]
 	}
-	logs[keyword] = true
-	localStorage['logs'] = JSON.stringify(logs)
-	refreshTable()
+	if(current + 1 < title_list.length){
+		last_viewed_item.next = title_list[current+1]
+	}
+
+	chrome.runtime.sendMessage(last_viewed_item, function(response) {
+		console.log(response.farewell);
+	});
 }
-// t1 = window.setInterval(doCheckHasContent,1000);
-$.get(chrome.extension.getURL('/html/flot.html'), function(data) {
-	$(data).appendTo('body');
-	// Or if you're using jQuery 1.8+:
-	// $($.parseHTML(data)).appendTo('body');
 
-	refreshTable();
-});
+function get_title_list(item){
+	var title = item.attr('title')
+	var ext = getExt(title)
+	var list = $('span.sharelist-item-title-name a').map(function(){
+		return $(this).attr('title')}).get()
+	var list1 = list.filter(word => getExt(word) == ext);
+	console.log(list1)
+	return Array.from(new Set(list1)).sort();;
+}
 
-function refreshTable(){
-	$("#logsTable").empty();
+function getExt(filename)
+{
+	var idx = filename.lastIndexOf('.');
+	// handle cases like, .htaccess, filename
+	return (idx < 1) ? "" : filename.substr(idx + 1);
+}
 
-	if (localStorage['logs']  !== undefined ) {
-		var logs = JSON.parse(localStorage['logs']);
-		for(let k of Object.keys(logs) ){
-			$("#logsTable").append("<tr><td>"+k+"</td><td>" + localStorage['his'+k] +"</td></tr>")
+function goto_item(item){
+	//click 全部文件
+	$('.sharelist-history li a:contains(全部文件)').fclick()
+	//copy array
+	var item_route= [...fix_route[item.fix]]
+	item_route.push(item.series)
+	item_route.push( item.current)
+	walkRoute(item_route)
+}
+
+//events
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		if( request.goto != undefined && request.goto !='' ) {
+			var route = request.goto;
+			localStorage['last_route']  =route.fix
+			console.log(route.fix)
+			goto_item(route)
+
+		}else if( request.gotoNav != undefined && request.gotoNav !='' ) {
+			var route = request.gotoNav;
+			localStorage['last_route']  =route
+			window.location.href ='https://pan.baidu.com/mbox/homepage#share/type=session'
+			window.location.reload()
 		}
 	}
+);
 
-}
-
-function walkRoute(){
-	if(state >= 0 && state < currentRount.length &&$('.sharelist-item-title-name').find('a:contains('+currentRount[state]+')').length >0){
-		$('.sharelist-item-title-name').find('a:contains('+currentRount[state]+')').fclick();
-		state ++;
+//helper funcs
+function do_job_steps(...steps) {
+	var job = []
+	for(var i=0;i<steps.length;i++){
+		job.push(steps[i])
 	}
+	do_job(job)
 }
 
-
-window.setInterval(doCheckHasContent,1000);
-
-
+function do_job(job) {
+	var step_count = job.length;
+	var current_step = 0;
+	var t1 = window.setInterval( function () {
+		if(job[current_step]()){
+			current_step ++;
+			step_count--;
+		}
+		if(step_count == 0){
+			window.clearInterval(t1);
+		}
+	},1000);
+}
 

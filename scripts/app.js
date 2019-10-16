@@ -1,14 +1,62 @@
-function calc(){
-var money = $('#benjin').val()-0;// 本金
-var days = $('#days').val()-0;// 投资期限
-var lilv = $('#lilv1').val()-0;// 收益率
-var coupon = $('#coupon').val()-0;// 优惠券金额(元)
-var lilv2 = (money * lilv / 365 * days + coupon) / days * 365 / money;
-lilv2 = (lilv2 * 100).toFixed(2);
-$('#lilv2').val(lilv2 + "%");
+function refreshTable(){
+    $("#logsTable").empty();
+
+    if (localStorage['new_item_coming']  == '1') {
+        for(var k in localStorage) {
+            if(k.startsWith('item')){
+               var item = JSON.parse(localStorage[k])
+                var con = td(item.series) + tda(item.title,item)  + tda(item.next,item)+ tda(item.prev,item)
+
+                $("#logsTable").append(tr(con))
+            }
+        }
+    }
+
 }
-$(document).ready(function(){
-$("#benjin").html(localStorage['logs'])
-});
-});
+
+function tr(k) {
+    return "<tr>" + k + "</tr>"
+
+}
+
+function td(k){
+    return "<td>"+ k + "</td>"
+}
+
+function goto(k) {
+   var route = JSON.parse(k)
+    alert(route.fix)
+}
+
+function tda(k,item){
+    if(k == undefined || k == ''){
+        return td('无')
+    }
+    var route = {}
+    route.fix = item.fix_route
+    route.series = item.series
+    route.current = k
+    return td("<a href='#' route='"+ JSON.stringify(route) +"');'>"+ k+ "</a>")
+}
+
+
+refreshTable()
+
+$('td a').bind('click',function () {
+    var route = JSON.parse($(this).attr("route"))
+    chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
+        var activeTab = tabs[0];
+        chrome.tabs.sendMessage(activeTab.id, {"goto": route});
+    });
+})
+
+$('tr a').bind('click',function () {
+    var fix = $(this).attr("fix")
+    console.log(fix)
+    chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
+        var activeTab = tabs[0];
+        chrome.tabs.sendMessage(activeTab.id, {"gotoNav": fix});
+    });
+})
+
 

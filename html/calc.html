@@ -11,6 +11,38 @@
 优惠券金额：<input id="coupon" value="450"/><br/>
 最终收益率：<input id="lilv2" readonly="true" /><br/>
 <input id="calcBtn" type="button" value="计算" /><br/>
+
+<div  id="dg" style="z-index: 9999; position: fixed ! important; left: 0px; top: 0px;background: #FFFFFF">
+    <table border="1"  width=""100% style="position: absolute; width:260px; left: 10px; top: 200px;">
+
+        <thead>
+
+        <tr>
+            <th><a href="javascript:localStorage['type']='zhuanlan0';location.href='https://pan.baidu.com/mbox/homepage#share/type=session';location.reload()" >专栏完结</a></th>
+            <th><a href="javascript:localStorage['type']='shipin0';location.href='https://pan.baidu.com/mbox/homepage#share/type=session';location.reload()" >视频完结</a></th>
+
+            <th><a href="javascript:localStorage['type']='zhuanlan1';location.href='https://pan.baidu.com/mbox/homepage#share/type=session';location.reload()" >专栏更新</a>
+            </th>
+            <th><a href="javascript:localStorage['type']='shipin1';location.href='https://pan.baidu.com/mbox/homepage#share/type=session';location.reload()" >视频更新</a></th>
+
+
+        </tr>
+        <tr>
+            <th>视频、文章</th>
+
+            <th>观看记录</th>
+            <th>上一节</th>
+
+            <th>下一节</th>
+        </tr>
+        </thead>
+
+        <tbody id="logsTable">
+
+        </tbody>
+    </table>
+
+</div>
 <script src="../scripts/jquery-3.3.1.min.js"></script>
 <script src="../scripts/app.js"></script>
 </body>
