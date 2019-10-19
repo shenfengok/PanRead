@@ -154,6 +154,10 @@ function download_html(item) {
 		console.log('click down')
 		lastDownloadClick =new Date().getTime()
 		item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
+		var m4a = item.attr('title').replace(/\.html/,'.m4a')
+		var m4a_item = $('span.sharelist-item-title-name a:contains('+ m4a+')');
+		m4a_item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
+		//同时下载m4a或者mp3
 		item.attr("down","1")
 	}
 }
