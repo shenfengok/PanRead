@@ -171,16 +171,9 @@ function isDir(title){
 
 function save_last_viewed_item(item){
 	var last_viewed_item ={}
-	// if (localStorage['last_viewed_routes']  === undefined || localStorage['last_viewed_routes'] =="" ) {
-	//
-	// }else{
-	// 	last_viewed_routes = JSON.parse(localStorage['last_viewed_routes'])
-	// }
 	last_viewed_item.title = item.attr('title')
 	last_viewed_item.fix_route = localStorage['last_route']
 	last_viewed_item.series = last;
-	// last_viewed_routes[title] = true
-	// localStorage['last_viewed_routes'] = JSON.stringify(last_viewed_routes)
 	var title_list = get_title_list(item)
 	var current = title_list.indexOf(item.attr('title'))
 	if(current > 1){
@@ -213,29 +206,41 @@ function getExt(filename)
 }
 
 function goto_item(item){
-	//click 全部文件
-	$('.sharelist-history li a:contains(全部文件)').fclick()
-	//copy array
-	var item_route= [...fix_route[item.fix]]
-	item_route.push(item.series)
-	item_route.push( item.current)
+	var item_route = []
+	if(localStorage['last_route']  != item.fix){
+		//click 全部文件
+		localStorage['last_route']  = item.fix
+		$('.sharelist-history li a:contains(全部文件)').fclick()
+		item_route= [...fix_route[item.fix]]
+		item_route.push(item.series)
+		item_route.push(item.current)
+	} else if ($('.sharelist-item-title-name').find('a:contains('+item.series+')').length >0){
+		item_route.push(item.series)
+		item_route.push(item.current)
+	} else {
+		item_route.push(item.current)
+	}
+	
 	walkRoute(item_route)
 }
 
 //events
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
+		console.log(request);
 		if( request.goto != undefined && request.goto !='' ) {
 			var route = request.goto;
-			localStorage['last_route']  =route.fix
+		
 			console.log(route.fix)
 			goto_item(route)
 
 		}else if( request.gotoNav != undefined && request.gotoNav !='' ) {
 			var route = request.gotoNav;
-			localStorage['last_route']  =route
-			window.location.href ='https://pan.baidu.com/mbox/homepage#share/type=session'
-			window.location.reload()
+			if(localStorage['last_route']  == route){
+				localStorage['last_route']  = route
+				window.location.href ='https://pan.baidu.com/mbox/homepage#share/type=session'
+				window.location.reload();
+			}
 		}
 	}
 );

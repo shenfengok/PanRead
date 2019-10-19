@@ -5,7 +5,7 @@ function refreshTable(){
         for(var k in localStorage) {
             if(k.startsWith('item')){
                var item = JSON.parse(localStorage[k])
-                var con = td(item.series) + tda(item.title,item)  + tda(item.next,item)+ tda(item.prev,item)
+                var con = td('<span>'+item.series+'</span>') + tda(item.title,item)  + tda(item.next,item)+ tda(item.prev,item)
 
                 $("#logsTable").append(tr(con))
             }
@@ -46,17 +46,33 @@ $('td a').bind('click',function () {
     var route = JSON.parse($(this).attr("route"))
     chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
         var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, {"goto": route});
+       chrome.tabs.sendMessage(activeTab.id, {"goto": route});
     });
+})
+
+$('td span').bind('click',function () {
+    var key =$(this).text()
+    delete localStorage['item' + key]
+    refreshTable();
 })
 
 $('tr a').bind('click',function () {
     var fix = $(this).attr("fix")
-    console.log(fix)
-    chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
+    var msg = {"gotoNav": fix};
+    chrome.tabs.query({url: 'https://pan.baidu.com/*'}, function (tabs){
+       
         var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, {"gotoNav": fix});
+
+        if(activeTab == undefined){
+            chrome.tabs.create( {active: true,url: 'https://pan.baidu.com/mbox/homepage#share/type=session'}, function (tab){
+                chrome.tabs.sendMessage(tab.id,msg)
+            })
+        }else{
+            chrome.tabs.update(activeTab.id, {active: true}, function (tab){
+                chrome.tabs.sendMessage(tab.id,msg)
+            })
+        }
+        
     });
 })
-
 
