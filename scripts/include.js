@@ -30,8 +30,7 @@ loop_item_viewed_status()
 loop_item_listen_event()
 //do end...
 
-//status
-last = ''
+
 lastDownloadClick = new Date().getTime()
 
 // funcs
@@ -121,7 +120,8 @@ function loop_item_listen_event(){
 			var item = $(this);
 			save_viewed_status(item)
 			download_html(item)
-			if(last != "" && isDir(last) && !isDir(item.attr('title'))){
+			//只保存html
+			if(!is_item_dir(item) && is_html(item)){
 				save_last_viewed_item(item)
 			}
 
@@ -134,8 +134,8 @@ function loop_item_listen_event(){
 function save_viewed_status(item) {
 	var title = item.attr('title');
 	console.log(title)
-	localStorage['viewed_status'+last] = title
-	if(!isDir(title)){
+	localStorage['viewed_status'+get_parent_dir()] = title
+	if(!is_item_dir(item)){
 
 		localStorage['viewed_status'+title] = '已观看';
 		var el = item.siblings('span')
@@ -144,40 +144,53 @@ function save_viewed_status(item) {
 		}
 	}
 
-	if(isDir(title)){
-		last = title
-	}
+
 }
 
 function download_html(item) {
-	if(new Date().getTime() -lastDownloadClick > 3000 && item.attr('title').search('.html') != -1){
+	//同一个item，2秒内不能重复点击
+	if(item.attr("down") =="1" && new Date().getTime() -lastDownloadClick < 2000 ){
+		return
+	}
+
+	if( item.attr('title').search('.html') != -1 || item.attr('title').search('.m4a') != -1 || item.attr('title').search('.mp3') != -1){
 		console.log('click down')
 		lastDownloadClick =new Date().getTime()
 		item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
-		var m4a = item.attr('title').replace(/\.html/,'.m4a')
-		var m4a_item = $('span.sharelist-item-title-name a:contains('+ m4a+')');
-		m4a_item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
-		//同时下载m4a或者mp3
 		item.attr("down","1")
 	}
 }
 
 
-function isDir(title){
-	if(title.search(".pdf") != -1 || title.search(".mp3") != -1
-	|| title.search(".mp4") != -1|| title.search(".html") != -1
-	|| title.search(".m4a") != -1){
-		return false;
-	}
-	return true;
+
+function is_item_dir(item){
+	return item.attr('data-dir')=="1"
 }
+
+// function isDir(title){
+// 	if(title.search(".pdf") != -1 || title.search(".mp3") != -1
+// 	|| title.search(".mp4") != -1|| title.search(".html") != -1
+// 	|| title.search(".m4a") != -1){
+// 		return false;
+// 	}
+// 	return true;
+// }
+
+function is_html(item){
+	var title = item.attr('title')
+	if(title.search(".html") != -1){
+		return true;
+	}
+	return false;
+}
+
 
 
 function save_last_viewed_item(item){
 	var last_viewed_item ={}
 	last_viewed_item.title = item.attr('title')
 	last_viewed_item.fix_route = localStorage['last_route']
-	last_viewed_item.series = last;
+	last_viewed_item.series = get_parent_dir();
 	var title_list = get_title_list(item)
 	var current = title_list.indexOf(item.attr('title'))
 	if(current > 1){
@@ -200,6 +213,10 @@ function get_title_list(item){
 	var list1 = list.filter(word => getExt(word) == ext);
 	console.log(list1)
 	return Array.from(new Set(list1)).sort();;
+}
+
+function get_parent_dir() {
+	return $('li[node-type=sharelist-history-list] span').last().attr('title')
 }
 
 function getExt(filename)
