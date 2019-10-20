@@ -257,11 +257,8 @@ chrome.runtime.onMessage.addListener(
 
 		}else if( request.gotoNav != undefined && request.gotoNav !='' ) {
 			var route = request.gotoNav;
-			if(localStorage['last_route']  == route){
-				localStorage['last_route']  = route
-				window.location.href ='https://pan.baidu.com/mbox/homepage#share/type=session'
-				window.location.reload();
-			}
+			localStorage['last_route']  = route
+			window.location.reload();
 		}
 	}
 );
