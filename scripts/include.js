@@ -158,6 +158,14 @@ function download_html(item) {
 		lastDownloadClick =new Date().getTime()
 		item.parent().parent().siblings(".sharelist-item-funcs").find("a:contains(下载)").fclick();
 		item.attr("down","1")
+
+		if(item.attr('title').search('.html') != -1){
+			//如果是html,则点击m4a
+			var title = item.attr('title').replace(/\.html/,'.m4a');
+			window.setTimeout(function(){
+				$('span.sharelist-item-title-name a:contains('+title+')').fclick();
+			},2000)
+		}
 	}
 }
 
