@@ -18,10 +18,10 @@ jQuery.fn.fclick = function () {
 };
 
 fix_route = {}
-fix_route['zhuanlan_wj'] =['极客','geek完结','专栏-完结']
-fix_route['shipin_wj'] =['极客','geek完结','视频-完结']
-fix_route['zhuanlan_gx'] =['geek_all『极客』','geek_all『极客』','geek更新','专栏-更新']
-fix_route['shipin_gx'] =['geek_all『极客』','geek_all『极客』','geek更新','视频-更新']
+fix_route['zhuanlan_wj'] =['极客','geek_all『极客』','geek完结','专栏-完结']
+fix_route['shipin_wj'] =['极客','geek_all『极客』','geek完结','视频-完结']
+fix_route['zhuanlan_gx'] =['极客','geek_all『极客』','geek更新','专栏-更新']
+fix_route['shipin_gx'] =['极客','geek_all『极客』','geek更新','视频-更新']
 
 //do ...
 go2filefactory()
