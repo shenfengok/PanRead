@@ -291,6 +291,6 @@ function do_job(job) {
 		if(step_count == 0){
 			window.clearInterval(t1);
 		}
-	},1000);
+	},2000);
 }
 
