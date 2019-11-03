@@ -6,7 +6,7 @@ function OpenCon()
  {
     $servername = "localhost:3307";
     $username = "root";
-    $password = "ipqmtd123";
+    $password = "ppwwdd";
     $db = "pan_db";
     // Create connection
     $conn = mysqli_connect($servername, $username, $password,$db);
