@@ -11,17 +11,6 @@ echo "<a href='his.php'>历史</a>";
 include './funcs.php';
 $conn = OpenCon();
 
-$uid = 3;      
-if(isset($_COOKIE['uid'])){
-	$uid = $_COOKIE['uid'];
-    
-}else{
-	
-	setcookie("uid",$uid,time()+30*2400);
-}
-echo "用户".$uid.'登录成功';
-
-
 
 $start = get_start();
 

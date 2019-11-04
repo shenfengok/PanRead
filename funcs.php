@@ -2,6 +2,16 @@
 
 $perpage = 20;// number of elements perpage
 
+  
+if(!isset($_COOKIE['uid'])){
+   header('location:login.html',true,301);
+    exit();
+} else{
+    echo $_COOKIE['username'];
+    echo "<a href='logout.php'>注销</a>";
+}
+
+ 
 function OpenCon()
  {
     $servername = "localhost:3307";
@@ -30,6 +40,12 @@ function is_exists($conn,$sql){
     }
     return false;
 }
+
+function is_valid_user($conn,$username,$pwd){
+    $sql = "select * from user where name ='".$username."' and pwd ='".$pwd."' limit 1;"
+    return is_exists($conn,$sql);
+}
+
 
 function get_start(){
     $start = 0 ;
