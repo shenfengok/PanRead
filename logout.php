@@ -2,7 +2,7 @@
 <?php 
 	header('Content-type:text/html; charset=utf-8');
 	// 注销后的操作
-	session_start();
+	
 	// 清除Session
 	$username = $_SESSION['username'];  //用于后面的提示信息
 	$_SESSION = array();
