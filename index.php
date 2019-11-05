@@ -31,7 +31,7 @@ while($row = mysqli_fetch_array($result))
   if (mysqli_num_rows($read_rs) > 0) {//阅读记录
   		$row_rs = mysqli_fetch_array($read_rs);
 	    
-	    echo "<td width='25%'><a target=_blank href='read.php?sid=". $row_rs['subject_id']."&iid=".$row_rs['id']. "'>".$row_rs['name']."</a></td>";
+	    echo "<td width='25%'>继续阅读：<a target=_blank href='read.php?sid=". $row_rs['subject_id']."&iid=".$row_rs['id']. "'>".$row_rs['name']."</a></td>";
 	    echo "<td width='25%'>".$row_rs['update_time']."</td>";
 	}
   else{

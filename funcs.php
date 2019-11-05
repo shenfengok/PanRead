@@ -3,11 +3,12 @@
 $perpage = 20;// number of elements perpage
 
   
-if(!isset($_COOKIE['uid'])){
+if(!isset($_COOKIE['uid'])|| !isset($_COOKIE['username'])){
    header('location:login.html',true,301);
     exit();
 } else{
     echo $_COOKIE['username'];
+    $uid = $_COOKIE['uid'];
     echo "<a href='logout.php'>注销</a>";
 }
 
@@ -16,7 +17,7 @@ function OpenCon()
  {
     $servername = "localhost:3307";
     $username = "root";
-    $password = "ppwwdd";
+    $password = "ipqmtd123";
     $db = "pan_db";
     // Create connection
     $conn = mysqli_connect($servername, $username, $password,$db);
@@ -41,10 +42,10 @@ function is_exists($conn,$sql){
     return false;
 }
 
-function is_valid_user($conn,$username,$pwd){
-    $sql = "select * from user where name ='".$username."' and pwd ='".$pwd."' limit 1;"
-    return is_exists($conn,$sql);
-}
+// function is_valid_user($conn,$username,$pwd){
+//     $sql = "select * from user where name ='".$username."' and pwd ='".$pwd."' limit 1;"
+//     return is_exists($conn,$sql);
+// }
 
 
 function get_start(){
