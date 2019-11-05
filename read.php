@@ -50,7 +50,7 @@ if($row1 = mysqli_fetch_array($result1)){
 	$html = $path.".html";
 	$audio = $path.$row1['audio'];
 }
-echo "<audio controls preload='none' style='width:480px;'>" ;
+echo "<audio controls autoplay loop style='width:480px;'>" ;
 
 echo "<source src='".$audio."' type='audio/mp4' /></audio><br>" ;
 echo "<div style='height:100%;width:100%'><iframe style='float:left' src='".$html."' width='75%' height='100%'> </iframe><div style='float:right;width:20%'>" ;
