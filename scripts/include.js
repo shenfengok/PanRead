@@ -121,7 +121,7 @@ function loop_item_listen_event(){
 			save_viewed_status(item)
 			download_html(item)
 			//只保存html
-			if(!is_item_dir(item) && is_html(item)){
+			if(!is_item_dir(item) && (is_html(item) || is_mp4(item))){
 				save_last_viewed_item(item)
 			}
 
@@ -187,6 +187,14 @@ function is_item_dir(item){
 function is_html(item){
 	var title = item.attr('title')
 	if(title.search(".html") != -1){
+		return true;
+	}
+	return false;
+}
+
+function is_mp4(item){
+	var title = item.attr('title')
+	if(title.search(".mp4") != -1){
 		return true;
 	}
 	return false;
