@@ -13,7 +13,7 @@ $conn = OpenCon();
 
 
 $start = get_start();
-$read_sql = "select i.id,i.name,i.subject_id,r.update_time from (select * from t_read rr where rr.uid=".$uid." order by rr.update_time LIMIT ".$start.", ".$perpage.") r   inner join   t_item i  on i.id = r.iid;";
+$read_sql = "select i.id,i.name,i.subject_id,r.update_time from (select * from t_read rr where rr.uid=".$uid." order by rr.update_time desc LIMIT ".$start.", ".$perpage.") r   inner join   t_item i  on i.id = r.iid;";
 
 
 

@@ -15,7 +15,7 @@ $conn = OpenCon();
 $start = get_start();
 
 
-$result = mysqli_query($conn,"select * from t_subject LIMIT ".$start.", ".$perpage.";");
+$result = mysqli_query($conn,"select * from t_subject order by name asc LIMIT ".$start.", ".$perpage.";");
 
 echo "<table>";
 while($row = mysqli_fetch_array($result))

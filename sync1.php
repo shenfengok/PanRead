@@ -6,7 +6,7 @@ error_reporting(-1);                    //打印出所有的 错误信息
 print "hello";
 
 
-include './db_conn.php';
+include './funcs.php';
 $conn = OpenCon();
        
 
@@ -19,7 +19,7 @@ for ($i= 0;$i< count($dirs); $i++){
 	$key = $dirs[$i];
 	$qql = "select * from t_subject where name ='".$key."';";
 	
-	$sql = "INSERT INTO t_subject (name) VALUES ('".$key."');";
+	$sql = "INSERT INTO t_subject (name,updating) VALUES ('".$key."',1);";
 	//先查询是否存在
 	if (!is_exists($conn,$qql)) {
 		//不存在则插入
@@ -34,7 +34,7 @@ for ($i= 0;$i< count($dirs); $i++){
 	}
 	echo "<br>";
 	//插入item
-	read_item($key,$conn);
+	read_item('zhuanlan-gengxin/专栏-更新',$key,$conn);
 }
  
 

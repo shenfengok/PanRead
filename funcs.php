@@ -1,6 +1,6 @@
 <?php
 
-$perpage = 20;// number of elements perpage
+$perpage = 30;// number of elements perpage
 
   
 if(!isset($_COOKIE['uid'])|| !isset($_COOKIE['username'])){
@@ -93,9 +93,9 @@ function endWith($haystack, $needle) {
 }
 
 
-function read_item($key,$conn){
-    echo 'read sub path '.'zhanlan-wanjie/'.$key.'<br>';
-    $items = read_path_item('zhanlan-wanjie/'.$key,true);
+function read_item($path,$key,$conn){
+    echo 'read sub path '.$path.'/'.$key.'<br>';
+    $items = read_path_item($path.'/'.$key,true);
     // print_r($items);
     for ($ii= 0;$ii< count($items); $ii++){
         if(endWith($items[$ii],'.html')){
@@ -121,6 +121,15 @@ function read_item($key,$conn){
     }
 }
 
+
+function read_file($file_path){
+    if(file_exists($file_path)){
+        $fp = fopen($file_path,"r");
+        $str = fread($fp,filesize($file_path));//指定读取大小，这里把整个文件内容读取出来
+        return $str;
+    }
+    return "not exist";
+}
 
        
 ?>

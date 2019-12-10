@@ -34,7 +34,7 @@ for ($i= 0;$i< count($dirs); $i++){
 	}
 	echo "<br>";
 	//插入item
-	read_item($key,$conn);
+	read_item('zhanlan-wanjie',$key,$conn);
 }
  
 
