@@ -76,3 +76,22 @@ $('tr a').bind('click',function () {
     });
 })
 
+$('tr button').bind('click',function () {
+    
+    var msg = {"caiji": '1'};
+    chrome.tabs.query({url: 'https://pan.baidu.com/*'}, function (tabs){
+       
+        var activeTab = tabs[0];
+
+        if(activeTab == undefined){
+            chrome.tabs.create( {active: true,url: 'https://pan.baidu.com/mbox/homepage#share/type=session'}, function (tab){
+                chrome.tabs.sendMessage(tab.id,msg)
+            })
+        }else{
+            chrome.tabs.update(activeTab.id, {active: true}, function (tab){
+                chrome.tabs.sendMessage(tab.id,msg)
+            })
+        }
+        
+    });
+})
