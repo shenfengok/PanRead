@@ -21,7 +21,7 @@ fix_route = {}
 
 
 fix_route['zhuanlan_wj'] =['00-资源文件','14-极客时间','01-专栏课','专栏-完结']
-// fix_route['shipin_wj'] =['00-资源文件','>14-极客时间','geek完结','视频-完结']
+fix_route['shipin_wj'] =['00-资源文件','14-极客时间','02-视频课']
 fix_route['zhuanlan_gx'] =['00-资源文件','14-极客时间','00-更新中的专栏','专栏-更新']
 fix_route['shipin_gx'] =['00-资源文件','14-极客时间','02-视频课']
 
@@ -51,7 +51,7 @@ function go2filefactory () {
 			if ($('.empty-start').length > 0) {
 				$('.user-name:contains(（禁言）大学堂15)').parent().click();
 
-				console.log('open jike 30')
+				console.log('open jike shijian')
 				return true;
 			}
 			return false;
@@ -74,7 +74,7 @@ function do_last_routing() {
 
 function get_last_route() {
 	if(localStorage['last_route'] === undefined || localStorage['last_route'] === null || localStorage['last_route'] ==''){
-		localStorage['last_route'] = 'zhuanlan_gx'
+		localStorage['last_route'] = 'zhuanlan_wj'
 	}
 	return fix_route[localStorage['last_route']]
 }
@@ -283,42 +283,67 @@ chrome.runtime.onMessage.addListener(
 			localStorage['last_route']  = route
 			window.location.reload();
 		}else if( request.caiji != undefined && request.caiji !='' ) {
-			window.caijing = 1;
+			// window.caijing = 1;
 			
-			let caiji_list = $('.sharelist-container ul li');
-			let big_data = {};
+			window.big_data = {};
+			window.stack =[];
 
-			for(let i =0;i <caiji_list.length; i ++){
-				let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
-				if(undefined !== alink.attr('title')){
-					big_data[alink.attr('title')] = {};
-				}
-			}
-			let caiji_list_back = $('ul.sharelist-history li[node-type=sharelist-history-list]').find('span').last().attr('title');
-			for(let a in big_data){
-				gotback(caiji_list_back);
-				goto_inner(a);
 
-				let inner_list = $('.sharelist-container ul li');
-				for(let i =0;i < inner_list.length; i ++){
-					let alink = $(inner_list[i]).find('span.sharelist-item-title-name a');
-					if(undefined !== alink.attr('title')){
-						big_data[a][alink.attr('title')]= {};
-					}
-				}
-			}
+			console.log("caijiing...");
+			caiji_obj(big_data);
+
+			while(window.stack1.length!=0){
+		        let item=window.stack.pop();//正在访问的节点
+		        //todo push "goback"
+		          	
+		    }
 			console.log(big_data);
 			
 		}
 	}
 );
 
-function goto_inner(title){
-
+function caiji_obj(){
+	let obj = windwo.big_data；
+	let sele = '.sharelist-container ul li';
+	let caiji_list = $(sele);
+	for(let i =0;i < caiji_list.length; i ++){
+		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
+		if(undefined !== alink.attr('title')){
+			obj[alink.attr('title')] = [];
+			window.stack.push(alink.attr('title'));
+		}
+	}
 }
 
-function goback(back_title){
 
+function caiji_obj1(obj){
+	let sele = '.sharelist-container ul li';
+	let caiji_list =  $(sele);
+	for(let i =0;i < caiji_list.length; i ++){
+		caiji_list = $(sele);
+		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
+		if(undefined !== alink.attr('title')){
+			obj[alink.attr('title')] = {};
+
+			if(is_item_dir(alink)){
+				 inner_obj(obj[alink.attr('title')]);
+			}else{//数据节点处理
+				obj[alink.attr('title')]['audio'] ='xx.mp3'
+			}
+			goback();
+		}
+	}
+}
+
+
+
+function sleep(d){
+	for(var t = Date.now();Date.now() - t <= d;);
+}
+
+function goback(){
+	$('a:contains(返回上一级)').click();
 }
 
 //helper funcs
