@@ -263,8 +263,7 @@ function goto_item(item){
 	walkRoute(item_route)
 }
 
-window.caijing = 0;
-window.caijing_index = 0;
+
 //events
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -288,53 +287,115 @@ chrome.runtime.onMessage.addListener(
 			window.big_data = {};
 			window.stack =[];
 
+			window.consuming = false;
+			window.caijiing = true;
+
 
 			console.log("caijiing...");
-			caiji_obj(big_data);
 
-			while(window.stack1.length!=0){
-		        let item=window.stack.pop();//正在访问的节点
-		        //todo push "goback"
-		          	
-		    }
-			console.log(big_data);
+			window.producer_consumer = window.setInterval(function(){
+				if(window.consuming){
+					return;
+				}
+				window.consuming = true;
+
+				//平面采集---状态转换成普通
+				if(window.caijiing){
+					window.big_data[window.stack_parent] =[];
+					let caiji = '.sharelist-container ul li';
+					if($(caiji).length >0){
+						let aset = $(caiji + ' span.sharelist-item-title-name a');
+						for(let i = 0; i < aset.length; i ++){
+							let ali = $(aset[i]);
+
+							let to_caiji_item = {};
+							to_caiji_item['title'] = ali.attr('title');
+							to_caiji_item['parent'] = 'todo';
+							if(is_item_dir(ali)){
+								window.stack.push(ali.attr('title'));
+							}
+							window.big_data[window.stack_parent].push(ali.attr('title'));
+						}
+
+						window.caijiing = false;
+
+					}
+					window.consuming = false;
+					return;//处理完就返回
+				}
+
+				//---------消费分割线--------------------------
+				if(window.stack.length <=0 ){
+					console.log(window.big_data);
+					window.consuming = false;
+					window.clearInterval(window.producer_consumer);
+					return;//处理完就返回
+				}
+
+				let title=window.stack.pop();//正在访问的节点
+
+				//需要返回
+				if(title === 'goback'){
+					let par = $(".sharelist-history span[title='"+window.stack_parent+"']").prev().prev().attr('title');
+					$(".sharelist-history span[title='"+window.stack_parent+"']").prev().prev().fclick();
+					window.stack_parent = par;
+					window.consuming = false;
+					return;//处理完就返回
+				}
+
+				
+				//深入采集----转换到caijiing状态
+				 
+		        let item = $($('a:contains('+title+')')[0]);
+		        if(is_item_dir(item)){
+		        	item.fclick();
+		        	window.stack.push('goback');
+		        	window.stack_parent =  title;
+		        	window.caijiing = true;
+		        }
+		        window.consuming = false;
+
+			},200 );
+
+		
+			
 			
 		}
 	}
 );
 
-function caiji_obj(){
-	let obj = windwo.big_data；
-	let sele = '.sharelist-container ul li';
-	let caiji_list = $(sele);
-	for(let i =0;i < caiji_list.length; i ++){
-		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
-		if(undefined !== alink.attr('title')){
-			obj[alink.attr('title')] = [];
-			window.stack.push(alink.attr('title'));
-		}
-	}
-}
+// function caiji_obj(){
+// 	let obj = windwo.big_data；
+// 	let sele = '.sharelist-container ul li';
+// 	let caiji_list = $(sele);
+// 	for(let i =0;i < caiji_list.length; i ++){
+// 		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
+// 		if(undefined !== alink.attr('title')){
+// 			obj[alink.attr('title')] = [];
+// 			window.stack.push(alink.attr('title'));
+// 		}
+// 	}
+// }
 
 
-function caiji_obj1(obj){
-	let sele = '.sharelist-container ul li';
-	let caiji_list =  $(sele);
-	for(let i =0;i < caiji_list.length; i ++){
-		caiji_list = $(sele);
-		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
-		if(undefined !== alink.attr('title')){
-			obj[alink.attr('title')] = {};
+// function caiji_obj1(obj){
+// 	let sele = '.sharelist-container ul li';
+// 	let caiji_list =  $(sele);
+// 	for(let i =0;i < caiji_list.length; i ++){
+// 		caiji_list = $(sele);
+// 		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
+// 		if(undefined !== alink.attr('title')){
+// 			obj[alink.attr('title')] = {};
 
-			if(is_item_dir(alink)){
-				 inner_obj(obj[alink.attr('title')]);
-			}else{//数据节点处理
-				obj[alink.attr('title')]['audio'] ='xx.mp3'
-			}
-			goback();
-		}
-	}
-}
+// 			if(is_item_dir(alink)){
+// 				 inner_obj(obj[alink.attr('title')]);
+// 			}else{//数据节点处理
+// 				obj[alink.attr('title')]['audio'] ='xx.mp3'
+// 			}
+// 			goback();
+// 		}
+// 	}
+// }
 
 
 
