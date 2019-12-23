@@ -375,6 +375,7 @@ chrome.runtime.onMessage.addListener(
 					//需要返回
 					if(window.poping_item.title === 'goback'){
 						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
+						// $("div.sharelist-item-title > span > a")
 						// $("ul.sharelist-history > li:nth-child(2) > a:contains("+window.poping_item.parent+")").fclick();
 						window.route.pop();
 						window.poping = false;
@@ -388,6 +389,12 @@ chrome.runtime.onMessage.addListener(
 					let folder = $('a:contains('+window.poping_item.title+')');
 					if(folder.length <=0){
 						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
+							if($("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").length > 0){
+							$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
+						}else{
+							$("div.sharelist-item-title > span > a:contains('" +window.poping_item.parent+"')" ).fclick();
+						}
+						
 						window.consuming = false;
 						return;
 					}
@@ -418,7 +425,7 @@ chrome.runtime.onMessage.addListener(
 				}
 
 				
-			},500 );
+			},1000 );
 			
 		}
 	}
