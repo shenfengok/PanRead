@@ -287,6 +287,8 @@ chrome.runtime.onMessage.addListener(
 			window.big_data = {};
 			window.stack =[];
 			window.start = get_current_parent();
+			window.starting = true;
+			window.current_special = {};
 
 			window.consuming = false;
 			window.caijiing = true;
@@ -296,6 +298,7 @@ chrome.runtime.onMessage.addListener(
 			window.poping_item = {};
 			window.route = [];
 			window.waiting_count= 0;
+
 
 
 			console.log("caijiing...");
@@ -327,20 +330,37 @@ chrome.runtime.onMessage.addListener(
 						for(let j = 0;j < window.route.length; j++){
 							x = x[window.route[j]];
 						}
+
+						let parent_cur = get_current_parent();
+
+						//先去重
+						let aset_distinct = new Set();
+					 
+
 						for(let i = 0; i < aset.length; i ++){
 							let ali = $(aset[i]);
-
+							//先去重
+							if(aset_distinct.has(ali.attr('title'))){
+								continue;
+							}else{
+								aset_distinct.add(ali.attr('title'));
+							}
+							
 							let to_caiji_item = {};
 							to_caiji_item['title'] = ali.attr('title');
-							to_caiji_item['parent'] = get_current_parent();
+							to_caiji_item['parent'] = parent_cur;
 							x[ali.attr('title')] = {};
+							if(window.starting){
+								to_caiji_item.is_speclial =true;
+							}
+
 							if(is_item_dir(ali)){
 								window.stack.push(to_caiji_item);
 							}else{
 								x[ali.attr('title')]['audio'] ='mp3';
 							}
 						}
-
+						window.starting = false;
 						window.caijiing = false;
 
 					}else if($('div.sharelist-container > div:contains(文件列表为空)').length > 0){
@@ -366,7 +386,12 @@ chrome.runtime.onMessage.addListener(
 
 					if(!window.poping){
 						window.poping_item =window.stack.pop();//正在访问的节点
+						if(window.poping_item.is_speclial){
 
+							Object.assign(window.current_special,window.poping_item);
+							console.log("current special " + window.current_special.title)
+
+						}
 						console.log("pop out" + window.poping_item.title);
 						window.poping = true;
 					}
