@@ -267,7 +267,7 @@ function goto_item(item){
 //events
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-		if(window.caijing === 1){
+		if(window.consuming){
 			return;
 		}
 		console.log(request);
@@ -286,9 +286,16 @@ chrome.runtime.onMessage.addListener(
 			
 			window.big_data = {};
 			window.stack =[];
+			window.start = get_current_parent();
 
 			window.consuming = false;
 			window.caijiing = true;
+			window.caijiing_parent = get_current_parent();
+
+			window.poping = false;
+			window.poping_item = {};
+			window.route = [];
+			window.waiting_count= 0;
 
 
 			console.log("caijiing...");
@@ -301,68 +308,125 @@ chrome.runtime.onMessage.addListener(
 
 				//平面采集---状态转换成普通
 				if(window.caijiing){
-					window.big_data[window.stack_parent] =[];
+
+					//fix 修复无法采集非当前parent
+					if(get_current_parent() !== window.caijiing_parent){
+						// $("div.sharelist-item-name > div.sharelist-item-title > span > a:contains('"+ window.caijiing_parent+"')").click();
+						// console.log("fix"+ window.caijiing_parent);
+						console.log("waiting " + window.caijiing_parent);
+						consuming = false;
+						return;
+					}
+					console.log ("采集"+ window.caijiing_parent + "...");
+					// window.big_data[window.stack_parent] =[];
 					let caiji = '.sharelist-container ul li';
 					if($(caiji).length >0){
 						let aset = $(caiji + ' span.sharelist-item-title-name a');
+						//找到当前对象
+						let x = big_data;
+						for(let j = 0;j < window.route.length; j++){
+							x = x[window.route[j]];
+						}
 						for(let i = 0; i < aset.length; i ++){
 							let ali = $(aset[i]);
 
 							let to_caiji_item = {};
 							to_caiji_item['title'] = ali.attr('title');
-							to_caiji_item['parent'] = 'todo';
+							to_caiji_item['parent'] = get_current_parent();
+							x[ali.attr('title')] = {};
 							if(is_item_dir(ali)){
-								window.stack.push(ali.attr('title'));
+								window.stack.push(to_caiji_item);
+							}else{
+								x[ali.attr('title')]['audio'] ='mp3';
 							}
-							window.big_data[window.stack_parent].push(ali.attr('title'));
 						}
 
 						window.caijiing = false;
 
+					}else if($('div.sharelist-container > div:contains(文件列表为空)').length > 0){
+						window.caijiing = false;
 					}
 					window.consuming = false;
 					return;//处理完就返回
-				}
+				}else{
+					// if(window.poping){
+					// 	consuming = false;
+					// 	return;
+					// }
+					
+					//---------消费分割线--------------------------
+					if(window.stack.length <=0 && !window.poping ){
+						console.log(window.big_data);
+						window.consuming = false;
+						window.clearInterval(window.producer_consumer);
+						return;//处理完就返回
+					}
+					
+					
 
-				//---------消费分割线--------------------------
-				if(window.stack.length <=0 ){
-					console.log(window.big_data);
-					window.consuming = false;
-					window.clearInterval(window.producer_consumer);
-					return;//处理完就返回
-				}
+					if(!window.poping){
+						window.poping_item =window.stack.pop();//正在访问的节点
 
-				let title=window.stack.pop();//正在访问的节点
+						console.log("pop out" + window.poping_item.title);
+						window.poping = true;
+					}
+					
 
-				//需要返回
-				if(title === 'goback'){
-					let par = $(".sharelist-history span[title='"+window.stack_parent+"']").prev().prev().attr('title');
-					$(".sharelist-history span[title='"+window.stack_parent+"']").prev().prev().fclick();
-					window.stack_parent = par;
-					window.consuming = false;
-					return;//处理完就返回
+					//需要返回
+					if(window.poping_item.title === 'goback'){
+						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
+						// $("ul.sharelist-history > li:nth-child(2) > a:contains("+window.poping_item.parent+")").fclick();
+						window.route.pop();
+						window.poping = false;
+						window.consuming = false;
+						return;//处理完就返回
+					}
+
+					
+					//深入采集----转换到caijiing状态
+
+					let folder = $('a:contains('+window.poping_item.title+')');
+					if(folder.length <=0){
+						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
+						window.consuming = false;
+						return;
+					}
+					 
+			        let item = $(folder[0]);
+			        if(is_item_dir(item)){
+			        	let to_caiji_item1 = {};
+			        	to_caiji_item1['title'] = 'goback';
+						to_caiji_item1['parent'] = get_current_parent();
+						window.stack.push(to_caiji_item1);
+						console.log("click " + item.attr('title'));
+			        	item.fclick();
+			        	window.route.push(item.attr('title'));
+			        	window.caijiing_parent = item.attr('title');
+			        	window.caijiing = true;
+			        	window.poping = false;
+			        }else{
+			        	window.waiting_count ++ ;
+			        	console.log("waiting "+ window.poping_item.title + "...");
+
+			        	if(window.waiting_count > 10){
+			        		// try to fix 
+
+			        	}
+			        }
+			        window.consuming = false;
+
 				}
 
 				
-				//深入采集----转换到caijiing状态
-				 
-		        let item = $($('a:contains('+title+')')[0]);
-		        if(is_item_dir(item)){
-		        	item.fclick();
-		        	window.stack.push('goback');
-		        	window.stack_parent =  title;
-		        	window.caijiing = true;
-		        }
-		        window.consuming = false;
-
-			},200 );
-
-		
-			
+			},500 );
 			
 		}
 	}
 );
+
+function get_current_parent(){
+	return $('ul.sharelist-history > li:nth-child(2) > span').last().attr('title');
+}
 
 // function caiji_obj(){
 // 	let obj = windwo.big_data；
