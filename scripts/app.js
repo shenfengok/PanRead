@@ -77,8 +77,10 @@ $('tr a').bind('click',function () {
 })
 
 $('tr button').bind('click',function () {
+
+    var caiji = $(this).attr("caiji")
     
-    var msg = {"caiji": '1'};
+    var msg = {"caiji":  caiji};
     chrome.tabs.query({url: 'https://pan.baidu.com/*'}, function (tabs){
        
         var activeTab = tabs[0];

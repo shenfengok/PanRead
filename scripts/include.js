@@ -17,6 +17,12 @@ jQuery.fn.fclick = function () {
 	});
 };
 
+jQuery.fn.fhover = function () {
+	$(this).each( function() {
+		fireEvent(this, "mouseover");
+	});
+};
+
 fix_route = {}
 
 
@@ -282,7 +288,10 @@ chrome.runtime.onMessage.addListener(
 			localStorage['last_route']  = route
 			window.location.reload();
 		}else if( request.caiji != undefined && request.caiji !='' ) {
-			// window.caijing = 1;
+			window.caiji_sp = true;
+			if(request.caiji ==="1"){
+				window.caiji_sp = false;
+			}
 			
 			window.big_data = {};
 			window.stack =[];
@@ -299,6 +308,7 @@ chrome.runtime.onMessage.addListener(
 			window.route = [];
 			window.waiting_count= 0;
 
+			window.syncing = false;
 
 
 			console.log("caijiing...");
@@ -357,6 +367,7 @@ chrome.runtime.onMessage.addListener(
 							if(is_item_dir(ali)){
 								window.stack.push(to_caiji_item);
 							}else{
+								//todo ajaxGetDlinkShare      getDlinkMbox          u.prototype.directDownload
 								x[ali.attr('title')]['audio'] ='mp3';
 							}
 						}
