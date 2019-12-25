@@ -310,6 +310,8 @@ chrome.runtime.onMessage.addListener(
 
 			window.syncing = false;
 
+			window.syncing_folder = true;
+
 
 			console.log("caijiing...");
 
@@ -318,6 +320,18 @@ chrome.runtime.onMessage.addListener(
 					return;
 				}
 				window.consuming = true;
+
+				if(window.syncing_folder){
+					var list = $('span.sharelist-item-title-name a').map(function(){
+						return $(this).attr('title')}).get();
+					$('ul > li:nth-child(1) > div.sharelist-item-name > div.sharelist-item-funcs > a.sharelist-func-transfer.global-icon-transfer').fclick();
+					window.setInterval(function checkfolder() {
+						// body...
+					},200)
+					window.consuming = false;
+					return;
+				}
+
 
 				//平面采集---状态转换成普通
 				if(window.caijiing){
@@ -355,6 +369,8 @@ chrome.runtime.onMessage.addListener(
 							}else{
 								aset_distinct.add(ali.attr('title'));
 							}
+
+
 							
 							let to_caiji_item = {};
 							to_caiji_item['title'] = ali.attr('title');
