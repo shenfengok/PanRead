@@ -1,6 +1,4 @@
-// https://pan.baidu.com/mbox/msg/transfer?bdstoken=336e45b3f37b61eaa4de44b16751164c&channel=chunlei&web=1&app_id=250528clienttype=0
 
-// overwrite
 
 
 fireEvent= function  (element, event) {
@@ -100,7 +98,11 @@ window.big_data = {};
 						window.stack.push(to_caiji_item);
 					}else{
 						//todo ajaxGetDlinkShare      getDlinkMbox          u.prototype.directDownload
-						x[ali.attr('title')]['audio'] ='mp3';
+						x[ali.attr('title')]['fid'] = ali.parent().parent().parent().parent().attr('data-fid');
+
+						if(is_resource(ali.attr('title'))){
+							sync_item(window.current_special.title,x[ali.attr('title')]['fid']);
+						}
 					}
 				}
 				window.starting = false;
@@ -190,6 +192,43 @@ window.big_data = {};
 },1000 );
 	
 console.log("done");
+
+function sync_item(folder,fid) {
+	    $.ajax({
+        type :  "POST",
+        contentType: "application/json; charset=UTF-8",
+        url : "https://pan.baidu.com/mbox/msg/transfer?bdstoken=6d30583a50d01666122ed84721517d77&channel=chunlei&web=1&app_id=250528&logid=MTU3NzM2NDYwMDg4ODAuOTYyMzEwMDE4MjA2ODI5Mg==&clienttype=0",
+        data : {
+            from_uk: "228435709",
+            msg_id: "471981340980807638",
+            path: "/apps/Cloud Sync/zhuanlan-all/" + folder,
+            ondup: "overwrite",
+            async: "1",
+            type: "2",
+            gid: "658103785633267975",
+            fs_ids: "["+fid+"]"
+        },
+        success : function(rs) {
+            result = rs;
+            console.log(folder +"-"+ fid)
+            console.log(rs);
+        },
+        error : function(e){
+
+            console.log(e.status);
+            console.log(e.responseText);
+        }
+    });
+}
+
+function is_resource(name){
+	if(name.endsWith(".m4a") || name.endsWith(".mp3") || name.endsWith(".html")){
+		return true;
+	}
+	return false;
+}
+
+
 function create_folder(name){
     var url_create ='https://pan.baidu.com/api/create?a=commit&channel=chunlei&web=1&app_id=250528&bdstoken='+bdstoken+'&clienttype=0';
     var create_data = {
@@ -234,3 +273,10 @@ function http_call(url,datas,isget){
 
 
 
+function get_current_parent(){
+	return $('ul.sharelist-history > li:nth-child(2) > span').last().attr('title');
+}
+
+function is_item_dir(item){
+	return item.attr('data-dir')=="1"
+}
