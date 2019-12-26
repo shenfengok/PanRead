@@ -6,11 +6,11 @@
             from_uk: "228435709",
             msg_id: "471981340980807638",
             path: "/apps/Cloud Sync/zhuanlan-all/test",
-            ondup: "newcopy",
+            ondup: "overwrite",
             async: "1",
             type: "2",
             gid: "658103785633267975",
-            fs_ids: "[594453964689878]"
+            fs_ids: "[180093740597068]"
         },
         success : function(rs) {
             result = rs;
