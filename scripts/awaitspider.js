@@ -53,42 +53,50 @@ function get_share_list_url(fsid){
 }
 
 async function sync_folder(folder,route){
+  var url_create ='https://pan.baidu.com/api/create?a=commit&channel=chunlei&web=1&app_id=250528&bdstoken='+bdstoken+'&clienttype=0';
+    var create_data = {
+        path: "/apps/Cloud Sync/zhuanlan-all/" + name,
+        isdir: 1,
+        block_list: [],
+        ondup:"overwrite"
+    }
+    await http_call(url_create,create_data,false);
+}
+
+async function sync_file(sc){
 
 }
 
-
-var folder_stack = [];
-
-//{
-//  "folder1" :{ fetched: true}
-//  "folder2" :{exist:true,fetched: false}
-//}
-var big_folder = {};
-var walking_route = [];
-
-var big_data = {};
 
 async function caiji(){
-  big_folder = await fetch_pan_list();
-  var un_fin = await fetch_share_list("294603226355310");
-  var fin = await fetch_share_list("1039355554886088");
+ 
+  await handle_folder("294603226355310","\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/01-\u4e13\u680f\u8bfe");//unfin  
+  await handle_folder("1039355554886088","\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/00-\u66f4\u65b0\u4e2d\u7684\u4e13\u680f");//fin 
+}
 
-  var list_all = un_fin.concat(fin);
+async function handle_folder(fsid,folder_name){
+
+  console.log("handling..." + folder_name);
+  var list = await fetch_share_list(fsid);
+  var name = share_folder_2_pan_folder(folder_name);
+  var old_list = await fetch_pan_list(name);
+
   for(var sc in list_all){
     if(sc.isdir === 1){
-      folder_stack.push(sc);
-      await sync_folder(sc.server_filename);
-    }
-  }
-
-  while(folder_stack.length > 0){
-    var item = folder_stack.pop();
-    if(sc.isdir === 1){
-      folder_stack.push(sc);
-      await sync_folder(sc.server_filename);
+      //不包含，sync
+      if(old_list.indexOf(sc.server_filename) < 0 ){
+         await sync_folder(sc.server_filename);
+      }
+     
+      await handle_folder(fs_id);
+    }else{
+      await sync_file(sc);
     }
   }
 }
-
+function share_folder_2_pan_folder(name){
+  return name.replace("\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/01-\u4e13\u680f\u8bfe","").
+  replace("\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/00-\u66f4\u65b0\u4e2d\u7684\u4e13\u680f","");
+}
 
 caiji();

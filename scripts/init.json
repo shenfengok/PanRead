@@ -1,0 +1,40 @@
+{
+	"errno": 0,
+	"request_id": 8359888665045914224,
+	"records": [{
+		"category": 6,
+		"fs_id": 1122360866268928,
+		"isdir": 1,
+		"local_ctime": 1560706582,
+		"local_mtime": 1560706582,
+		"path": "\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/02-\u89c6\u9891\u8bfe",
+		"server_ctime": 1560706582,
+		"server_filename": "02-\u89c6\u9891\u8bfe",
+		"server_mtime": 1565477466,
+		"size": 0
+	}, {
+		"category": 6,
+		"fs_id": 294603226355310,
+		"isdir": 1,
+		"local_ctime": 1567182672,
+		"local_mtime": 1567182672,
+		"path": "\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/01-\u4e13\u680f\u8bfe",
+		"server_ctime": 1567182672,
+		"server_filename": "01-\u4e13\u680f\u8bfe",
+		"server_mtime": 1569582411,
+		"size": 0
+	}, {
+		"category": 6,
+		"fs_id": 1039355554886088,
+		"isdir": 1,
+		"local_ctime": 1567182245,
+		"local_mtime": 1567182245,
+		"path": "\/00-\u8d44\u6e90\u6587\u4ef6\/14-\u6781\u5ba2\u65f6\u95f4\/00-\u66f4\u65b0\u4e2d\u7684\u4e13\u680f",
+		"server_ctime": 1567182245,
+		"server_filename": "00-\u66f4\u65b0\u4e2d\u7684\u4e13\u680f",
+		"server_mtime": 1569979665,
+		"size": 0
+	}],
+	"timestamp": 1577415012,
+	"has_more": 0
+}
