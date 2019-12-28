@@ -19,7 +19,7 @@ function http_call(url,datas,isget,strict) {
         
       },
       error: function (e ) {
-        resolve(result);
+        resolve(e);
         console.log(e);
         if(strict){
           resolve(500);
@@ -72,23 +72,84 @@ var sleep = async (duration) => {
     });
 };
 
-async function guarantee_renew(fid,name){
-   while(true ){
-    var del_res = await del_folder(name);
-    if(del_res === 12 ||del_res === 0) {
-      break;
-    }
-    console.log("delete..." + name);
-    sleep(200);
-   }
-   while(true ){
+async function guarantee_renew(fid,name,only_create,redo){
+  var count = 0;
+  if(!only_create){
+     while(true){
+      var del_res = await del_folder(name);
+      if((del_res === 12 && !redo) ||del_res === 0) {
+        break;
+      }
+      console.log("delete..." + name);
+      await sleep(1000);
+     }
+  }
+  
+   while(true){
+    count ++;
     var sync_result = await sync_folder_overwrite(fid,name);
-     if(sync_result === 0  || sync_result === 2148 || sync_result === 12){
+    if(sync_result === 0  || sync_result === 2148 || sync_result === 12){
+      return sync_result;
+    }
+    if(count > 20){
+        console.log("redoing")
+      await guarantee_renew(fid,name,only_create,true);
       break;
     }
     console.log("create..." + name);
-    sleep(200);
+    await sleep(1000);
    }
+}
+
+window.list_all = [];
+
+
+
+async function sync_list(list){
+     for(var s = 0; s < list.length; s++){
+        var sc = list[s];
+        console.log(sc.server_filename);
+        await guarantee_renew(sc.fs_id,sc.server_filename);
+      }
+}
+
+
+async function fetch_pan_list() {
+    var list_data = {};
+    var result = await http_call(get_pan_list_url(),list_data,true);
+    var result_obj = {};
+
+    for(var i = 0;i < result.list.length;i ++){
+        result_obj[result.list[i].server_filename] = {exist:true};
+    }
+    return result_obj;
+}
+
+
+function get_pan_list_url(folder){
+  var dir = "%2Fapps%2FCloud+Sync%2Fzhuanlan-all";
+  if(folder){
+    dir = "%2Fapps%2FCloud+Sync%2Fzhuanlan-all%2F"+ encodeURI(folder);
+  }
+  return "https://pan.baidu.com/api/list?order=time&desc=1&showempty=0&web=1&page=1&num=300&dir="+dir+"&t=0.571569333030987&channel=chunlei&web=1&app_id=250528&bdstoken="
+  + token+"&clienttype=0";
+}
+
+async function buchong(list){
+    var pan_list= await fetch_pan_list();
+    var list_all_len = list.length;
+    var all = true;
+     for(var s = 0; s < list.length; s++){
+        var sc = list[s];
+        if(pan_list[sc.server_filename]){
+          continue;
+        }
+        console.log("buchong..." + sc.server_filename);
+        if(2148 !== await guarantee_renew(sc.fs_id,sc.server_filename,true)){
+          all = false;
+        }
+      }
+      return all;
 }
 
 
@@ -101,19 +162,18 @@ async function caiji(){
   await sync_list(list);
   
   var list2 = await fetch_share_list("1039355554886088"); 
+
   await sync_list(list2);
+
+  var list_all = list.concat(list2);
+
+  while(!await buchong(list_all)){
+    await sleep(1000);
+  }
+  
   console.log("done");
 
 }
-
-async function sync_list(list){
-     for(var s = 0; s < list.length; s++){
-        var sc = list[s];
-        console.log(sc.server_filename);
-        await guarantee_renew(sc.fs_id,sc.server_filename);
-      }
-}
-
 
 
 caiji();
