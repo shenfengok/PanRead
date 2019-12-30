@@ -14,7 +14,7 @@ $conn = OpenCon();
 
  // echo "<pre>"; print_r($dirs); exit;
 echo "<br>";
-$dirs = read_path_item('zhanlan-wanjie',false);
+$dirs = read_path_item('zhuanlan-all',false);
 for ($i= 0;$i< count($dirs); $i++){
 	$key = $dirs[$i];
 	$qql = "select * from t_subject where name ='".$key."';";
@@ -34,7 +34,7 @@ for ($i= 0;$i< count($dirs); $i++){
 	}
 	echo "<br>";
 	//插入item
-	read_item('zhanlan-wanjie',$key,$conn);
+	read_item('zhuanlan-all',$key,$conn);
 }
  
 

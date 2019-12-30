@@ -38,10 +38,10 @@ $audio = '';
 $current= '';
 if($row1 = mysqli_fetch_array($result1)){
 	$current = "当前阅读:<a  href='http://".$_SERVER['HTTP_HOST']."/dtl.php?sid=".$row0['id']."'>".$row0['name']."</a> >> ". $row1['name']."<br>" ;
-	$base_path ="zhanlan-wanjie/";
-	if($row0['updating'] == 1){
-		$base_path ="zhuanlan-gengxin/专栏-更新/";
-	}
+	$base_path ="zhuanlan-all/";
+	// if($row0['updating'] == 1){
+	// 	$base_path ="zhuanlan-gengxin/专栏-更新/";
+	// }
 
 	$path = $base_path.$row0['name']."/";
 

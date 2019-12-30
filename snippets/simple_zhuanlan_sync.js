@@ -145,7 +145,7 @@ async function buchong(list){
           continue;
         }
         console.log("buchong..." + sc.server_filename);
-        if(2148 !== await guarantee_renew(sc.fs_id,sc.server_filename,true)){
+        if(2148 !== await guarantee_renew(sc.fs_id,sc.server_filename,false)){
           all = false;
         }
       }
