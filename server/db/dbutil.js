@@ -4,7 +4,7 @@ class dbutil{
     constructor() {
         this.pool = mysql.createPool({
             host: '192.168.33.101',
-            user: 'shenfeng',
+            user: 'root',
             password: 'ipqmtd123',
             database: 'ray',
             port: 3307
