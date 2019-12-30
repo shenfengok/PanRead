@@ -11,24 +11,49 @@ class dbutil{
         });
     }
 
-    async function query(sql){
+    async query(sql){
+        let conn = await this.getConnection();
+        return new Promise((resolve, reject) => {
+            conn.query(sql,function(err,result){
+                conn.release();
+                if (err) {
+                    reject(new Error(err.message))
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    async execute(sql,params){
+        let conn = await this.getConnection();
+        return new Promise((resolve, reject) => {
+
+             conn.query(sql,params,function (err, result) {
+
+                if (err) {
+                    reject(new Error(err.message))
+                } else {
+                    resolve(result);
+                }
+
+            });
+        });
 
     }
 
-    function getConnection(){
-    	const c = new Promise((resolve, reject) => {
-    		pool.getConnection(function(err, connection){
-			  if(err) {
-			   reject(new Error(err))
-			  }else{
-			   resolve(connection);
-			  }
-			});
-    	}
-    	return c;
+     async getConnection(){
+         return new Promise((resolve, reject) => {
+            this.pool.getConnection(function (err, connection) {
+                if (err) {
+                    reject(new Error(err.message))
+                } else {
+                    resolve(connection);
+                }
+            });
+        });
     }
 
-    function query()
 }
 
 module.exports = dbutil;
