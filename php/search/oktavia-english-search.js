@@ -208,7 +208,7 @@ OktaviaSearch.prototype.loadIndex$S = function (index) {
 		this.search$SF$IIV$((function (v) {
 			if (! (v != null)) {
 				debugger;
-				throw new Error("[tool/web/oktavia-search.jsx:84:28] null access\n            this.search(this._queryString, this._callback);\n                            ^\n");
+				throw new Error("[js2mysql/web/oktavia-search.jsx:84:28] null access\n            this.search(this._queryString, this._callback);\n                            ^\n");
 			}
 			return v;
 		}(this._queryString)), this._callback);
@@ -351,7 +351,7 @@ OktaviaSearch.prototype.getResult$ = function () {
 		if (content.indexOf((function (v) {
 			if (! (v != null)) {
 				debugger;
-				throw new Error("[tool/web/oktavia-search.jsx:179:36] null access\n            if (content.indexOf(info[0]) == 1)\n                                    ^\n");
+				throw new Error("[js2mysql/web/oktavia-search.jsx:179:36] null access\n            if (content.indexOf(info[0]) == 1)\n                                    ^\n");
 			}
 			return v;
 		}(info[0]))) === 1) {
@@ -379,13 +379,13 @@ OktaviaSearch.prototype.getResult$ = function () {
 		results.push(new _Result$SSSI((function (v) {
 			if (! (v != null)) {
 				debugger;
-				throw new Error("[tool/web/oktavia-search.jsx:215:41] null access\n            results.push(new _Result(info[0], info[1], text, unit.score));\n                                         ^\n");
+				throw new Error("[js2mysql/web/oktavia-search.jsx:215:41] null access\n            results.push(new _Result(info[0], info[1], text, unit.score));\n                                         ^\n");
 			}
 			return v;
 		}(info[0])), (function (v) {
 			if (! (v != null)) {
 				debugger;
-				throw new Error("[tool/web/oktavia-search.jsx:215:50] null access\n            results.push(new _Result(info[0], info[1], text, unit.score));\n                                                  ^\n");
+				throw new Error("[js2mysql/web/oktavia-search.jsx:215:50] null access\n            results.push(new _Result(info[0], info[1], text, unit.score));\n                                                  ^\n");
 			}
 			return v;
 		}(info[1])), text, unit.score));
@@ -939,7 +939,7 @@ Oktavia.prototype.dump$B = function (verbose) {
 		result.push(Binary$dumpString$SLCompressionReport$((function (v) {
 			if (! (v != null)) {
 				debugger;
-				throw new Error("[src/oktavia.jsx:317:42] null access\n            result.push(Binary.dumpString(name, report), data);\n                                          ^^^^\n");
+				throw new Error("[src/oktavia.jsx:317:42] null access\n            result.push(Binary.dumpString(name, report), js2mysql);\n                                          ^^^^\n");
 			}
 			return v;
 		}(name)), report), data);
@@ -947,7 +947,7 @@ Oktavia.prototype.dump$B = function (verbose) {
 			console.log('Meta Data ' + (function (v) {
 				if (! (v != null)) {
 					debugger;
-					throw new Error("[src/oktavia.jsx:320:43] null access\n                console.log(\'Meta Data \' + name + \': \' + (data.length * 2) as string + \' bytes (\' + report.rate() as string + \'%)\');\n                                           ^^^^\n");
+					throw new Error("[src/oktavia.jsx:320:43] null access\n                console.log(\'Meta Data \' + name + \': \' + (js2mysql.length * 2) as string + \' bytes (\' + report.rate() as string + \'%)\');\n                                           ^^^^\n");
 				}
 				return v;
 			}(name)) + ': ' + (data.length * 2 + "") + ' bytes (' + (report.rate$() + "") + '%)');
@@ -985,7 +985,7 @@ Oktavia.prototype.load$S = function (data) {
 	headerSource = "oktavia-01";
 	header = Binary$dumpString$S(headerSource).slice(1);
 	if (data.slice(0, 5) !== header) {
-		throw new Error('Invalid data file');
+		throw new Error('Invalid js2mysql file');
 	}
 	this._metadatas = ({  });
 	this._metadataLabels = [  ];
@@ -6343,7 +6343,7 @@ SAXParser.prototype.parse$S = function (chunk) {
 				this.startTagPosition = this.position;
 			} else {
 				if (_.not$HBS(_.whitespace, c) && (! this.sawRoot || this.closedRoot)) {
-					this.strictFail$S("Text data outside of root node.");
+					this.strictFail$S("Text js2mysql outside of root node.");
 				}
 				if (c === "&") {
 					this.state = (_State.TEXT_ENTITY | 0);

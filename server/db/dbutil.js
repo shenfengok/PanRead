@@ -11,14 +11,15 @@ class dbutil{
         });
     }
 
-    async query(sql){
+    async query(sql,params){
         let conn = await this.getConnection();
         return new Promise((resolve, reject) => {
-            conn.query(sql,function(err,result){
+            conn.query(sql,params,function(err,result){
                 conn.release();
                 if (err) {
                     reject(new Error(err.message))
                 } else {
+
                     resolve(result);
                 }
             });
@@ -30,7 +31,7 @@ class dbutil{
         return new Promise((resolve, reject) => {
 
              conn.query(sql,params,function (err, result) {
-
+                 conn.release();
                 if (err) {
                     reject(new Error(err.message))
                 } else {

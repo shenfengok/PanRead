@@ -1,13 +1,18 @@
 const router = require('koa-router')()
 const userModel = require('../model/usermodel')
 const ray = require("../common/ray");
+
+const session = require('koa-session');
+
 router.post('/login', async (ctx, next) => {
     let userRepo = ray.getInst(userModel);
-    let users = await userRepo.findOne(ctx.request.body.name,ctx.request.body.pwd);
-    if(users && users.length > 0){
+    let user = await userRepo.findOne(ctx.request.body.name,ctx.request.body.pwd);
+    if(user){
+        ctx.session.username= user.name;
+        ctx.session.userid= user.id;
         await ctx.render('login_suc', {
-            title: 'welcome' + users[0].name + '!',
-            userName: users[0].name
+            title: 'welcome' + user.name + '!',
+            userName: user.name
         })
     }
 

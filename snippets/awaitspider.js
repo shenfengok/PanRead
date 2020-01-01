@@ -146,4 +146,13 @@ function is_skip(file_name){
   return false;
 }
 
+async function sync_list(list){
+    for(var s = 0; s < list.length; s++){
+        var sc = list[s];
+        console.log(sc.server_filename);
+        await guarantee_renew(sc.fs_id,sc.server_filename);
+    }
+}
+
+
 caiji();

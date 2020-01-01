@@ -180,7 +180,7 @@ function download_html(item) {
 
 
 function is_item_dir(item){
-	return item.attr('data-dir')=="1"
+	return item.attr('js2mysql-dir')=="1"
 }
 
 // function isDir(title){

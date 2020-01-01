@@ -98,7 +98,7 @@ window.big_data = {};
 						window.stack.push(to_caiji_item);
 					}else{
 						//todo ajaxGetDlinkShare      getDlinkMbox          u.prototype.directDownload
-						x[ali.attr('title')]['fid'] = ali.parent().parent().parent().parent().attr('data-fid');
+						x[ali.attr('title')]['fid'] = ali.parent().parent().parent().parent().attr('js2mysql-fid');
 
 						if(is_resource(ali.attr('title'))){
 							sync_item(window.current_special.title,x[ali.attr('title')]['fid']);
@@ -278,5 +278,5 @@ function get_current_parent(){
 }
 
 function is_item_dir(item){
-	return item.attr('data-dir')=="1"
+	return item.attr('js2mysql-dir')=="1"
 }
