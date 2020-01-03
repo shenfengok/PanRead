@@ -1,5 +1,5 @@
 const  dbutil = require("../db/dbutil");
-const  data = require("");
+
 const ray = require("../common/ray");
 
 class usermodel{

@@ -9,7 +9,9 @@ const logger = require('koa-logger');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const login = require('./routes/login');
+const testjson= require('./routes/testjson')
 const session = require('koa-session');
+// var cors = require('koa2-cors');
 // error handler
 onerror(app);
 
@@ -27,7 +29,7 @@ const CONFIG = {
   rolling: false, /** 每次请求强行设置cookie */
   renew: false, /** cookie快过期时自动重新设置*/
 };
-
+// app.use(cors());
 app.use(session(CONFIG, app));
 app.use(json());
 app.use(logger());
@@ -52,6 +54,7 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(login.routes(), login.allowedMethods())
+app.use(testjson.routes(), testjson.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
