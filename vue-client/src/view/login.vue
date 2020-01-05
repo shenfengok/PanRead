@@ -6,7 +6,7 @@
     <section>
       <ul>
         <li style="margin: 8px "><input type="text" v-model="loginForm.username" placeholder="name"/></li>
-        <li style="margin: 8px "><input type="text" v-model="loginForm.password" placeholder="password"/></li>
+        <li style="margin: 8px "><input type="password" v-model="loginForm.password" placeholder="password"/></li>
         </li>
         <li style="margin: 8px ">
           <button @click="login">login</button>
@@ -39,11 +39,11 @@ export default {
       } else {
         this.axios({
           method: 'post',
-          url: '/user/login',
+          url: '/api/login',
           data: _this.loginForm
         }).then(res => {
           console.log(res.data)
-          _this.userToken = 'Bearer ' + res.data.data.body.token
+          _this.userToken = 'Bearer ' + res.data.t
           // 将用户token保存到vuex中
           _this.changeLogin({Authorization: _this.userToken});
           _this.$router.push('/home')

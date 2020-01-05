@@ -17,7 +17,8 @@ class dbutil{
             conn.query(sql,params,function(err,result){
                 conn.release();
                 if (err) {
-                    reject(new Error(err.message))
+                    console.log(sql);
+                    reject(new Error( err.message))
                 } else {
 
                     resolve(result);

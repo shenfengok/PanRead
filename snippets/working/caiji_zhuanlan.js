@@ -9,7 +9,7 @@ function http_call(url,datas,isget,strict) {
             success: function (result) {
                 console.log(result);
                 if(strict){
-                    if(result.errno != 0){
+                    if(result.errno !== 0){
                         var at=1;
                     }
                     resolve(result.errno);
@@ -96,8 +96,11 @@ async function sync_list(list,obj,finish){
         var sc = list[s];
         console.log(sc.server_filename);
         obj[sc.server_filename] = {
-            finish :finish
+            finish :finish,
+
         };
+
+        obj[sc.server_filename].fsid = sc.fs_id;
 
         await handle_folder(sc.fs_id,obj[sc.server_filename]);
     }
