@@ -2,23 +2,31 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '../view/home'
 import login from '../view/login'
+import nav from '../view/nav'
+
 Vue.use(Router)
 
 const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/login',
+      component: {nav:nav,content:login}
     },
     {
       path: '/login',
       name: 'login',
-      component: login
+      components: {nav:nav,content:login}
     },
     {
       path: '/home',
       name: 'home',
-      component: home
+      components: {nav:nav,content:home}
+    },
+    {
+      path: '/read',
+      name: 'read',
+      components: {nav:nav,content:home}
     }
   ]
 })

@@ -8,13 +8,17 @@ const ray = require("../common/ray");
 router.get('/', async (ctx, next) => {
   var uid = ctx.session.userid;
   let specialRepo =  ray.getInst(specialmodel);
-  let list = specialRepo.findlist(uid,ctx.request.query.page);
+  let list = await specialRepo.findlist(uid,ctx.request.query.cur);
 
-  await ctx.render('index', {
-    title: 'Hello Koa 2!',
-    name: ctx.session.username,
-    list_table : list
-  });
+  ctx.body = list;
+});
+
+router.get('/api/zlist', async (ctx, next) => {
+  var uid = ctx.state.user.id;
+  let specialRepo =  ray.getInst(specialmodel);
+  let list = await specialRepo.findlist(uid,ctx.query.start);
+
+ ctx.body = list;
 });
 
 router.get('/string', async (ctx, next) => {

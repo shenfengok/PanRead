@@ -6,12 +6,12 @@
       <section>
         <ul>
           <template v-if="zlist.length !== 0">
-          <li itemscope itemtype="https://schema.org/SoftwareApplication" v-for="(item, index) in zlist"><a itemprop="url" href="/domain-icons/"><span
-            class="name" itemprop="name"> {{item.title}}</span><span class="version"
-                                                                  itemprop="softwareVersion">{{item.finish ?'complete':'updating'}}</span><span
-            class="desc"
-            itemprop="description">{{item.ititle}}</span></a>
-          </li>
+            <li itemscope itemtype="https://schema.org/SoftwareApplication" v-for="(item, index) in zlist"><a itemprop="url" href="/domain-icons/"><span
+              class="name" itemprop="name"> {{item.title}}</span><span class="version"
+                                                                       itemprop="softwareVersion">{{item.finish ?'finish':'updating'}}</span><span
+              class="desc"
+              itemprop="description">{{item.ititle}}</span></a>
+            </li>
           </template>
           <template v-else>
             <li itemscope itemtype="https://schema.org/SoftwareApplication">no items
@@ -36,37 +36,37 @@
 
 <script>
 
-export default {
-  name: 'home',
-  created () {
-    this.getZlist(false);
-  },
-  data() {
-    return {
-      zlist: [],
-      cur :0
-    }
-  },
-  methods :{
-
-    getZlist (is_next) {
-      if(is_next){
-        this.cur = this.cur + 1;
-      }
-      this.axios.get('/api/zlist?start=' + this.cur)
-        .then((res) => {
-          if (res.data) {
-            this.zlist = res.data
-          } else {
-            console.log(res)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
+  export default {
+    name: 'read',
+    created () {
+      this.getZlist(false);
     },
+    data() {
+      return {
+        zlist: [],
+        cur :0
+      }
+    },
+    methods :{
 
+      getZlist (is_next) {
+        if(is_next){
+          this.cur = this.cur + 1;
+        }
+        this.axios.get('/api/zlist?start=' + this.cur)
+          .then((res) => {
+            if (res.data) {
+              this.zlist = res.data
+            } else {
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+
+    }
   }
-}
 </script>
 
