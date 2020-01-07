@@ -26,7 +26,7 @@
 export default {
   name: 'nav',
   created () {
-    this.getZlist(false);
+    // this.getZlist(false);
   },
   data() {
     return {

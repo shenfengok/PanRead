@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import home from '../view/home'
 import login from '../view/login'
 import nav from '../view/nav'
+import list from "../view/list";
+import dtl from  '../view/dtl'
 
 Vue.use(Router)
 
@@ -24,9 +26,14 @@ const router = new Router({
       components: {nav:nav,content:home}
     },
     {
-      path: '/read',
-      name: 'read',
-      components: {nav:nav,content:home}
+      path: '/list',
+      name: 'list',
+      components: {nav:nav,content:list}
+    },
+    {
+      path: '/dtl',
+      name: 'dtl',
+      components: {nav:nav,content:dtl}
     }
   ]
 })

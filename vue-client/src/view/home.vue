@@ -6,7 +6,7 @@
       <section>
         <ul>
           <template v-if="zlist.length !== 0">
-          <li itemscope itemtype="https://schema.org/SoftwareApplication" v-for="(item, index) in zlist"><a itemprop="url" href="/domain-icons/"><span
+          <li itemscope itemtype="https://schema.org/SoftwareApplication" v-for="(item, index) in zlist"><a itemprop="url" @click="routerTo(item.id,item.title)"><span
             class="name" itemprop="name"> {{item.title}}</span><span class="version"
                                                                   itemprop="softwareVersion">{{item.finish ?'complete':'updating'}}</span><span
             class="desc"
@@ -17,7 +17,15 @@
             <li itemscope itemtype="https://schema.org/SoftwareApplication">no items
             </li>
           </template>
+          <li  >
 
+            <a itemprop="url" style="display: inline" @click="getZlist(false)"><span
+              class="desc"
+              itemprop="description">上一页</span></a>
+            <a itemprop="url"  style="display: inline"  @click="getZlist(true)"><span
+              class="desc"
+              itemprop="description">下一页</span></a>
+          </li>
         </ul>
       </section>
     </main>
@@ -52,6 +60,11 @@ export default {
     getZlist (is_next) {
       if(is_next){
         this.cur = this.cur + 1;
+      }else{
+        this.cur = this.cur - 1;
+        if(this.cur < 0){
+          this.cur =0;
+        }
       }
       this.axios.get('/api/zlist?start=' + this.cur)
         .then((res) => {
@@ -65,6 +78,10 @@ export default {
           console.log(err)
         })
     },
+    routerTo(id,title){
+      this.$router.push({ path: '/list', query: { id: id,title:title }})
+    }
+
 
   }
 }

@@ -14,6 +14,10 @@ module.exports = {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true
+      },
+      '/zhuanlan-all': {
+        target: 'http://192.168.33.101:3333',
+        changeOrigin: true
       }
     },
 

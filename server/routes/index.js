@@ -16,14 +16,23 @@ router.get('/', async (ctx, next) => {
 router.get('/api/zlist', async (ctx, next) => {
   var uid = ctx.state.user.id;
   let specialRepo =  ray.getInst(specialmodel);
-  let list = await specialRepo.findlist(uid,ctx.query.start);
+  let list = await specialRepo.findzlist(uid,ctx.query.start);
 
  ctx.body = list;
 });
 
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
+router.get('/api/list', async (ctx, next) => {
+  let specialRepo =  ray.getInst(specialmodel);
+  let list = await specialRepo.findlist(ctx.query.id,ctx.query.cur);
+  ctx.body = list;
 });
+
+router.get('/api/dtl', async (ctx, next) => {
+  let specialRepo =  ray.getInst(specialmodel);
+  let list = await specialRepo.findlist(ctx.query.id,ctx.query.cur);
+  ctx.body = list;
+});
+
 
 router.get('/json', async (ctx, next) => {
   ctx.body = {
