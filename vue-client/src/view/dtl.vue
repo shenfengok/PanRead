@@ -94,7 +94,7 @@
         this.getdtl(this.next.id);
       },
       processData(data){
-        return data;
+        return data;//todo 处理页面显示
       },
       loghis(){
         //todo 记录最后一次阅读
