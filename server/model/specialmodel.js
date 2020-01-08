@@ -21,6 +21,33 @@ class specialmodel{
         let sql = 'select * from t_special_item where special_id = ? order by title asc LIMIT ?, ?;';
         return  await this.dao.query(sql, [id,cur *row, row]);
     }
+
+    async findOne(id){
+
+        let sql = 'select * from t_special_item where id = ? ;';
+        let list =  await this.dao.query(sql, [id]);
+        if(list && list.length > 0){
+            return list[0];
+        }
+    }
+
+    async findPrev(id,cur){
+
+        let sql = 'select * from t_special_item where id < ? and  special_id =? limit 1 ;';
+        let list =   await this.dao.query(sql, [cur,id]);
+        if(list && list.length > 0){
+            return list[0];
+        }
+    }
+
+    async findNext(id,cur){
+
+        let sql = 'select * from t_special_item where id > ? and  special_id =? limit 1 ;';
+        let list =   await this.dao.query(sql, [cur,id]);
+        if(list && list.length > 0){
+            return list[0];
+        }
+    }
 }
 
 

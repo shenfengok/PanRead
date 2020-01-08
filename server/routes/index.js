@@ -29,8 +29,11 @@ router.get('/api/list', async (ctx, next) => {
 
 router.get('/api/dtl', async (ctx, next) => {
   let specialRepo =  ray.getInst(specialmodel);
-  let list = await specialRepo.findlist(ctx.query.id,ctx.query.cur);
-  ctx.body = list;
+  let result = {};
+  result.cur = await specialRepo.findOne(ctx.query.cur);
+  result.prev = await specialRepo.findPrev(ctx.query.id,ctx.query.cur);
+  result.next = await specialRepo.findNext(ctx.query.id,ctx.query.cur);
+  ctx.body = result;
 });
 
 

@@ -2,25 +2,25 @@
   <div>
     <main>
       <header><h1>workspace</h1>
-        <h2>{{this.$route.query.title}}</h2></header>
+        <h2>{{this.curr.title}}</h2></header>
       <section>
         <ul>
-          <template v-if="content !== ''">
-            <li v-html="content" itemscope itemtype="https://schema.org/SoftwareApplication">
-            </li>
+          <template v-if="this.curr.title !== ''">
+
+            <iframe id="contentFrame" style="width: 100%;height: 700px;border:0;" ></iframe>
           </template>
           <template v-else>
             <li itemscope itemtype="https://schema.org/SoftwareApplication">no items
             </li>
           </template>
-          <li  >
+          <li  style="padding-top: 18px;">
 
-            <a itemprop="url" style="display: inline" @click="getlist(false)"><span
+            <a itemprop="url" style="display: inline" @click="gotoprev()"><span
               class="desc"
-              itemprop="description">上一页</span></a>
-            <a itemprop="url"  style="display: inline"  @click="getlist(true)"><span
+              itemprop="description">{{this.prev.title ?'上一篇:' + this.prev.title :''}}</span></a>
+            <a itemprop="url"  style="display: inline"  @click="gotonext()"><span
               class="desc"
-              itemprop="description">下一页</span></a>
+              itemprop="description">{{ this.next.title ?'下一篇:' + this.next.title :''}}</span></a>
           </li>
         </ul>
       </section>
@@ -42,25 +42,28 @@
   export default {
     name: 'list',
     created () {
-      // this.getdtl();
-      this.getcnt("/zhuanlan-all/01-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/01-%E5%BC%80%E7%AF%87%E8%AF%8D%20(1%E8%AE%B2)/00%E4%B8%A8%E5%BC%80%E7%AF%87%E8%AF%8D%E4%B8%A8%E4%BB%8E%E4%BB%8A%E5%A4%A9%E8%B5%B7%EF%BC%8C%E8%B7%A8%E8%BF%87%E2%80%9C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%9D%E8%BF%99%E9%81%93%E5%9D%8E.html")
+      this.getdtl(this.$route.query.subId);
+      // this.getcnt("/zhuanlan-all/01-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/01-%E5%BC%80%E7%AF%87%E8%AF%8D%20(1%E8%AE%B2)/00%E4%B8%A8%E5%BC%80%E7%AF%87%E8%AF%8D%E4%B8%A8%E4%BB%8E%E4%BB%8A%E5%A4%A9%E8%B5%B7%EF%BC%8C%E8%B7%A8%E8%BF%87%E2%80%9C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E2%80%9D%E8%BF%99%E9%81%93%E5%9D%8E.html")
     },
     data() {
       return {
-        content: 'waiting ...',
+        curr:{},prev:{},next:{},
         cur :0
       }
     },
     methods :{
 
-      getdtl (is_next) {
+      getdtl (cur) {
         let that = this;
-        this.axios.get('/api/dtl?id=' + this.$route.query.id + '&cur=' + this.$route.query.subId)
+        this.axios.get('/api/dtl?id=' + this.$route.query.id + '&cur=' + cur)
           .then((res) => {
             if (res.data) {
-              let data = res.data;
-              this.content = res.data;
-              that.getcnt('');
+
+              this.curr = res.data.cur ||{};
+              this.prev = res.data.prev ||{};
+              this.next = res.data.next ||{};
+              this.getcnt(res.data.cur.content_path,res.data.cur.audio_path);
+              this.loghis();
             } else {
               console.log(res)
             }
@@ -70,14 +73,12 @@
           })
       },
       getcnt(url){
-        this.axios.get(url)
+        this.axios.get('/zhuanlan-all' + url)
           .then((res) => {
             if (res.data) {
-              let data = res.data;
-
-
-              // this.content = data.split('<div class="_50pDbNcP_0">')[1];
-              this.content = res.data;
+              let doc = document.getElementById('contentFrame').contentWindow.document;
+              doc.documentElement.innerHTML = this.processData(res.data);
+              document.getElementById('contentFrame').contentWindow.scrollTo(0,0);
             } else {
               console.log(res)
             }
@@ -86,8 +87,17 @@
             console.log(err)
           })
       },
-      router3(subId){
-        this.$router.push({ path: '/dtl', query: {  id:this.$route.query.id,subId:subId }})
+      gotoprev(){
+        this.getdtl(this.prev.id);
+      },
+      gotonext(){
+        this.getdtl(this.next.id);
+      },
+      processData(data){
+        return data;
+      },
+      loghis(){
+        //todo 记录最后一次阅读
       }
 
 
