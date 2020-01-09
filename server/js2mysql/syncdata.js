@@ -4,6 +4,7 @@ const obj = require("../js2mysql/dataobj.json");
 async  function sync_data(){
     let dao = ray.getInst(dbutil);
     let all = obj;
+
     for(var a in all){
         let sa =  all[a];
         let fin = sa.finish;
@@ -55,10 +56,10 @@ async  function sync_data(){
                     continue;
                 }
 
-                let sqli = "INSERT INTO t_special_item(title, fsid_audio, audio_path,html_path,special_id,fsid_html) VALUES('"+il.title+"', "+il.fsid_audio
-                    +",' "+il.audio_path+"','"+il.html_path+"'," +il.special_id +"," + il.fsid_html +
+                let sqli = "INSERT INTO t_special_item(title, fsid_audio, audio_path,content_path,special_id,fsid_content) VALUES('"+il.title+"', "+il.fsid_audio
+                    +",'"+il.audio_path+"','"+il.html_path+"'," +il.special_id +"," + il.fsid_html +
                     ") ON DUPLICATE KEY UPDATE title='"+il.title+"', fsid_audio='"+il.fsid_audio+"', audio_path='"+il.audio_path
-                    +"', html_path='"+il.html_path +"', special_id="+il.special_id +",fsid_html=" + il.fsid_html ;
+                    +"', content_path='"+il.html_path +"', special_id="+il.special_id +",fsid_content=" + il.fsid_html ;
                 await dao.query(sqli);
                 console.log(il.title);
             }

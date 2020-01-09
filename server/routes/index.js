@@ -37,6 +37,13 @@ router.get('/api/dtl', async (ctx, next) => {
 });
 
 
+router.get('/api/loghis', async (ctx, next) => {
+  let specialRepo =  ray.getInst(specialmodel);
+  await specialRepo.loghis(ctx.query.id,ctx.query.cur,ctx.query.type,ctx.state.user.id);
+  ctx.body = 'success';
+});
+
+
 router.get('/json', async (ctx, next) => {
   ctx.body = {
     title: 'koa2 json'

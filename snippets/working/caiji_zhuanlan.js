@@ -5,6 +5,7 @@ function http_call(url,datas,isget,strict) {
             type : isget ? "GET" : "POST",
             contentType: "application/json;charset=UTF-8",
             url : url,
+            timeout: 40000,
             data : datas,
             success: function (result) {
                 console.log(result);
@@ -33,11 +34,23 @@ function http_call(url,datas,isget,strict) {
 
 async function fetch_share_list(fsid){
     var list_data = {};
-    var result = await http_call(get_share_list_url(fsid),list_data,true);
-    return result.records;
+    var resultList = [];
+    var page = 1;
+    while(page < 10){
+        sleep(200)
+        var result = await http_call(get_share_list_url(fsid,page),list_data,true);
+        resultList = resultList.concat(result.records);
+        if(result.has_more){
+
+            page++;
+        }else{
+            break;
+        }
+    }
+    return resultList;
 }
-function get_share_list_url(fsid){
-    return "https://pan.baidu.com/mbox/msg/shareinfo?msg_id=471981340980807638&page=1&from_uk=228435709&gid=658103785633267975&type=2&fs_id="+fsid+"&num=300&bdstoken="+token+"&channel=chunlei&web=1&app_id=250528&clienttype=0";
+function get_share_list_url(fsid,page){
+    return "https://pan.baidu.com/mbox/msg/shareinfo?msg_id=471981340980807638&page="+page+"&from_uk=228435709&gid=658103785633267975&type=2&fs_id="+fsid+"&num=300&bdstoken="+token+"&channel=chunlei&web=1&app_id=250528&clienttype=0";
 }
 var sleep = async (duration) => {
     return new Promise((resolve, reject) => {

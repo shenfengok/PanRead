@@ -14,13 +14,13 @@
             </li>
           </template>
           <li  style="padding-top: 18px;">
-
-            <a itemprop="url" style="display: inline" @click="gotoprev()"><span
-              class="desc"
-              itemprop="description">{{this.prev.title ?'上一篇:' + this.prev.title :''}}</span></a>
             <a itemprop="url"  style="display: inline"  @click="gotonext()"><span
               class="desc"
               itemprop="description">{{ this.next.title ?'下一篇:' + this.next.title :''}}</span></a>
+            <a itemprop="url" style="display: inline" @click="gotoprev()"><span
+              class="desc"
+              itemprop="description">{{this.prev.title ?'上一篇:' + this.prev.title :''}}</span></a>
+
           </li>
         </ul>
       </section>
@@ -63,7 +63,7 @@
               this.prev = res.data.prev ||{};
               this.next = res.data.next ||{};
               this.getcnt(res.data.cur.content_path,res.data.cur.audio_path);
-              this.loghis();
+              this.loghis(cur);
             } else {
               console.log(res)
             }
@@ -72,12 +72,14 @@
             console.log(err)
           })
       },
-      getcnt(url){
+      getcnt(url,audio){
         this.axios.get('/zhuanlan-all' + url)
           .then((res) => {
             if (res.data) {
               let doc = document.getElementById('contentFrame').contentWindow.document;
-              doc.documentElement.innerHTML = this.processData(res.data);
+
+              doc.documentElement.innerHTML = this.processData(res.data,audio);
+
               document.getElementById('contentFrame').contentWindow.scrollTo(0,0);
             } else {
               console.log(res)
@@ -93,11 +95,28 @@
       gotonext(){
         this.getdtl(this.next.id);
       },
-      processData(data){
-        return data;//todo 处理页面显示
+      processData(data,audio){
+        let myaudio = "<audio  controls autoplay loop id='audios' style='width:480px;'><source src='http://codingbaby.f3322.net:3333/zhuanlan-all"+audio+"' /></audio><br>" ;
+        let str = data.replace(/_28dOln0j_0/g,'_28dOln0j_01x').replace(/-webkit-line-clamp:5;/g,'').replace(/<div class=\"_2r3UB1GX_0\"><span>展开<\/span><i class=\"iconfont\"><\/i><\/div>/g,'')
+
+
+        return this.findUrl(str).replace('<div class="_7Xrmrbox_0">防止断更 请务必加首发微信：1716143665</div>',myaudio)
       },
-      loghis(){
-        //todo 记录最后一次阅读
+      loghis(cur){
+        let url = '/api/loghis?id=' + this.$route.query.id + '&cur=' + cur +'&type=0';
+        console.log(url)
+        this.axios.get(url)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      findUrl(str){
+        let reg = /<div class=\"_3Jbcj4Iu_0 _2QmGFWqF_0\"><img data-savepage-src=\"(.*)" src=\"(.*)\" class="_1-ZfmNK8_0">/;
+        let url = reg.exec(str)[1].trim();
+        return str.replace(reg,'<div class="_3Jbcj4Iu_0 _2QmGFWqF_0"><img  src="'+url+'" class="_1-ZfmNK8_0">');
       }
 
 

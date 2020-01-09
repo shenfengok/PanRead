@@ -31,6 +31,13 @@ class specialmodel{
         }
     }
 
+    async loghis(id,cid,type,uid){
+
+        let sql = "INSERT INTO t_his(pid, cid, type,uid) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE cid =?";
+        let list =  await this.dao.query(sql, [id,cid,type,uid,cid]);
+
+    }
+
     async findPrev(id,cur){
 
         let sql = 'select * from t_special_item where id < ? and  special_id =? limit 1 ;';
