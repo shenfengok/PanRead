@@ -5,6 +5,7 @@ function http_call(url,datas,isget,strict) {
       type : isget ? "GET" : "POST",
       contentType: "application/json;charset=UTF-8",
       url : url,
+      timeout: 40000,
       data : datas,
       success: function (result) {
         console.log(result);
@@ -19,12 +20,13 @@ function http_call(url,datas,isget,strict) {
         
       },
       error: function (e ) {
-        resolve(e);
-        console.log(e);
-        if(strict){
           resolve(500);
-        }
         // reject(new Error())
+      },
+      complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+          if(status=='timeout'){
+              resolve(500);
+         }
       }
     })
   })
@@ -47,7 +49,7 @@ async function sync_folder_overwrite(fid){
     var file_data = {
         "from_uk": "228435709",
         "msg_id": "471981340980807638",
-        "path": "/apps/Cloud Sync/zhuanlan-all/",
+        "path": "/apps/Cloud Sync/video-all/",
         "ondup": "overwrite",
         "async": "1",
         "type": "2",
@@ -60,7 +62,7 @@ async function sync_folder_overwrite(fid){
 async function del_folder(folder_name){
   var del_url = "https://pan.baidu.com/api/filemanager?opera=delete&async=2&onnest=fail&channel=chunlei&web=1&app_id=250528&bdstoken="+token+"&logid=MTU3NzUyMDY2MDk3NjAuODgyNjMwNTU3MTExNTE1&clienttype=0";
   var del_data= {
-    filelist: "[\"/apps/Cloud Sync/zhuanlan-all/"+folder_name+"\"]"
+    filelist: "[\"/apps/Cloud Sync/video-all/"+folder_name+"\"]"
   };
   return await http_call(del_url,del_data,false,true);
 }
@@ -127,9 +129,9 @@ async function fetch_pan_list() {
 
 
 function get_pan_list_url(folder){
-  var dir = "%2Fapps%2FCloud+Sync%2Fzhuanlan-all";
+  var dir = "%2Fapps%2FCloud+Sync%2Fvideo-all";
   if(folder){
-    dir = "%2Fapps%2FCloud+Sync%2Fzhuanlan-all%2F"+ encodeURI(folder);
+    dir = "%2Fapps%2FCloud+Sync%2Fvideo-all%2F"+ encodeURI(folder);
   }
   return "https://pan.baidu.com/api/list?order=time&desc=1&showempty=0&web=1&page=1&num=300&dir="+dir+"&t=0.571569333030987&channel=chunlei&web=1&app_id=250528&bdstoken="
   + token+"&clienttype=0";
@@ -158,12 +160,10 @@ async function caiji(){
 
   var set = new Set();
 
-  var list = await fetch_share_list("294603226355310"); 
+  var list = await fetch_share_list("1122360866268928");
   await sync_list(list);
   
-  var list2 = await fetch_share_list("1039355554886088"); 
-
-  await sync_list(list2);
+  var list2 = []
 
   var list_all = list.concat(list2);
 

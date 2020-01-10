@@ -10,6 +10,7 @@ const jwtKoa = require('koa-jwt');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const login = require('./routes/login');
+const video = require('./routes/video');
 // const testjson= require('./routes/testjson')
 const session = require('koa-session');
 var cors = require('koa2-cors');
@@ -56,6 +57,10 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(index.routes(), index.allowedMethods())
+
+const videor = new video('video',1)
+app.use(videor.router.routes(), videor.router.allowedMethods())
+
 app.use(users.routes(), users.allowedMethods())
 app.use(login.routes(), login.allowedMethods())
 

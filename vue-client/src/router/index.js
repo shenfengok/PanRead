@@ -5,7 +5,9 @@ import login from '../view/login'
 import nav from '../view/nav'
 import list from "../view/list";
 import dtl from  '../view/dtl'
-
+import video from "../view/video";
+import videolist from "../view/videolist";
+import videodtl from "../view/videodtl";
 Vue.use(Router)
 
 const router = new Router({
@@ -26,14 +28,29 @@ const router = new Router({
       components: {nav:nav,content:home}
     },
     {
+      path: '/video',
+      name: 'video',
+      components: {nav:nav,content:video}
+    },
+    {
       path: '/list',
       name: 'list',
       components: {nav:nav,content:list}
     },
     {
+      path: '/videolist',
+      name: 'videolist',
+      components: {nav:nav,content:videolist}
+    },
+    {
       path: '/dtl',
       name: 'dtl',
       components: {nav:nav,content:dtl}
+    },
+    {
+      path: '/videodtl',
+      name: 'videodtl',
+      components: {nav:nav,content:videodtl}
     }
   ]
 })

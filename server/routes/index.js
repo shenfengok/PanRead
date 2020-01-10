@@ -2,9 +2,8 @@ const router = require('koa-router')();
 const specialmodel = require("../model/specialmodel")
 
 const ray = require("../common/ray");
-/**多想高兴事，老大对自己挺好的
- * 多思自己不足，是不是因为自己惹了别人所以
- */
+
+
 router.get('/', async (ctx, next) => {
   var uid = ctx.session.userid;
   let specialRepo =  ray.getInst(specialmodel);
