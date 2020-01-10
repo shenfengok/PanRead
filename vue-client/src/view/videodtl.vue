@@ -1,8 +1,8 @@
 <template>
   <div>
     <main>
-      <header><h1>workspace</h1>
-        <h2>{{this.curr.title}}</h2></header>
+      <header><h1 @click="back()">Workspace</h1>
+        <h2>{{this.curr.title}}--{{this.$route.query.title}}</h2></header>
       <section>
         <ul>
           <template v-if="this.curr.title !== ''">
@@ -92,7 +92,9 @@
             console.log(err)
           })
       },
-
+      back(){
+        this.$router.go(-1);//返回上一层
+      }
 
 
     }
