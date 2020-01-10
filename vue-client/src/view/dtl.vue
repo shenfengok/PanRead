@@ -1,7 +1,7 @@
 <template>
   <div>
     <main>
-      <header><h1>workspace</h1>
+      <header><h1 @click="back()">Workspace</h1>
         <h2>{{this.curr.title}}</h2></header>
       <section>
         <ul>
@@ -100,7 +100,7 @@
         let str = data.replace(/_28dOln0j_0/g,'_28dOln0j_01x').replace(/-webkit-line-clamp:5;/g,'').replace(/<div class=\"_2r3UB1GX_0\"><span>展开<\/span><i class=\"iconfont\"><\/i><\/div>/g,'')
 
 
-        return this.findUrl(str).replace('<div class="_7Xrmrbox_0">防止断更 请务必加首发微信：1716143665</div>',myaudio)
+        return this.findUrl(str).replace('<div class="_7Xrmrbox_0">防止断更 请务必加首发微信：1716143665</div>',myaudio).replace('<div class="_7Xrmrbox_0">下载APP</div>',myaudio)
       },
       loghis(cur){
         let url = '/api/loghis?id=' + this.$route.query.id + '&cur=' + cur +'&type=0';
@@ -117,6 +117,9 @@
         let reg = /<div class=\"_3Jbcj4Iu_0 _2QmGFWqF_0\"><img data-savepage-src=\"(.*)" src=\"(.*)\" class="_1-ZfmNK8_0">/;
         let url = reg.exec(str)[1].trim();
         return str.replace(reg,'<div class="_3Jbcj4Iu_0 _2QmGFWqF_0"><img  src="'+url+'" class="_1-ZfmNK8_0">');
+      },
+      back(){
+        this.$router.go(-1);//返回上一层
       }
 
 

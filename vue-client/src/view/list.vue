@@ -1,7 +1,7 @@
 <template>
   <div>
     <main>
-      <header><h1>workspace</h1>
+      <header><h1 @click="back()">Workspace</h1>
         <h2>{{this.$route.query.title}}</h2></header>
       <section>
         <ul>
@@ -80,6 +80,9 @@
       },
       router2(subId){
         this.$router.push({ path: '/dtl', query: {  id:this.$route.query.id,subId:subId }})
+      },
+      back(){
+        this.$router.go(-1);//返回上一层
       }
 
 
