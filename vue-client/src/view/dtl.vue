@@ -73,7 +73,7 @@
           })
       },
       getcnt(url,audio){
-        this.axios.get('/zhuanlan-all' + url)
+        this.axios.get('/pan/zhuanlan-all' + url)
           .then((res) => {
             if (res.data) {
               let doc = document.getElementById('contentFrame').contentWindow.document;
@@ -100,7 +100,8 @@
         let str = data.replace(/_28dOln0j_0/g,'_28dOln0j_01x').replace(/-webkit-line-clamp:5;/g,'').replace(/<div class=\"_2r3UB1GX_0\"><span>展开<\/span><i class=\"iconfont\"><\/i><\/div>/g,'')
 
 
-        return this.findUrl(str).replace('<div class="_7Xrmrbox_0">防止断更 请务必加首发微信：1716143665</div>',myaudio).replace('<div class="_7Xrmrbox_0">下载APP</div>',myaudio)
+        return this.findUrl(str).replace('<div class="_7Xrmrbox_0">防止断更 请务必加首发微信：1716143665</div>',myaudio)
+          .replace('<div class="_7Xrmrbox_0">下载APP</div>',myaudio).replace('_28dOln0j_01x','_28dOln0j_01xx')
       },
       loghis(cur){
         let url = '/api/loghis?id=' + this.$route.query.id + '&cur=' + cur +'&type=0';

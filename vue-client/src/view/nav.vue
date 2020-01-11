@@ -19,15 +19,16 @@ export default {
   data() {
     return {
       menus: [
-        {path:'/home',title:'专栏'},
-        {path:'/video',title:'视频'},
+        {path:'/home',title:'极客专栏'},
+        {path:'/video',title:'极客视频'},
+        {path:'/dedao',title:'得到app',prefix:'dedao'}
       ],
       cur :0
     }
   },
   methods:{
     routerTo(index){
-      this.$router.push({ path: this.menus[index].path, query: { menu:this.menus[index].title }})
+      this.$router.push({ path: this.menus[index].path, query: { menu:this.menus[index].title,prefix:this.menus[index].prefix }})
     }
   }
 

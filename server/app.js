@@ -55,11 +55,18 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+function commonRounter(route,type){
+    const routter = new video(route,1)
+    app.use(routter.router.routes(), routter.router.allowedMethods())
+}
+
 // routes
 app.use(index.routes(), index.allowedMethods())
 
-const videor = new video('video',1)
-app.use(videor.router.routes(), videor.router.allowedMethods())
+commonRounter('video',1)
+
+commonRounter('dedao',2)
+
 
 app.use(users.routes(), users.allowedMethods())
 app.use(login.routes(), login.allowedMethods())

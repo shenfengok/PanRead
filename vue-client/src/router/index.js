@@ -8,6 +8,9 @@ import dtl from  '../view/dtl'
 import video from "../view/video";
 import videolist from "../view/videolist";
 import videodtl from "../view/videodtl";
+import dedao from "../view/dedao";
+import dedaolist from "../view/dedaolist";
+import dedaodtl from "../view/dedaodtl";
 Vue.use(Router)
 
 const router = new Router({
@@ -33,6 +36,11 @@ const router = new Router({
       components: {nav:nav,content:video}
     },
     {
+      path: '/dedao',
+      name: 'dedao',
+      components: {nav:nav,content:dedao}
+    },
+    {
       path: '/list',
       name: 'list',
       components: {nav:nav,content:list}
@@ -43,6 +51,11 @@ const router = new Router({
       components: {nav:nav,content:videolist}
     },
     {
+      path: '/dedaolist',
+      name: 'dedaolist',
+      components: {nav:nav,content:dedaolist}
+    },
+    {
       path: '/dtl',
       name: 'dtl',
       components: {nav:nav,content:dtl}
@@ -51,6 +64,11 @@ const router = new Router({
       path: '/videodtl',
       name: 'videodtl',
       components: {nav:nav,content:videodtl}
+    },
+    {
+      path: '/dedaodtl',
+      name: 'dedaodtl',
+      components: {nav:nav,content:dedaodtl}
     }
   ]
 })

@@ -4,6 +4,10 @@ const videoModel = require("../model/commonVideoModel")
 const ray = require("../common/ray");
 
 
+/**
+ * 视频类通用
+ */
+
 class video{
 
   constructor(name,type) {
