@@ -7,3 +7,21 @@
 
 koa2 server -e --ejs
 
+npm install forever -g
+
+forever start bin/www
+forever stopall
+
+/usr/local/nginx/conf/vhost 
+
+location ^~ /api/ {
+    proxy_pass http://127.0.0.1:3000;      
+}
+lnmp nginx reload
+
+
+/volume1/cat-share/baidu/PanRead/server
+
+群晖
+/etc/nginx/app.d
+sudo synoservicecfg --restart nginx

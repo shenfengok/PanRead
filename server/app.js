@@ -34,7 +34,13 @@ app.use(bodyparser({
 app.use(jwtKoa({secret: secret.sign}).unless({
         path: [/^\/api\/login/] //数组中的路径不需要通过jwt验证
     }));
-app.use(cors());
+// app.use(cors());
+app.use(async (ctx, next) => {
+    ctx.set('Access-Control-Allow-Origin', ctx.headers.origin); // 很奇怪的是，使用 * 会出现一些其他问题
+    ctx.set('Access-Control-Allow-Headers', 'content-type');
+    ctx.set('Access-Control-Allow-Methods', 'OPTIONS,GET,HEAD,PUT,POST,DELETE,PATCH')
+    await next();
+});
 // app.use(session(CONFIG, app));
 app.use(json());
 app.use(logger());

@@ -10,7 +10,7 @@ class raymodel{
 
     async findvlist(uid,cur){
         if(!cur || cur <=0) cur =0;
-        let row = 15;
+        let row = 30;
 
         let sql = 'select tread.id,tread.finish,tread.title,tread.item_id,ii.title as ititle from' +
             ' (select s.id,s.finish, s.title,' +
@@ -62,7 +62,7 @@ class raymodel{
     }
     async findhistorylist(uid,cur){
         if(!cur || cur <=0) cur =0;
-        let row = 15;
+        let row = 30;
         let sql = 'select * from t_his where  uid =? order by up_time desc limit ?,?  ;';
         return  await  this.dao.query(sql, [uid,cur *row, row]);
 
