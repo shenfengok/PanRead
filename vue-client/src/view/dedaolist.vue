@@ -79,7 +79,7 @@
           })
       },
       router2(subId){
-        this.$router.push({ path: '/'+this.$route.query.prefix+'dtl', query: {  id:this.$route.query.id,subId:subId,title:this.$route.query.title,prefix:this.$route.query.prefix }})
+        this.$router.push({ path: '/'+this.$route.query.prefix+'dtl', query: {  id:this.$route.query.id,subId:subId,pname:this.$route.query.title,title:this.$route.query.title,prefix:this.$route.query.prefix }})
       },
       back(){
         this.$router.go(-1);//返回上一层

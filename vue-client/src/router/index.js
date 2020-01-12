@@ -11,6 +11,11 @@ import videodtl from "../view/videodtl";
 import dedao from "../view/dedao";
 import dedaolist from "../view/dedaolist";
 import dedaodtl from "../view/dedaodtl";
+import history from "../view/history";
+import ray from "../view/ray";
+import raylist from "../view/raylist";
+import raydtl from "../view/raydtl";
+import play from '../view/play'
 Vue.use(Router)
 
 const router = new Router({
@@ -31,9 +36,24 @@ const router = new Router({
       components: {nav:nav,content:home}
     },
     {
+      path: '/ray',
+      name: 'ray',
+      components: {nav:nav,content:ray}
+    },
+    {
+      path: '/history',
+      name: 'history',
+      components: {nav:nav,content:history}
+    },
+    {
       path: '/video',
       name: 'video',
       components: {nav:nav,content:video}
+    },
+    {
+      path: '/play',
+      name: 'play',
+      components: {nav:nav,content:play}
     },
     {
       path: '/dedao',
@@ -44,6 +64,11 @@ const router = new Router({
       path: '/list',
       name: 'list',
       components: {nav:nav,content:list}
+    },
+    {
+      path: '/raylist',
+      name: 'raylist',
+      components: {nav:nav,content:raylist}
     },
     {
       path: '/videolist',
@@ -59,6 +84,11 @@ const router = new Router({
       path: '/dtl',
       name: 'dtl',
       components: {nav:nav,content:dtl}
+    },
+    {
+      path: '/raydtl',
+      name: 'raydtl',
+      components: {nav:nav,content:raydtl}
     },
     {
       path: '/videodtl',

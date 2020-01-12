@@ -2,7 +2,7 @@
   <div>
     <main>
       <header><h1 @click="back()">Workspace</h1>
-        <h2>{{this.curr.title}}--{{this.$route.query.title}}</h2></header>
+        <h2>{{this.curr.title}}--{{this.$route.query.pname}}</h2></header>
       <section>
         <ul>
           <template v-if="this.curr.title !== ''">
@@ -82,7 +82,9 @@
         this.getdtl(this.next.id);
       },
       loghis(cur){
-        let url = '/api/video/loghis?id=' + this.$route.query.id + '&cur=' + cur +'&type=1';
+        let url = '/api/loghis?id=' + this.$route.query.id + '&cur='
+          + cur +'&type=1pname='+this.$route.query.pname +'&cname='
+          +this.curr.title  +'&prefix=video';
         console.log(url)
         this.axios.get(url)
           .then((res) => {

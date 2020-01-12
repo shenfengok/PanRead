@@ -16,6 +16,14 @@ class specialmodel{
         return  await this.dao.query(sql, [uid,cur *row, row]);
     }
 
+
+    async findhistorylist(uid,cur){
+        if(!cur || cur <=0) cur =0;
+        let row = 30;
+        let sql = 'select * from t_his where uid = ? order by up_time desc LIMIT ?, ?;';
+        return  await this.dao.query(sql, [uid,cur *row, row]);
+    }
+
     async findlist(id,cur){
         if(!cur || cur <=0) cur =0;
         let row = 30;
@@ -32,10 +40,10 @@ class specialmodel{
         }
     }
 
-    async loghis(id,cid,type,uid){
+    async loghis(id,cid,type,uid,pname,cname,prefix){
 
-        let sql = "INSERT INTO t_his(pid, cid, type,uid) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE cid =?";
-        let list =  await this.dao.query(sql, [id,cid,type,uid,cid]);
+        let sql = "INSERT INTO t_his(pid, cid, type,uid,pname,cname,prefix) VALUES(?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE cid =?";
+        let list =  await this.dao.query(sql, [id,cid,type,uid,cid,pname,cname,prefix]);
 
     }
 

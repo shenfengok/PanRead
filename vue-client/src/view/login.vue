@@ -46,7 +46,8 @@ export default {
           _this.userToken = 'Bearer ' + res.data.t
           // 将用户token保存到vuex中
           _this.changeLogin({Authorization: _this.userToken});
-          _this.$router.push('/home')
+          _this.$router.push('/ray')
+          this.$router.push({ path: '/ray', query: { menu:'极客专栏',prefix:'zhuanlan' }})
           // alert('登陆成功')
         }).catch(error => {
           alert('账号或密码错误')

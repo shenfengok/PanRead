@@ -20,6 +20,14 @@ router.get('/api/zlist', async (ctx, next) => {
  ctx.body = list;
 });
 
+router.get('/api/history', async (ctx, next) => {
+  var uid = ctx.state.user.id;
+  let specialRepo =  ray.getInst(specialmodel);
+  let list = await specialRepo.findhistorylist(uid,ctx.query.start);
+
+  ctx.body = list;
+});
+
 router.get('/api/list', async (ctx, next) => {
   let specialRepo =  ray.getInst(specialmodel);
   let list = await specialRepo.findlist(ctx.query.id,ctx.query.cur);
@@ -38,7 +46,7 @@ router.get('/api/dtl', async (ctx, next) => {
 
 router.get('/api/loghis', async (ctx, next) => {
   let specialRepo =  ray.getInst(specialmodel);
-  await specialRepo.loghis(ctx.query.id,ctx.query.cur,ctx.query.type,ctx.state.user.id);
+  await specialRepo.loghis(ctx.query.id,ctx.query.cur,ctx.query.type,ctx.state.user.id,ctx.query.pname,ctx.query.cname,ctx.query.prefix);
   ctx.body = 'success';
 });
 

@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://localhost:3000',
         changeOrigin: true
       },
-      '/zhuanlan-all': {
+      '/pan': {
         target: 'http://192.168.33.101:3333',
         changeOrigin: true
       }

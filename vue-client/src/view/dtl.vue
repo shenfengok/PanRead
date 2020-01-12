@@ -104,7 +104,9 @@
           .replace('<div class="_7Xrmrbox_0">下载APP</div>',myaudio).replace('_28dOln0j_01x','_28dOln0j_01xx')
       },
       loghis(cur){
-        let url = '/api/loghis?id=' + this.$route.query.id + '&cur=' + cur +'&type=0';
+        let url = '/api/loghis?id=' + this.$route.query.id + '&cur='
+          + cur +'&type=0&pname='+this.$route.query.pname +'&cname=' +this.curr.title +'&prefix=special';
+
         console.log(url)
         this.axios.get(url)
           .then((res) => {

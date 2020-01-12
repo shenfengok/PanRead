@@ -12,16 +12,16 @@
 <script>
 
 export default {
-  name: 'nav',
+  name: 'navpage',
   created () {
     // this.getZlist(false);
   },
   data() {
     return {
       menus: [
-        {path:'/home',title:'极客专栏'},
-        {path:'/video',title:'极客视频'},
-        {path:'/dedao',title:'得到app',prefix:'dedao'}
+        {path:'/ray',title:'极客专栏',prefix:'zhuanlan'},
+        {path:'/ray',title:'极客视频',prefix:'video'},
+        {path:'/ray',title:'得到app',prefix:'dedao'}
       ],
       cur :0
     }

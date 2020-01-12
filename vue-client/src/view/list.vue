@@ -79,7 +79,7 @@
           })
       },
       router2(subId){
-        this.$router.push({ path: '/dtl', query: {  id:this.$route.query.id,subId:subId }})
+        this.$router.push({ path: '/dtl', query: {  id:this.$route.query.id,subId:subId,pname:this.$route.query.title}})
       },
       back(){
         this.$router.go(-1);//返回上一层

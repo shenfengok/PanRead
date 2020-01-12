@@ -7,12 +7,12 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const secret = require('./config/secret.json')
 const jwtKoa = require('koa-jwt');
-const index = require('./routes/index');
+// const index = require('./routes/index');
 const users = require('./routes/users');
 const login = require('./routes/login');
-const video = require('./routes/video');
+const rayRoute = require('./routes/rayroute');
 // const testjson= require('./routes/testjson')
-const session = require('koa-session');
+// const session = require('koa-session');
 var cors = require('koa2-cors');
 // error handler
 onerror(app);
@@ -55,19 +55,19 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-function commonRounter(route,type){
-    const routter = new video(route,1)
+function commonRounter(route){
+    const routter = new rayRoute(route)
     app.use(routter.router.routes(), routter.router.allowedMethods())
 }
 
-// routes
-app.use(index.routes(), index.allowedMethods())
+// // routes
+// app.use(index.routes(), index.allowedMethods())
 
-commonRounter('video',1)
+commonRounter('video')
 
-commonRounter('dedao',2)
+commonRounter('dedao')
 
-
+commonRounter('zhuanlan')
 app.use(users.routes(), users.allowedMethods())
 app.use(login.routes(), login.allowedMethods())
 
