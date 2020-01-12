@@ -49,6 +49,13 @@ class rayroute{
       await rayRepo.loghis(ctx.query.id,ctx.query.cur,ctx.query.prefix,ctx.state.user.id,ctx.query.pname,ctx.query.cname);
       ctx.body = 'success';
     });
+    this.router.get('/api/history', async (ctx, next) => {
+      let uid = ctx.state.user.id;
+      let rayRepo =  this.getModel();
+      let list = await rayRepo.findhistorylist(uid,ctx.query.start);
+
+      ctx.body = list;
+    });
   }
 
   getModel(){

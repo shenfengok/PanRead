@@ -1,16 +1,16 @@
 <template>
   <div>
     <main>
-      <header><h1>workspace</h1>
+      <header><h1>History</h1>
         <h2>latest updates ...</h2></header>
       <section>
         <ul>
           <template v-if="zlist.length !== 0">
           <li itemscope itemtype="https://schema.org/SoftwareApplication" v-for="(item, index) in zlist"><a itemprop="url"><span
-            class="name" itemprop="name"  @click="routerTo(item.id,item.title)"> {{item.pname}}</span><span class="version"
-                                                                  itemprop="softwareVersion">{{item.finish ?'complete':'updating'}}</span><span
+            class="name" itemprop="name"  @click="routerTo(index)"> {{item.pname}}</span><span @click="routerToS(index)" class="version"
+                                                                  itemprop="softwareVersion">{{item.cname}}</span><span
             class="desc"
-            itemprop="description"  @click="routerToS(item.id,item.title)">{{item.cname}}</span></a>
+            itemprop="description"  @click="routerToS(index)">{{item.up_time}}</span></a>
           </li>
           </template>
           <template v-else>
@@ -78,27 +78,12 @@ export default {
           console.log(err)
         })
     },
-    routerTo(id,title,prefix){
+    routerTo(index){
 
-      if(prefix ==='special'){
-        // go to list.vue
-      }else if(prefix === 'video'){
-        // goto videolist.vue
-      }else{
-        // goto dedaolist.vue
-      }
-      this.$router.push({ path: '/dedaolist', query: { id: id,title:title }})
+      this.$router.push({ path: '/raylist', query: { id: this.zlist[index].pid,title:this.zlist[index].pname ,prefix:this.zlist[index].prefix }})
     },
-    routerToS(id,title,prefix){
-
-      if(prefix ==='special'){
-        // go to list.vue
-      }else if(prefix === 'video'){
-        // goto videolist.vue
-      }else{
-        // goto dedaolist.vue
-      }
-      this.$router.push({ path: '/dedaolist', query: { id: id,title:title }})
+    routerToS(index){
+      this.$router.push({ path: '/raydtl', query: {  id:this.zlist[index].pid,subId:this.zlist[index].cid,pname:this.zlist[index].pname,title:this.zlist[index].cname,prefix:this.zlist[index].prefix }})
     }
 
   }

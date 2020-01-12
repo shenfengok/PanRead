@@ -60,6 +60,13 @@ class raymodel{
             return list[0];
         }
     }
+    async findhistorylist(uid,cur){
+        if(!cur || cur <=0) cur =0;
+        let row = 15;
+        let sql = 'select * from t_his where  uid =? order by up_time desc limit ?,?  ;';
+        return  await  this.dao.query(sql, [uid,cur *row, row]);
+
+    }
 }
 
 
