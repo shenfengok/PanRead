@@ -12,14 +12,7 @@
 
 </div>
 </template>
-<style>
-  ul{
-    list-style: none;
-  }
-  li{
-    border-bottom: 1px solid gray;
-  }
-</style>
+
 <script>
   export default {
     name: 'play',

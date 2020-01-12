@@ -163,6 +163,9 @@
         return '/pan/'+this.$route.query.prefix+'-all'+url;
       },
       playUUrl(audio){
+        if(window.location.href.indexOf('greenhtml') > 0){
+          return 'https://www.greenhtml.com/pan/'+this.$route.query.prefix+'-all'+audio;
+        }
         return 'http://codingbaby.f3322.net:3333/pan/'+this.$route.query.prefix+'-all'+audio;
       },
       loghis(cur){
