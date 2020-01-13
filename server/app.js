@@ -32,15 +32,14 @@ app.use(bodyparser({
 //   renew: false, /** cookie快过期时自动重新设置*/
 // };
 app.use(jwtKoa({secret: secret.sign}).unless({
-        path: [/^\/api\/login/] //数组中的路径不需要通过jwt验证
+        path: [/^\/api\/login/,/^\/vue\/index.html/,'/vue/static/css/app.1e68c8782b633353a6a9900f58fe1a2a.css'
+            ,'/vue/static/icon-16-48.ico','/vue/static/icon.svg',
+            '/vue/static/js/app.6e4964958e738aa75d47.js',
+            '/vue/static/js/vendor.58bccbe2e61ec5b64ea1.js',
+            '/vue/static/js/manifest.5731bc56e953027b9c82.js'] //数组中的路径不需要通过jwt验证
     }));
-// app.use(cors());
-app.use(async (ctx, next) => {
-    ctx.set('Access-Control-Allow-Origin', ctx.headers.origin); // 很奇怪的是，使用 * 会出现一些其他问题
-    ctx.set('Access-Control-Allow-Headers', 'content-type');
-    ctx.set('Access-Control-Allow-Methods', 'OPTIONS,GET,HEAD,PUT,POST,DELETE,PATCH')
-    await next();
-});
+app.use(cors());
+
 // app.use(session(CONFIG, app));
 app.use(json());
 app.use(logger());
@@ -74,6 +73,7 @@ commonRounter('video')
 commonRounter('dedao')
 
 commonRounter('zhuanlan')
+commonRounter('shidian')
 app.use(users.routes(), users.allowedMethods())
 app.use(login.routes(), login.allowedMethods())
 

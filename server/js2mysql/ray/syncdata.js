@@ -1,6 +1,6 @@
 const  dbutil = require("../../db/dbutil");
 const ray = require("../../common/ray");
-const prefix = 'dedao';//dedao ,video
+const prefix = 'shidian';//dedao ,video,shidian
 const obj = require("./"+prefix+"-data.json");
 async  function sync_data(){
     let dao = ray.getInst(dbutil);
