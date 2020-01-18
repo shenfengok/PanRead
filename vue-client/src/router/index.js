@@ -15,7 +15,10 @@ import history from "../view/history";
 import ray from "../view/ray";
 import raylist from "../view/raylist";
 import raydtl from "../view/raydtl";
-import play from '../view/play'
+import play from '../view/play';
+import jing from '../vw/jing';
+import jinglist from "../vw/jinglist";
+import jingdtl from "../vw/jingdtl";
 Vue.use(Router)
 
 const router = new Router({
@@ -34,6 +37,11 @@ const router = new Router({
       path: '/home',
       name: 'home',
       components: {nav:nav,content:home}
+    },
+    {
+      path: '/jing',
+      name: 'jing',
+      components: {nav:nav,content:jing}
     },
     {
       path: '/ray',
@@ -66,6 +74,11 @@ const router = new Router({
       components: {nav:nav,content:list}
     },
     {
+      path: '/jinglist',
+      name: 'jinglist',
+      components: {nav:nav,content:jinglist}
+    },
+    {
       path: '/raylist',
       name: 'raylist',
       components: {nav:nav,content:raylist}
@@ -84,6 +97,11 @@ const router = new Router({
       path: '/dtl',
       name: 'dtl',
       components: {nav:nav,content:dtl}
+    },
+    {
+      path: '/jingdtl',
+      name: 'jingdtl',
+      components: {nav:nav,content:jingdtl}
     },
     {
       path: '/raydtl',

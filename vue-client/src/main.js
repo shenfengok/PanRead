@@ -22,16 +22,26 @@ axios.interceptors.request.use(
 });
 
 
-axios.interceptors.response.use(function (response) {
-    return response;
-  }, function (error) {
-    if (err.response.status === 401) {
 
-       //  localStorage.removeItem('Authorization');
-      	// this.$router.push('/login');
-        return Proimse.reject(data)
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          localStorage.removeItem('Authorization');
+          // 返回 401 清除token信息并跳转到登录页面
+          router.replace({
+            path: '/login',
+            query: {
+              redirect: router.currentRoute.fullPath
+            }
+          })
+      }
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response.data) // 返回接口返回的错误信息
   });
 
 Vue.prototype.axios = axios

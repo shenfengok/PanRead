@@ -19,10 +19,10 @@ export default {
   data() {
     return {
       menus: [
-        {path:'/ray',title:'极客专栏',prefix:'zhuanlan'},
-        {path:'/ray',title:'极客视频',prefix:'video'},
-        {path:'/ray',title:'得到app',prefix:'dedao'},
-        {path:'/ray',title:'十点读书',prefix:'shidian'}
+        {path:'/jing',title:'极客专栏',prefix:'zhuanlan'},
+        {path:'/jing',title:'极客视频',prefix:'video'},
+        {path:'/jing',title:'得到app',prefix:'dedao'},
+        {path:'/jing',title:'十点读书',prefix:'shidian'}
       ],
       cur :0
     }

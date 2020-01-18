@@ -3,8 +3,9 @@
  
 
 	include './db_conn.php';
-	$conn = OpenCon();
 	header('Content-type:text/html; charset=utf-8');
+	$conn = OpenCon();
+
 	// // 开启Session
 	// session_start();
 

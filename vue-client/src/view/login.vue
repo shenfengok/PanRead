@@ -39,16 +39,13 @@ export default {
       } else {
         this.axios({
           method: 'post',
-          url: '/api/login',
+          url: '/api/login.php',
           data: _this.loginForm
         }).then(res => {
           console.log(res.data)
-          _this.userToken = 'Bearer ' + res.data.t
-          // 将用户token保存到vuex中
+          _this.userToken =  res.data.token;
           _this.changeLogin({Authorization: _this.userToken});
-          _this.$router.push('/ray')
-          this.$router.push({ path: '/ray', query: { menu:'极客专栏',prefix:'zhuanlan' }})
-          // alert('登陆成功')
+          _this.$router.push({ path: '/jing', query: { menu:'极客专栏',prefix:'zhuanlan' }})
         }).catch(error => {
           alert('账号或密码错误')
           console.log(error)
