@@ -154,20 +154,37 @@ async function buchong(list){
     return all;
 }
 
+window.finish_list = {"662233362056296":"/00-资源文件/14-极客时间/01-专栏课/100-","587919476866806":"/00-资源文件/14-极客时间/01-专栏课/051-99","714384765881638":"/00-资源文件/14-极客时间/01-专栏课/01-50"};
+
 
 async function caiji(){
 
 
     var set = new Set();
 
-    var list = await fetch_share_list("294603226355310");
-    await sync_list(list);
+    // var list = await fetch_share_list("662233362056296");
+    // await sync_list(list);
+    //
+    // var list1 = await fetch_share_list("662233362056296");
+    // await sync_list(list);
+    //
+    // var list2 = await fetch_share_list("662233362056296");
+    // await sync_list(list);
+    //
+    // var list3 = await fetch_share_list("662233362056296");
+    // await sync_list(list);
+    var list_all = await fetch_share_list("1039355554886088");
+    for(var i in window.finish_list){
+        var list = await fetch_share_list(i);
+        await sync_list(list);
+        list_all = list_all.concat(list);
+    }
 
-    var list2 = await fetch_share_list("1039355554886088");
 
-    await sync_list(list2);
-
-    var list_all = list.concat(list2);
+    //
+    // await sync_list(list2);
+    //
+    // var list_all = list.concat(list2).concat(list3).concat(list4);
 
     while(!await buchong(list_all)){
         await sleep(1000);

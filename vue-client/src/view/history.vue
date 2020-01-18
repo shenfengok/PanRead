@@ -66,7 +66,7 @@ export default {
           this.cur =0;
         }
       }
-      this.axios.get('/api/history?start=' + this.cur)
+      this.axios.get('/api/history.php?start=' + this.cur)
         .then((res) => {
           if (res.data) {
             this.zlist = res.data

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable:  {
       '/api': {
-        target: 'http://192.168.33.102:3333',
+        target: 'http://192.168.33.101:3333',
         changeOrigin: true
       },
       '/pan': {
@@ -54,10 +54,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../../php/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../../php'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

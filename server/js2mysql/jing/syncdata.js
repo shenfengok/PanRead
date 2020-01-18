@@ -41,9 +41,9 @@ async  function sync_data(){
                 let ext = get_e(i);
                 if(ext === 'mp4'){
                     is_mp4 ++;
-                    if(is_mp4 >= 3){
-                        insert_list[title].is_video = 1;
-                    }
+                    // if(is_mp4 >= 3){
+                    //     insert_list[title].is_video = 1;
+                    // }
                 }
                 insert_list[title].file_info[ext] = fi ;
             }
@@ -54,11 +54,18 @@ async  function sync_data(){
                 if("" === il.title){
                     continue;
                 }
-                let isV = il.is_video >0 ?1:0;
+                let isV = il.file_info['mp4']  ?1:0;
                 let sqli = "INSERT INTO t_"+prefix+"_item(title,pid,file_info,is_video) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE title=?, pid=?, file_info=?,is_video=?"  ;
                 let fin = JSON.stringify(il.file_info);
                 await dao.query(sqli,[il.title,il.pid,fin,isV,il.title,il.pid,fin,isV]);
                 console.log(il.title);
+            }
+            if(is_mp4 >=5){
+                let select = "update t_"+prefix+" set is_video =1 where id =" + spe[0].id ;
+                 await dao.query(select);
+            }else{
+                let select = "update t_"+prefix+" set is_video =0 where id =" + spe[0].id ;
+                await dao.query(select);
             }
         }
         console.log(a);

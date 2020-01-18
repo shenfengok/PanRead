@@ -9,6 +9,7 @@ if(!isset($uid)){
     http_response_code(401);
     exit('登录过期，请重新登录');
 }
+
 $conn = OpenCon();
 $arr = array();
 $prefix =$_GET['prefix'];
@@ -23,6 +24,7 @@ mysqli_query($conn,$sql);
 
 $arr["code"] = 0;
 $arr["msg"] = '成功'.$sql;
+$arr["sql"] = $sql;
 CloseCon($conn);
 
 exit(json_encode($arr));

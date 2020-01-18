@@ -1,7 +1,7 @@
 <?php
 function OpenCon()
  {
-    $servername = "192.168.33.102:3306";
+    $servername = "192.168.33.101:3307";
     $username = "root";
     $password = "Qwert,1102";
     $db = "jing";
