@@ -6,8 +6,8 @@
       <section>
         <ul>
           <template  v-if="this.showPlay">
-            <li itemscope itemtype="https://schema.org/SoftwareApplication" v-html="this.playAudio">
-
+            <li itemscope itemtype="https://schema.org/SoftwareApplication" >
+              <audio  controls   id='audios' style='width:480px;' v-onended="gotonext_check()"><source :src="this.audio_url" /></audio><br>
             </li>
           </template>
 
@@ -54,7 +54,9 @@
         frame_path:'',
         showPlay :false,
         playUrl :'',
-        playAudio :''
+        playAudio :'',
+        audio_url:'',
+        end_time : 0
       }
     },
     methods :{
@@ -85,7 +87,8 @@
                 if(!finfo.mp4 &&　ad){
                   this.showPlay = true;
                   this.playUrl = this.playUUrl(this.findAudioPath(finfo));
-                  this.playAudio = "<audio  controls autoplay loop id='audios' style='width:480px;'><source src='"+this.playUrl +"' /></audio>"
+                  this.audio_url = this.playUrl;
+                  // this.playAudio = "<audio  controls autoplay loop id='audios' style='width:480px;'><source src='"+this.playUrl +"' /></audio>"
                 }
               }
 
@@ -148,11 +151,23 @@
       gotoprev(){
         this.getdtl(this.prev.id);
       },
+      gotonext_check(){
+        if(this.audio_url === ''){
+          return ;
+        }
+        this.end_time ++;
+        if(this.end_time <3 ){
+          return;
+        }
+        this.gotonext();
+      },
       gotonext(){
         this.getdtl(this.next.id);
       },
       processData(data,audio){
-        let myaudio = "<audio  controls autoplay loop id='audios' style='width:480px;'><source src='"+this.playUUrl(audio)+"' /></audio><br>" ;
+        this.audio_url = this.playUUrl(audio);
+        document.getElementById('audios').play();
+        // let myaudio = "<audio  controls autoplay loop id='audios' style='width:480px;'><source src='"+this.playUUrl(audio)+"' /></audio><br>" ;
         let str = data.replace(/_28dOln0j_0/g,'_28dOln0j_01x').replace(/-webkit-line-clamp:5;/g,'').replace(/<div class=\"_2r3UB1GX_0\"><span>展开<\/span><i class=\"iconfont\"><\/i><\/div>/g,'')
 
 
