@@ -29,6 +29,11 @@ class core {
             timeout: 600000,
             waitUntil: "networkidle2"
         });
+        let sel ='#test';
+        const token = await page.evaluate((sel) => {
+            return yunData.MYBDSTOKEN;
+        }, sel);
+        console.log(token);
         await page.waitForSelector('.list-content-box');
         return page;
     }

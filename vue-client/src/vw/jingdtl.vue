@@ -43,7 +43,7 @@
 
 <script>
   export default {
-    name: 'raydtl',
+    name: 'dingdtl',
     created () {
       this.getdtl(this.$route.query.subId);
     },
