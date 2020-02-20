@@ -3,11 +3,13 @@ const mysql = require("mysql")
 class dbutil{
     constructor() {
         this.pool = mysql.createPool({
-            host: '192.168.33.101',
+            //host: '192.168.33.101',
+            host:'localhost',
             user: 'root',
-            password: 'Qwert,1102',
+            //password: 'Qwert,1102',
+            password: 'ipqmtd123',
             database: 'jing',
-            port: 3307
+            port: 3306
         });
     }
 
