@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PanRead.iml" filepath="$PROJECT_DIR$/.idea/PanRead.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PanApp.iml" filepath="$PROJECT_DIR$/PanApp.iml" />
     </modules>
   </component>
 </project>
