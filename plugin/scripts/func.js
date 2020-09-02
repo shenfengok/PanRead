@@ -1,6 +1,5 @@
- 
+
 function http_call(url,datas,isget,strict) {
-    
     const p = new Promise((resolve, reject) => {
         $.ajax(url, {
             type : isget ? "GET" : "POST",
@@ -51,17 +50,3 @@ async function fetch_share_list(fsid){
 function get_share_list_url(fsid,page){
     return "https://pan.baidu.com/mbox/msg/shareinfo?msg_id=471981340980807638&page="+page+"&from_uk=228435709&gid=658103785633267975&type=2&fs_id="+fsid+"&num=300&bdstoken="+yunData.MYBDSTOKEN+"&channel=chunlei&web=1&app_id=250528&clienttype=0";
 }
-async function caiji() {
-    var list = await fetch_share_list("294603226355310");
-    var obj = {};
-    for(var s = 0; s < list.length; s++){
-        var sc = list[s];
-        obj[sc.fs_id] = sc.path;
-
-    }
-    console.log(JSON.stringify(obj));
-}
-caiji();
-
-//完成
-//{"662233362056296":"/00-资源文件/14-极客时间/01-专栏课/100-","587919476866806":"/00-资源文件/14-极客时间/01-专栏课/051-99","714384765881638":"/00-资源文件/14-极客时间/01-专栏课/01-50"}

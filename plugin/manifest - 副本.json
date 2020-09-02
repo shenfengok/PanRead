@@ -14,7 +14,7 @@
 
 "content_scripts": [
 {
-"js": ["scripts/jquery-3.3.1.min.js","scripts/func.js","scripts/include.js"],
+"js": ["scripts/jquery-3.3.1.min.js","scripts/include.js"],
 "matches": [
 "https://pan.baidu.com/*"
 ],
