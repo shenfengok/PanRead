@@ -11,15 +11,24 @@ router.post('/api/login', async (ctx, next) => {
         // ctx.session.username= user.name;
         // ctx.session.userid= user.id;
         const userToken = {
-          name: user.name,
-          id: user.id
+            name: user.name,
+            id: user.id
         }
         const token = jwt.sign(userToken, secret.sign, {expiresIn: '1h'})  // 签发token
         ctx.body = {
-          message: '成功',
-          t:token,
-          code: 1
+            message: '成功',
+            t:token,
+            code: 1
         }
+    }
+
+})
+
+
+router.post('/login/account', async (ctx, next) => {
+    ctx.body = {
+        t:'token',
+        status: 'ok'
     }
 
 })

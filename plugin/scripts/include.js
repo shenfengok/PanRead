@@ -47,7 +47,10 @@ function go2filefactory () {
 		function () {
 
 			if (window.location != 'https://pan.baidu.com/mbox/homepage#share/type=session' || $('li.session-list-item').length <= 1) {
-				console.log('not loading ready')
+				console.log('not loading ready');
+				if(loc_has('pan.baidu.com')){
+					window.location.href="https://pan.baidu.com/mbox/homepage#share/type=session";
+				}
 				return false;
 			}
 			return true;
@@ -78,6 +81,25 @@ function do_last_routing() {
 	walkRoute(last_route)
 }
 
+/**
+ * 浏览历史栏包含str
+ *
+ * */
+function history_contain(str){
+
+	return exist('div.sharelist-header > ul.sharelist-history li a:contains('+str+')');
+}
+
+/** 判断元素存在
+ *
+ */
+function exist(str){
+	if($(str).length > 0){
+		return $(str)[0];
+	}
+	return undefined;
+}
+
 function get_last_route() {
 	if(localStorage['last_route'] === undefined || localStorage['last_route'] === null || localStorage['last_route'] ==''){
 		localStorage['last_route'] = 'zhuanlan_wj'
@@ -100,7 +122,9 @@ function walkRoute(full_route){
 	do_job(jobs)
 }
 
-
+/**
+ * 更新阅读状态
+ */
 function loop_item_viewed_status(){
 	do_job_steps(function () {
 		for (var i =0;i <$('span.sharelist-item-title-name').length;i ++ ){
@@ -114,6 +138,8 @@ function loop_item_viewed_status(){
 					ti.append('<span>(未观看)</span>')
 					localStorage['viewed_status'+title] = '<span>未观看</span>'
 				}
+
+				ti.append('<button>采集</button>')
 				ti.attr('set-step',"1");
 			}
 		}
@@ -122,16 +148,17 @@ function loop_item_viewed_status(){
 
 }
 
+function loc_has(str){
+	return window.location.href.indexOf(str) >=0;
+}
+
 function loop_item_listen_event(){
 	do_job_steps(function () {
-		$('span.sharelist-item-title-name a').unbind('click').bind('click',function () {
+		$('span.sharelist-item-title-name button').unbind('click').bind('click',function () {
 			var item = $(this);
-			save_viewed_status(item)
-			download_html(item)
-			//只保存html
-			if(!is_item_dir(item) && (is_html(item) || is_mp4(item))){
-				save_last_viewed_item(item)
-			}
+			let fid = item.parents('li').attr('data-fid');
+			let list = fetch_share_list(fid)
+			console.log(list)
 
 		})
 		return false;
@@ -265,7 +292,7 @@ function goto_item(item){
 	} else {
 		item_route.push(item.current)
 	}
-	
+
 	walkRoute(item_route)
 }
 
@@ -279,7 +306,7 @@ chrome.runtime.onMessage.addListener(
 		console.log(request);
 		if( request.goto != undefined && request.goto !='' ) {
 			var route = request.goto;
-		
+
 			console.log(route.fix)
 			goto_item(route)
 
@@ -288,192 +315,8 @@ chrome.runtime.onMessage.addListener(
 			localStorage['last_route']  = route
 			window.location.reload();
 		}else if( request.caiji != undefined && request.caiji !='' ) {
-			window.caiji_sp = true;
-			if(request.caiji ==="1"){
-				window.caiji_sp = false;
-			}
-			
-			window.big_data = {};
-			window.stack =[];
-			window.start = get_current_parent();
-			window.starting = true;
-			window.current_special = {};
-
-			window.consuming = false;
-			window.caijiing = true;
-			window.caijiing_parent = get_current_parent();
-
-			window.poping = false;
-			window.poping_item = {};
-			window.route = [];
-			window.waiting_count= 0;
-
-			window.syncing = false;
-
-			window.syncing_folder = true;
 
 
-			console.log("caijiing...");
-
-			window.producer_consumer = window.setInterval(function(){
-				if(window.consuming){
-					return;
-				}
-				window.consuming = true;
-
-				// if(window.syncing_folder){
-					
-				// 	$('ul > li:nth-child(1) > div.sharelist-item-name > div.sharelist-item-funcs > a.sharelist-func-transfer.global-icon-transfer').fclick();
-					
-				// 	window.consuming = false;
-				// 	return;
-				// }
-
-
-				//平面采集---状态转换成普通
-				if(window.caijiing){
-
-					//fix 修复无法采集非当前parent
-					if(get_current_parent() !== window.caijiing_parent){
-						// $("div.sharelist-item-name > div.sharelist-item-title > span > a:contains('"+ window.caijiing_parent+"')").click();
-						// console.log("fix"+ window.caijiing_parent);
-						console.log("waiting " + window.caijiing_parent);
-						consuming = false;
-						return;
-					}
-					console.log ("采集"+ window.caijiing_parent + "...");
-					// window.big_data[window.stack_parent] =[];
-					let caiji = '.sharelist-container ul li';
-					if($(caiji).length >0){
-						let aset = $(caiji + ' span.sharelist-item-title-name a');
-						//找到当前对象
-						let x = big_data;
-						for(let j = 0;j < window.route.length; j++){
-							x = x[window.route[j]];
-						}
-
-						let parent_cur = get_current_parent();
-
-						//先去重
-						let aset_distinct = new Set();
-					 
-
-						for(let i = 0; i < aset.length; i ++){
-							let ali = $(aset[i]);
-							//先去重
-							if(aset_distinct.has(ali.attr('title'))){
-								continue;
-							}else{
-								aset_distinct.add(ali.attr('title'));
-							}
-
-							let to_caiji_item = {};
-							to_caiji_item['title'] = ali.attr('title');
-							to_caiji_item['parent'] = parent_cur;
-							x[ali.attr('title')] = {};
-							if(window.starting){
-								to_caiji_item.is_speclial =true;
-							}
-
-							if(is_item_dir(ali)){
-								window.stack.push(to_caiji_item);
-							}else{
-								//todo ajaxGetDlinkShare      getDlinkMbox          u.prototype.directDownload
-								x[ali.attr('title')]['audio'] ='mp3';
-							}
-						}
-						window.starting = false;
-						window.caijiing = false;
-
-					}else if($('div.sharelist-container > div:contains(文件列表为空)').length > 0){
-						window.caijiing = false;
-					}
-					window.consuming = false;
-					return;//处理完就返回
-				}else{
-					// if(window.poping){
-					// 	consuming = false;
-					// 	return;
-					// }
-					
-					//---------消费分割线--------------------------
-					if(window.stack.length <=0 && !window.poping ){
-						console.log(window.big_data);
-						window.consuming = false;
-						window.clearInterval(window.producer_consumer);
-						return;//处理完就返回
-					}
-					
-					
-
-					if(!window.poping){
-						window.poping_item =window.stack.pop();//正在访问的节点
-						if(window.poping_item.is_speclial){
-
-							Object.assign(window.current_special,window.poping_item);
-							console.log("current special " + window.current_special.title)
-
-						}
-						console.log("pop out" + window.poping_item.title);
-						window.poping = true;
-					}
-					
-
-					//需要返回
-					if(window.poping_item.title === 'goback'){
-						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
-						// $("div.sharelist-item-title > span > a")
-						// $("ul.sharelist-history > li:nth-child(2) > a:contains("+window.poping_item.parent+")").fclick();
-						window.route.pop();
-						window.poping = false;
-						window.consuming = false;
-						return;//处理完就返回
-					}
-
-					
-					//深入采集----转换到caijiing状态
-
-					let folder = $('a:contains('+window.poping_item.title+')');
-					if(folder.length <=0){
-						$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
-							if($("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").length > 0){
-							$("ul.sharelist-history > li:nth-child(2) > a[title='"+window.poping_item.parent+"']").fclick();
-						}else{
-							$("div.sharelist-item-title > span > a:contains('" +window.poping_item.parent+"')" ).fclick();
-						}
-						
-						window.consuming = false;
-						return;
-					}
-					 
-			        let item = $(folder[0]);
-			        if(is_item_dir(item)){
-			        	let to_caiji_item1 = {};
-			        	to_caiji_item1['title'] = 'goback';
-						to_caiji_item1['parent'] = get_current_parent();
-						window.stack.push(to_caiji_item1);
-						console.log("click " + item.attr('title'));
-			        	item.fclick();
-			        	window.route.push(item.attr('title'));
-			        	window.caijiing_parent = item.attr('title');
-			        	window.caijiing = true;
-			        	window.poping = false;
-			        }else{
-			        	window.waiting_count ++ ;
-			        	console.log("waiting "+ window.poping_item.title + "...");
-
-			        	if(window.waiting_count > 10){
-			        		// try to fix 
-
-			        	}
-			        }
-			        window.consuming = false;
-
-				}
-
-				
-			},1000 );
-			
 		}
 	}
 );
@@ -481,40 +324,6 @@ chrome.runtime.onMessage.addListener(
 function get_current_parent(){
 	return $('ul.sharelist-history > li:nth-child(2) > span').last().attr('title');
 }
-
-// function caiji_obj(){
-// 	let obj = windwo.big_data；
-// 	let sele = '.sharelist-container ul li';
-// 	let caiji_list = $(sele);
-// 	for(let i =0;i < caiji_list.length; i ++){
-// 		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
-// 		if(undefined !== alink.attr('title')){
-// 			obj[alink.attr('title')] = [];
-// 			window.stack.push(alink.attr('title'));
-// 		}
-// 	}
-// }
-
-
-// function caiji_obj1(obj){
-// 	let sele = '.sharelist-container ul li';
-// 	let caiji_list =  $(sele);
-// 	for(let i =0;i < caiji_list.length; i ++){
-// 		caiji_list = $(sele);
-// 		let alink = $(caiji_list[i]).find('span.sharelist-item-title-name a');
-// 		if(undefined !== alink.attr('title')){
-// 			obj[alink.attr('title')] = {};
-
-// 			if(is_item_dir(alink)){
-// 				 inner_obj(obj[alink.attr('title')]);
-// 			}else{//数据节点处理
-// 				obj[alink.attr('title')]['audio'] ='xx.mp3'
-// 			}
-// 			goback();
-// 		}
-// 	}
-// }
-
 
 
 function sleep(d){

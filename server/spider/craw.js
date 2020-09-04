@@ -5,13 +5,15 @@ const SyncData = require('./SyncData')
 corr = ray.getInst(core);
 syncdata = ray.getInst(SyncData)
 
+
+
 async function work() {
-    await corr.login();
+    // await corr.login();
     //极客时间---完结列表folder
-    let jike_list = await craw_it(from.jike)
-    let jike_content = await corr.crawContent(jike_list)
-    await syncdata.do("jike",jike_content)
-    console.log(corr.replace);
+    // let jike_list = await craw_it(from.jike)
+    // let jike_content = await corr.crawContent(jike_list)
+    // await syncdata.do("jike",jike_content)
+    // console.log(corr.replace);
 }
 
 async function craw_it(it) {

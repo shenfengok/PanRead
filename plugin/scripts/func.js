@@ -1,4 +1,4 @@
-
+var token ="6d7f483cf5848d4e022ce7d051bc3316";
 function http_call(url,datas,isget,strict) {
     const p = new Promise((resolve, reject) => {
         $.ajax(url, {
@@ -48,5 +48,5 @@ async function fetch_share_list(fsid){
     return resultList;
 }
 function get_share_list_url(fsid,page){
-    return "https://pan.baidu.com/mbox/msg/shareinfo?msg_id=471981340980807638&page="+page+"&from_uk=228435709&gid=658103785633267975&type=2&fs_id="+fsid+"&num=300&bdstoken="+yunData.MYBDSTOKEN+"&channel=chunlei&web=1&app_id=250528&clienttype=0";
+    return "https://pan.baidu.com/mbox/msg/shareinfo?msg_id=471981340980807638&page="+page+"&from_uk=228435709&gid=658103785633267975&type=2&fs_id="+fsid+"&num=300&bdstoken="+token+"&channel=chunlei&web=1&app_id=250528&clienttype=0";
 }
