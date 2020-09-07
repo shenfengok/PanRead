@@ -33,4 +33,9 @@ public class AccountController {
         }
         return CommonResult.fail("登录失败");
     }
+
+    @RequestMapping("/test")
+    public CommonResult test (){
+        return CommonResult.success("yeah");
+    }
 }
