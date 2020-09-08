@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Data
 @Table
 public class AccountEntity extends BaseEntity {
-
     private String userName;
     private String password;
     private String mobile;

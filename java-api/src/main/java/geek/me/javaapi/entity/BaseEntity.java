@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 public class BaseEntity {
 
-
     @CreatedDate
     private Date createDate;
     @LastModifiedDate

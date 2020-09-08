@@ -2,6 +2,7 @@ package geek.me.javaapi.controller;
 
 import geek.me.javaapi.dto.CommonResult;
 import geek.me.javaapi.dto.form.LoginForm;
+import geek.me.javaapi.dto.form.ReNewForm;
 import geek.me.javaapi.entity.AccountEntity;
 import geek.me.javaapi.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,9 @@ public class AccountController {
         return CommonResult.fail("登录失败");
     }
 
-    @RequestMapping("/test")
-    public CommonResult test (){
+    @RequestMapping("/refreshToken")
+    public CommonResult refreshToken (@RequestBody ReNewForm form){
+        form.refresh();
         return CommonResult.success("yeah");
     }
 }
