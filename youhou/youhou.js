@@ -28,8 +28,8 @@ unsafeWindow.PARENT_LIST = [];
 
 
 (async () => {
-    await refresh();
-
+    //刷新token等全局变量
+    do_job_steps(refresh);
     //事件监听和标记
     do_job_steps(function () {
         $('.sharelist-item-title a').unbind('click').bind('click', async function () {
@@ -92,9 +92,11 @@ function get_parent_id() {
 }
 
 async function refresh() {
+    if(!unsafeWindow.yunData.SHARE_UK){
+        return ;
+    }
     console.log('refresh');
     let param = {};
-    debugger;
     param.cookie = document.cookie;
     param.yunDataTxt = JSON.stringify(unsafeWindow.yunData);
     param.logId = getLogID();
@@ -153,7 +155,7 @@ function post(erUrl, param) {
         GM.xmlHttpRequest({
             method: 'POST',
             url: erUrl,
-            data: param,
+            data: JSON.stringify(param),
             headers: {'Content-type': 'application/json'},
             onload: function (xhr) {
                 console.log(xhr.responseText);
