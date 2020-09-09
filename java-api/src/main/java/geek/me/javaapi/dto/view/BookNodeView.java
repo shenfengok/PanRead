@@ -1,19 +1,19 @@
-package geek.me.javaapi.entity;
+package geek.me.javaapi.dto.view;
 
+import geek.me.javaapi.entity.BookNodeEntity;
+import geek.me.javaapi.entity.NodeTypeEnum;
 import lombok.Data;
-import org.springframework.stereotype.Indexed;
+import org.springframework.beans.BeanUtils;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
 
-@Entity
 @Data
-@Table(indexes = {@Index(name = "my_index_name",  columnList="name"),
-        @Index(name = "my_index_type", columnList="nodeType")})
-
-public class BookNodeEntity extends BaseEntity {
+public class BookNodeView {
+    public static BookNodeView from(BookNodeEntity one) {
+        BookNodeView view = new BookNodeView();
+        BeanUtils.copyProperties(one,view);
+        return view;
+    }
 
     private String name;
     @Id

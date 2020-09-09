@@ -18,18 +18,16 @@
 // ==/UserScript==
 
 
-const parentKey = 'parent_key';
-
-function putGlobal(key, value) {
-    GM.setValue(key, value);
-}
+const BASE_URL = 'http://localhost:8080';
+const QUERY_NODE_TYPE = '/api/node/queryType';
+const REFRESH_TOKEN = '/api/refreshToken';
 
 unsafeWindow.PARENT_LIST = [];
 
 
 (async () => {
     //刷新token等全局变量
-    do_job_steps(refresh);
+    do_job_steps(refreshToken);
     //事件监听和标记
     do_job_steps(function () {
         $('.sharelist-item-title a').unbind('click').bind('click', async function () {
@@ -64,46 +62,46 @@ unsafeWindow.PARENT_LIST = [];
     })
 
     //获取类型，展示操作
-    do_job_steps(function () {
-        let list = $('.sharelist-item-title a');//判断类型是否赋值
-        if (list.length > 0) {
-            let parent_id = get_parent_id();
-
-            for (let l in list) {
-                if (l.attr('marked-type')) {
-                    continue
-                } else {
-                    //获取类型
-                    //getParentIfNo()
-                    //getSelf();
-                }
-            }
-
-            return true;
-        }
-        return false;
-    });
+    do_job_steps(checkParentType);
 
 })()
 
 
+//-------dom操作--------
 function get_parent_id() {
     return $('li[node-type=sharelist-history-list] span').last().attr('fid-hack')
 }
 
-async function refresh() {
-    if(!unsafeWindow.yunData.SHARE_UK){
-        return ;
+
+//-------业务类---------
+
+/**
+ * 检查父文件夹类型
+ */
+async function checkParentType() {
+    let parent_id = get_parent_id();
+    
+    let data = await post(QUERY_NODE_TYPE,{fsid: parent_id});
+    if(data){
+        let type = data.contentType;
+    }
+
+    return false;
+}
+
+async function refreshToken() {
+    if (!unsafeWindow.yunData.SHARE_UK) {
+        return false;
     }
     console.log('refresh');
     let param = {};
     param.cookie = document.cookie;
     param.yunDataTxt = JSON.stringify(unsafeWindow.yunData);
     param.logId = getLogID();
-    const response = await post('http://localhost:8080/api/refreshToken', param)
-    console.log(response)
+    const response = await post(REFRESH_TOKEN, param)
+    console.log(response);
+    return false;
 }
-
 
 //----帮助类helper------
 
@@ -135,7 +133,7 @@ function get(erUrl) {
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: 'GET',
-            url: erUrl,
+            url: BASE_URL + erUrl,
             headers: {'Content-type': 'application/json'},
             onload: function (xhr) {
                 console.log(xhr.responseText);
@@ -154,7 +152,7 @@ function post(erUrl, param) {
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: 'POST',
-            url: erUrl,
+            url: BASE_URL + erUrl,
             data: JSON.stringify(param),
             headers: {'Content-type': 'application/json'},
             onload: function (xhr) {
