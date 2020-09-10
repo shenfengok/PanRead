@@ -4,6 +4,7 @@ import geek.me.javaapi.dao.BookNodeDao;
 import geek.me.javaapi.dto.view.BookNodeView;
 import geek.me.javaapi.entity.AccountEntity;
 import geek.me.javaapi.entity.BookNodeEntity;
+import geek.me.javaapi.entity.NodeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,8 @@ public class BookNodeService {
         if(null == one){
             one = new BookNodeEntity();
             one.setFsid(fsId);
-            bookNodeDao.save(one);
+            one.setNodeType(NodeTypeEnum.unknown);
+            bookNodeDao.saveAndFlush(one);
         }
 
         return one;

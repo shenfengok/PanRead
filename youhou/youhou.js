@@ -29,37 +29,7 @@ unsafeWindow.PARENT_LIST = [];
     //刷新token等全局变量
     do_job_steps(refreshToken);
     //事件监听和标记
-    do_job_steps(function () {
-        $('.sharelist-item-title a').unbind('click').bind('click', async function () {
-            var item = $(this);
-            let fid = item.parents('li').attr('data-fid');
-            let tile = item.attr('title');
-            //标记到his导航栏a上
-            do_job_steps(function () {
-                let his = $('.sharelist-history a:contains("' + tile + '")');
-                if (his.length > 0) {
-                    his.attr('fid-hack', fid);
-
-                    return true;
-                }
-                return false;
-            });
-
-            //标记到span标签上
-            do_job_steps(function () {
-                let his2 = $('li[node-type=sharelist-history-list] span[title="' + tile + '"]');
-                if (his2.length > 0) {
-                    his2.attr('fid-hack', fid);
-
-                    return true;
-                }
-                return false;
-            });
-
-
-        })
-        return false;
-    })
+    do_job_steps(listenNodeClick);
 
     //获取类型，展示操作
     do_job_steps(checkParentType);
@@ -69,7 +39,11 @@ unsafeWindow.PARENT_LIST = [];
 
 //-------dom操作--------
 function get_parent_id() {
-    return $('li[node-type=sharelist-history-list] span').last().attr('fid-hack')
+    let spans = $('li[node-type=sharelist-history-list] span');
+    if (spans.length > 0) {
+        return spans.last().attr('fid-hack')
+    }
+    return undefined;
 }
 
 
@@ -80,15 +54,57 @@ function get_parent_id() {
  */
 async function checkParentType() {
     let parent_id = get_parent_id();
-    
-    let data = await post(QUERY_NODE_TYPE,{fsid: parent_id});
-    if(data){
-        let type = data.contentType;
+
+    if (parent_id) {
+        let data = await post(QUERY_NODE_TYPE, {fsId: parent_id});
+        if (data) {
+            let type = data.contentType;
+        }
     }
+
 
     return false;
 }
 
+/**
+ * 监听node点击
+ * @returns {Promise<boolean>}
+ */
+async function listenNodeClick () {
+    $('.sharelist-item-title a').unbind('click').bind('click', async function () {
+        var item = $(this);
+        let fid = item.parents('li').attr('data-fid');
+        let tile = item.attr('title');
+        //标记到his导航栏a上
+        do_job_steps(function () {
+            let his = $('.sharelist-history a:contains("' + tile + '")');
+            if (his.length > 0) {
+                his.attr('fid-hack', fid);
+
+                return true;
+            }
+            return false;
+        });
+
+        //标记到span标签上
+        do_job_steps(function () {
+            let his2 = $('li[node-type=sharelist-history-list] span[title="' + tile + '"]');
+            if (his2.length > 0) {
+                his2.attr('fid-hack', fid);
+
+                return true;
+            }
+            return false;
+        });
+
+
+    })
+    return false;
+}
+/**
+ * 刷新token到服务端
+ * @returns {Promise<boolean>}
+ */
 async function refreshToken() {
     if (!unsafeWindow.yunData.SHARE_UK) {
         return false;
@@ -107,32 +123,34 @@ async function refreshToken() {
 
 //helper funcs
 function do_job_steps(...steps) {
-    var job = []
-    for (var i = 0; i < steps.length; i++) {
+    let job = []
+    for (let i = 0; i < steps.length; i++) {
         job.push(steps[i])
     }
     do_job(job)
 }
 
 function do_job(job) {
-    var step_count = job.length;
-    var current_step = 0;
-    var t1 = window.setInterval(function () {
-        if (job[current_step]()) {
+    let step_count = job.length;
+    let current_step = 0;
+    let t1 = window.setInterval(function () {
+        let result = job[current_step]();
+        if (result === true) {
             current_step++;
             step_count--;
         }
-        if (step_count == 0) {
+        if (step_count === 0) {
             window.clearInterval(t1);
         }
     }, 2000);
 }
 
 
-function get(erUrl) {
+function get(erUrl,param) {
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: 'GET',
+            data:param,
             url: BASE_URL + erUrl,
             headers: {'Content-type': 'application/json'},
             onload: function (xhr) {
@@ -152,7 +170,7 @@ function post(erUrl, param) {
     return new Promise((resolve, reject) => {
         GM.xmlHttpRequest({
             method: 'POST',
-            url: BASE_URL + erUrl,
+            url: BASE_URL + erUrl ,
             data: JSON.stringify(param),
             headers: {'Content-type': 'application/json'},
             onload: function (xhr) {
@@ -217,3 +235,4 @@ function getCookie(e) {
     var n = document, c = decodeURI;
     return n.cookie.length > 0 && (o = n.cookie.indexOf(e + "="), -1 != o) ? (o = o + e.length + 1, t = n.cookie.indexOf(";", o), -1 == t && (t = n.cookie.length), c(n.cookie.substring(o, t))) : "";
 }
+

@@ -3,20 +3,16 @@ package geek.me.javaapi.entity;
 import lombok.Data;
 import org.springframework.stereotype.Indexed;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
-@Table(indexes = {@Index(name = "my_index_name",  columnList="name"),
+@Table(indexes = {@Index(name = "myunique",  columnList="fsid",unique = true),
         @Index(name = "my_index_type", columnList="nodeType")})
-
 public class BookNodeEntity extends BaseEntity {
 
     private String name;
-    @Id
+
     private String fsid;
     private String parentFsid;
     private String path;
@@ -50,4 +46,7 @@ public class BookNodeEntity extends BaseEntity {
      * 2，下载失败
      */
     private int fileStatus;
+    @Id
+    @GeneratedValue
+    private Long id;
 }
