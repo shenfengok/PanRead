@@ -1,8 +1,8 @@
 package geek.me.javaapi.entity;
 
 public enum NodeTypeEnum {
-    unknown,
-    libout,
+    none,
+    libOut,
     lib,
     series,
     subSeries,

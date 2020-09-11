@@ -6,6 +6,7 @@ import lombok.Data;
 public class CommonResult<T> {
 
     private String status;
+    private String msg;
     private T data;
 
     public static <T> CommonResult success(T data) {

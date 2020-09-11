@@ -12,6 +12,9 @@ public class BookNodeView {
     public static BookNodeView from(BookNodeEntity one) {
         BookNodeView view = new BookNodeView();
         BeanUtils.copyProperties(one,view);
+        if(null == view.getNodeType()){
+            view.setNodeType(NodeTypeEnum.none);
+        }
         return view;
     }
 

@@ -31,7 +31,7 @@ public class BookNodeService {
         if(null == one){
             one = new BookNodeEntity();
             one.setFsid(fsId);
-            one.setNodeType(NodeTypeEnum.unknown);
+            one.setNodeType(NodeTypeEnum.none);
             bookNodeDao.saveAndFlush(one);
         }
 
