@@ -38,14 +38,32 @@ unsafeWindow.PARENT_LIST = [];
 
 
 //-------dom操作--------
+
+const parent_span = 'li[node-type=sharelist-history-list] span:last';
+const hack_id = 'fid-hack';
 function get_parent_id() {
-    let spans = $('li[node-type=sharelist-history-list] span');
-    if (spans.length > 0) {
-        return spans.last().attr('fid-hack')
+    return do_for_element(parent_span,x=>x.attr(hack_id));
+}
+
+function append_parent_span(str,check) {
+
+    if(do_for_element(parent_span,x=>x.attr(check) ==="1")){
+        return true;
+    }
+    return do_for_element(parent_span,x=>{
+        x.prepend(str);
+        x.attr(check,1)
+    });
+}
+
+
+function do_for_element(sel,do_func){
+    let ele = $(sel);
+    if(ele.length > 0){
+        return do_func(ele);
     }
     return undefined;
 }
-
 
 //-------业务类---------
 
@@ -58,7 +76,8 @@ async function checkParentType() {
     if (parent_id) {
         let data = await post(QUERY_NODE_TYPE, {fsId: parent_id});
         if (data) {
-            let type = data.contentType;
+            let type = data.nodeType;
+            append_parent_span('('+type+')','nodeType');
         }
     }
 
