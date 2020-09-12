@@ -16,7 +16,14 @@ public class CommonResult<T> {
         return result;
     }
 
-    public static CommonResult fail( String msg) {
+    public static <T> CommonResult success() {
+        CommonResult result = new CommonResult();
+        result.setData("");
+        result.setStatus("ok");
+        return result;
+    }
+
+    public static CommonResult fail(String msg) {
         CommonResult result = new CommonResult();
         result.setData(msg);
         result.setStatus("fail");

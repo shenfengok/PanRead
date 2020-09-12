@@ -37,4 +37,23 @@ public class BookNodeService {
 
         return one;
     }
+
+    public BookNodeView markParentType(String fsId, NodeTypeEnum type) {
+        BookNodeEntity one = bookNodeDao.findByFsid(fsId);
+        if(null == one){
+            one = new BookNodeEntity();
+        }
+        one.setFsid(fsId);
+        one.setNodeType(type);
+        bookNodeDao.saveAndFlush(one);
+        return BookNodeView.from(one);
+    }
+
+    public BookNodeView updateParent(String fsId) {
+        return null;
+    }
+
+    public BookNodeView syncParent(String fsId) {
+        return null;
+    }
 }

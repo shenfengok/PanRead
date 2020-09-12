@@ -258,6 +258,13 @@ function checkRes(res, title) {
     }
 }
 
+function errorMsg(res) {
+    Toast.fire({
+        text: title + '失败：' + res.msg,
+        icon: 'error'
+    })
+}
+
 /**
  * 检查父文件夹类型
  */
@@ -268,9 +275,14 @@ async function checkParentType() {
 
         let res = await post(QUERY_NODE_TYPE, {fsId: parent_id});
         if (res) {
-            let type = res.data.nodeType;
-            append_parent_span('(' + type + ')', NODE_TYPE);
-            fill_button(type);
+            if (res.data && res.data.nodeType) {
+                let type = res.data.nodeType;
+                append_parent_span('(' + type + ')', NODE_TYPE);
+                fill_button(type);
+            } else {
+                errorMsg(res);
+            }
+
         }
     }
 
