@@ -1,5 +1,7 @@
 package geek.me.javaapi.service;
 
+import geek.me.javaapi.baidu.PcsApi;
+import geek.me.javaapi.baidu.dto.PcsItem;
 import geek.me.javaapi.dao.BookNodeDao;
 import geek.me.javaapi.dto.view.BookNodeView;
 import geek.me.javaapi.entity.AccountEntity;
@@ -8,6 +10,8 @@ import geek.me.javaapi.entity.NodeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,6 +19,9 @@ public class BookNodeService {
 
     @Autowired
     private BookNodeDao bookNodeDao;
+
+    @Autowired
+    private PcsApi pcsApi;
 
 
     public Map<String, BookNodeView> findChilren(String fsId) {
@@ -55,5 +62,20 @@ public class BookNodeService {
 
     public BookNodeView syncParent(String fsId) {
         return null;
+    }
+
+    /**
+     * 查询所有子node 的type
+     * @param fsId
+     * @return
+     */
+    public List<BookNodeView> queryChildType(String fsId) throws InterruptedException {
+        List<PcsItem> list = pcsApi.getChildItem(fsId);
+        List<BookNodeView> res = new ArrayList<>();
+        for(PcsItem item:list){
+            BookNodeView view = BookNodeView.from(makeOne(String.valueOf(item.getFs_id())));
+            res.add(view);
+        }
+        return res;
     }
 }

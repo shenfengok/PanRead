@@ -21,6 +21,7 @@
 
 const BASE_URL = 'http://localhost:8080';
 const QUERY_NODE_TYPE = '/api/node/queryType';
+const QUERY_CHILD_TYPE = '/api/node/queryChildType';
 const MARK_PARENT_TYPE = '/api/node/markParentType';
 const UPDATE_PARENT = '/api/node/updateParent';
 const SYNC_PARENT = '/api/node/syncParent';
@@ -37,8 +38,13 @@ unsafeWindow.PARENT_LIST = [];
     //事件监听和标记
     do_job_steps(listenNodeClick);
 
-    //获取类型，展示操作
+    //获取父类型，展示操纵
     do_job_steps(checkParentType);
+    // 获取子Node类型，展示操作
+    do_job_steps(checkChildType);
+
+    //button点击操作
+    do_job_steps(listenButtonClick);
 
 })()
 
@@ -47,15 +53,15 @@ unsafeWindow.PARENT_LIST = [];
 
 const parent_span = 'li[node-type=sharelist-history-list] span:last';
 const hack_id = 'fid-hack';
-const BUTTON_GROUP = '.file-factory';
+const BUTTON_GROUP = 'div.sharelist-container  div.sharelist-item-title > span';
 const BUTTON_GROUP_BUTTONS = BUTTON_GROUP + '> button';
-const BUTTON_GROP_RESET_CONTENT = '<span class="button"><em class="icon"></em><span class="name">文件库</span></span>';
+const BUTTON_GROP_RESET_CONTENT = ' <span class="button"><em class="icon"></em><span class="name">文件库</span></span>';
 
 const BUTTON_FILLED_For = 'buttonFilledFor';
 
-const BUTTON_WHEN_NODE_TYPE_NONE = '<button>lib</button><button>libOut</button>';
+const BUTTON_WHEN_NODE_TYPE_NONE = ' <button>lib</button> <button>libOut</button>';
 
-const BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES = '<button>update</button><button>sync</button>';
+const BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES = ' <button>update</button> <button>sync</button>';
 
 function get_parent_id() {
     return do_for_element(parent_span, x => x.attr(hack_id));
@@ -104,7 +110,7 @@ function fill_button(type) {
         return true;
     }
     return do_for_element(BUTTON_GROUP, x => {
-        x.html(BUTTON_GROP_RESET_CONTENT);
+        x.remove('button');
         if ('none' === type) {
             x.append(BUTTON_WHEN_NODE_TYPE_NONE);
         } else if ('lib' === type || 'series' === type) {
@@ -176,16 +182,16 @@ async function listenButtonClick() {
  * @returns {Promise<boolean>}
  */
 async function refreshToken() {
-    if (!unsafeWindow.yunData.SHARE_UK) {
-        return false;
-    }
-    console.log('refresh');
+    // if (!unsafeWindow.yunData.SHARE_UK) {
+    //     return false;
+    // }
+    // console.log('refresh');
     let param = {};
     param.cookie = document.cookie;
     param.yunDataTxt = JSON.stringify(unsafeWindow.yunData);
     param.logId = getLogID();
     const response = await post(REFRESH_TOKEN, param)
-    console.log(response);
+    // console.log(response);
     return false;
 }
 
@@ -274,6 +280,30 @@ async function checkParentType() {
     if (parent_id) {
 
         let res = await post(QUERY_NODE_TYPE, {fsId: parent_id});
+        if (res) {
+            if (res.data && res.data.nodeType) {
+                let type = res.data.nodeType;
+                append_parent_span('(' + type + ')', NODE_TYPE);
+                fill_button(type);
+            } else {
+                errorMsg(res);
+            }
+
+        }
+    }
+
+
+    return false;
+}
+/**
+ * 检查zi文件夹类型
+ */
+async function checkChildType() {
+    let parent_id = get_parent_id();
+
+    if (parent_id) {
+
+        let res = await post(QUERY_CHILD_TYPE, {fsId: parent_id});
         if (res) {
             if (res.data && res.data.nodeType) {
                 let type = res.data.nodeType;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +26,13 @@ public class BookNodeController {
         BookNodeView res = bookNodeService.queryType(nodeTypeQuery.getFsId());
         return CommonResult.success(res);
     }
+
+    @RequestMapping("queryChildType")
+    public CommonResult<List<BookNodeView>> queryChildType(@RequestBody NodeTypeQuery nodeTypeQuery) throws InterruptedException {
+        List<BookNodeView> res = bookNodeService.queryChildType(nodeTypeQuery.getFsId());
+        return CommonResult.success(res);
+    }
+
 
     @RequestMapping("markParentType")
     public CommonResult markParentType( @RequestBody NodeTypeForm form){
