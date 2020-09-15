@@ -280,7 +280,9 @@ async function updateParent() {
 
 /**
  * 同步Parent内容
- * todo 这里需要一个一个跟新，因为下载地址需要验证码
+ * todo
+ * todo step 1: 获取可以更新的列表，含层次结构
+ * todo step 2: 轮询获取列表中的每一项（下载连接，文章，视频）
  * @returns {Promise<void>}
  */
 async function syncParent() {
