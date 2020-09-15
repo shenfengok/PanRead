@@ -5,10 +5,10 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
-const secret = require('./config/secret.json')
-const jwtKoa = require('koa-jwt');
+// const secret = require('./config/secret.json')
+// const jwtKoa = require('koa-jwt');
 // const index = require('./routes/index');
-const users = require('./routes/users');
+const pcs = require('./routes/pcs');
 const login = require('./routes/login');
 const rayRoute = require('./routes/rayroute');
 // const testjson= require('./routes/testjson')
@@ -27,141 +27,6 @@ app.use(bodyparser({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //   autoCommit: true, /** (boolean) automatically commit headers (default true) */
 //   overwrite: true, /** 无效属性 */
 //   httpOnly: true, /** (boolean) httpOnly or not (default true) */
@@ -169,13 +34,13 @@ app.use(bodyparser({
 //   rolling: false, /** 每次请求强行设置cookie */
 //   renew: false, /** cookie快过期时自动重新设置*/
 // };
-app.use(jwtKoa({secret: secret.sign}).unless({
-        path: [/^\/api\/login/,/^\/vue\/index.html/,'/vue/static/css/app.1e68c8782b633353a6a9900f58fe1a2a.css'
-            ,'/vue/static/icon-16-48.ico','/vue/static/icon.svg',
-            '/vue/static/js/app.6e4964958e738aa75d47.js',
-            '/vue/static/js/vendor.58bccbe2e61ec5b64ea1.js',
-            '/vue/static/js/manifest.5731bc56e953027b9c82.js'] //数组中的路径不需要通过jwt验证
-    }));
+// app.use(jwtKoa({secret: secret.sign}).unless({
+//         path: [/^\/api\/login/,/^\/vue\/index.html/,'/vue/static/css/app.1e68c8782b633353a6a9900f58fe1a2a.css'
+//             ,'/vue/static/icon-16-48.ico','/vue/static/icon.svg',
+//             '/vue/static/js/app.6e4964958e738aa75d47.js',
+//             '/vue/static/js/vendor.58bccbe2e61ec5b64ea1.js',
+//             '/vue/static/js/manifest.5731bc56e953027b9c82.js'] //数组中的路径不需要通过jwt验证
+//     }));
 app.use(cors());
 
 // app.use(session(CONFIG, app));
@@ -198,22 +63,22 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-function commonRounter(route){
-    const routter = new rayRoute(route)
-    app.use(routter.router.routes(), routter.router.allowedMethods())
-}
-
-// // routes
-// app.use(index.routes(), index.allowedMethods())
-
-commonRounter('video')
-
-commonRounter('dedao')
-
-commonRounter('zhuanlan')
-commonRounter('shidian')
-app.use(users.routes(), users.allowedMethods())
-app.use(login.routes(), login.allowedMethods())
+// function commonRounter(route){
+//     const routter = new rayRoute(route)
+//     app.use(routter.router.routes(), routter.router.allowedMethods())
+// }
+//
+// // // routes
+// // app.use(index.routes(), index.allowedMethods())
+//
+// commonRounter('video')
+//
+// commonRounter('dedao')
+//
+// commonRounter('zhuanlan')
+// commonRounter('pcs')
+// app.use(users.routes(), users.allowedMethods())
+app.use(pcs.routes(), login.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

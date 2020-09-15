@@ -1,5 +1,6 @@
 package geek.me.javaapi.config;
 
+import geek.me.javaapi.baidu.PcsConst;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -20,7 +21,7 @@ public class ActionAddCookieInterceptor implements ClientHttpRequestInterceptor 
             throws IOException {
         HttpHeaders headers = request.getHeaders();
 
-        headers.add("cookie", PCS_COOKIE);
+        headers.add("cookie", PcsConst.cookie);
         return execution.execute(request, body);
     }
 }
