@@ -50,18 +50,33 @@ unsafeWindow.PARENT_LIST = [];
 
 
 //-------dom操作--------
-
+/**
+ * 父node对应的span标签
+ * @type {string}
+ */
 const parent_span = 'li[node-type=sharelist-history-list] span:last';
 const hack_id = 'fid-hack';
+/**
+ * 所有的item对应的标签
+ * @type {string}
+ */
 const BUTTON_GROUP = 'div.sharelist-container  div.sharelist-item-title > span';
 const BUTTON_GROUP_BUTTONS = BUTTON_GROUP + '> button';
 const BUTTON_GROP_RESET_CONTENT = ' <span class="button"><em class="icon"></em><span class="name">文件库</span></span>';
 
 const BUTTON_FILLED_For = 'buttonFilledFor';
 
-const BUTTON_WHEN_NODE_TYPE_NONE = ' <button>lib</button> <button>libOut</button>';
+/**
+ * node type为none时填充的button
+ * @type {string}
+ */
+const BUTTON_WHEN_NODE_TYPE_NONE = '<space>&nbsp;</space><button class="mark">lib</button> ';
 
-const BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES = ' <button>update</button> <button>sync</button>';
+/**
+ * node type为lib或者书籍的时候填充
+ * @type {string}
+ */
+const BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES = '<space>&nbsp;</space><button>sync</button><space>&nbsp;</space><button class="mark">none</button>';
 
 function get_parent_id() {
     return do_for_element(parent_span, x => x.attr(hack_id));
@@ -75,13 +90,11 @@ function get_parent_id() {
  * @param tag
  * @returns {boolean}
  */
-function append_parent_span(str, tag) {
-    if (do_for_element(parent_span, x => x.attr(tag) === "1")) {
-        return true;
-    }
+function append_parent_span(str) {
+
     return do_for_element(parent_span, x => {
         x.prepend(str);
-        x.attr(tag, 1)
+        x.attr(NODE_TYPE, 1)
     });
 }
 
@@ -110,14 +123,22 @@ function fill_button(type) {
         return true;
     }
     return do_for_element(BUTTON_GROUP, x => {
-        x.remove('button');
-        if ('none' === type) {
-            x.append(BUTTON_WHEN_NODE_TYPE_NONE);
-        } else if ('lib' === type || 'series' === type) {
-            x.append(BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES);
-        }
-        x.attr(BUTTON_FILLED_For, type);
+        fill_button_by_type(type, x)
     });
+
+}
+
+function fill_button_by_type(type, x) {
+    x.children('button').remove();
+    x.children('space').remove();
+    x.children('font').remove();
+    x.append('<font>('+ type+')</font>');
+    if ('none' === type) {
+        x.append(BUTTON_WHEN_NODE_TYPE_NONE);
+    } else if ('lib' === type || 'series' === type) {
+        x.append(BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES);
+    }
+    x.attr(BUTTON_FILLED_For, type);
 
 }
 
@@ -129,7 +150,7 @@ function fill_button(type) {
 async function listenNodeClick() {
     $('.sharelist-item-title a').unbind('click').bind('click', async function () {
         var item = $(this);
-        let fid = item.parents('li').attr('data-fid');
+        let fid = get_fsid_for_item(item);
         let tile = item.attr('title');
         //标记到his导航栏a上
         do_job_steps(function () {
@@ -148,12 +169,21 @@ async function listenNodeClick() {
             if (his2.length > 0) {
                 his2.attr('fid-hack', fid);
 
-                return true;
+                return false;
             }
             return false;
         });
     })
     return false;
+}
+
+/**
+ * 为item获取fsid
+ * @param it
+ * @returns {undefined|*|null}
+ */
+function get_fsid_for_item(it) {
+    return it.parents('li').attr('data-fid');
 }
 
 /**
@@ -164,8 +194,9 @@ async function listenButtonClick() {
         x.unbind('click').bind('click', async function () {
             let btn = $(this);
             let type = btn.text();
-            if ('lib' === type || 'libOut' === type) {
-                await markParentType(type);
+            if ('lib' === type || 'none' === type) {
+                await markNodeType(get_fsid_for_item(btn), type);
+                fill_button_by_type(type, btn.parent('span'));
             }
             if ('update' === type) {
                 await updateParent();
@@ -224,6 +255,17 @@ async function markParentType(type) {
 }
 
 /**
+ * 更新父Node 类型
+ * @param type
+ * @returns {Promise<void>}
+ */
+async function markNodeType(fsid, type) {
+    let res = await post(MARK_PARENT_TYPE, {fsId: fsid, type: type});
+    checkRes(res, '更新Node类型');
+    return true;
+}
+
+/**
  * 更新Parent内容
  * @returns {Promise<boolean>}
  */
@@ -250,8 +292,13 @@ async function syncParent() {
     return true;
 }
 
+/**
+ * 检查返回的response
+ * @param res
+ * @param title
+ */
 function checkRes(res, title) {
-    if (res.status === 'success') {
+    if (res.status === 'ok') {
         Toast.fire({
             text: title + '成功',
             icon: 'success'
@@ -264,9 +311,9 @@ function checkRes(res, title) {
     }
 }
 
-function errorMsg(res) {
+function errorMsg(msg) {
     Toast.fire({
-        text: title + '失败：' + res.msg,
+        text: '失败：' + msg,
         icon: 'error'
     })
 }
@@ -275,6 +322,11 @@ function errorMsg(res) {
  * 检查父文件夹类型
  */
 async function checkParentType() {
+
+    //跳过条件，所有的job都有跳过条件
+    if (do_for_element(parent_span, x => x.attr(NODE_TYPE) === "1")) {
+        return ;
+    }
     let parent_id = get_parent_id();
 
     if (parent_id) {
@@ -283,8 +335,8 @@ async function checkParentType() {
         if (res) {
             if (res.data && res.data.nodeType) {
                 let type = res.data.nodeType;
-                append_parent_span('(' + type + ')', NODE_TYPE);
-                fill_button(type);
+                append_parent_span('(' + type + ')');
+                // fill_button(type);
             } else {
                 errorMsg(res);
             }
@@ -295,27 +347,41 @@ async function checkParentType() {
 
     return false;
 }
+
 /**
  * 检查zi文件夹类型
  */
 async function checkChildType() {
+
+    //跳过条件
+    if($(BUTTON_GROUP).length === $(BUTTON_GROUP + '> button.mark').length ){
+        return ;
+    }
     let parent_id = get_parent_id();
 
     if (parent_id) {
-
         let res = await post(QUERY_CHILD_TYPE, {fsId: parent_id});
         if (res) {
-            if (res.data && res.data.nodeType) {
-                let type = res.data.nodeType;
-                append_parent_span('(' + type + ')', NODE_TYPE);
-                fill_button(type);
+            if (res.data && res.data.length > 0) {
+                let map = {};
+                for (let i = 0; i < res.data.length; i++) {
+                    let item = res.data[i];
+                    map[item.fsid] = item.nodeType;
+                }
+                do_for_element(BUTTON_GROUP, x => {
+                    x.each(function (index, el) {
+                        let it = $(el);
+                        let fsid = get_fsid_for_item(it);
+                        let type = map[fsid];
+                        fill_button_by_type(type, it);
+                    })
+                })
             } else {
-                errorMsg(res);
+                errorMsg(res.msg);
             }
 
         }
     }
-
 
     return false;
 }

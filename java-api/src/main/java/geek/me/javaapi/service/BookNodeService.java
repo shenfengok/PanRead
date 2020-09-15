@@ -33,21 +33,28 @@ public class BookNodeService {
         return BookNodeView.from(one);
     }
 
-    private BookNodeEntity makeOne(String fsId) {
+    private BookNodeEntity makeOne(String fsId){
+        return makeOne(fsId,NodeTypeEnum.none);
+    }
+
+    private BookNodeEntity makeOne(String fsId,NodeTypeEnum type) {
         BookNodeEntity one = bookNodeDao.findByFsid(fsId);
-        if(null == one){
+        if (null == one) {
             one = new BookNodeEntity();
             one.setFsid(fsId);
-            one.setNodeType(NodeTypeEnum.none);
-            bookNodeDao.saveAndFlush(one);
+
         }
+        if(NodeTypeEnum.none == one.getNodeType() || null == one.getNodeType()){
+            one.setNodeType(type);
+        }
+        bookNodeDao.saveAndFlush(one);
 
         return one;
     }
 
     public BookNodeView markParentType(String fsId, NodeTypeEnum type) {
         BookNodeEntity one = bookNodeDao.findByFsid(fsId);
-        if(null == one){
+        if (null == one) {
             one = new BookNodeEntity();
         }
         one.setFsid(fsId);
@@ -66,16 +73,25 @@ public class BookNodeService {
 
     /**
      * 查询所有子node 的type
-     * @param fsId
+     *
+     * @param pId
      * @return
      */
-    public List<BookNodeView> queryChildType(String fsId) throws InterruptedException {
-        List<PcsItem> list = pcsApi.getChildItem(fsId);
+    public List<BookNodeView> queryChildType(String pId) throws InterruptedException {
+        NodeTypeEnum parentType = NodeTypeEnum.none;
+        List<PcsItem> list = pcsApi.getChildItem(pId);
+        BookNodeEntity parent = makeOne(pId);
+        parentType = parent.getNodeType();
         List<BookNodeView> res = new ArrayList<>();
-        for(PcsItem item:list){
-            BookNodeView view = BookNodeView.from(makeOne(String.valueOf(item.getFs_id())));
+        for (PcsItem item : list) {
+            String fsid = String.valueOf(item.getFs_id());
+            item.setParentType(parentType);
+            BookNodeEntity node = makeOne(fsid,item.decideType());
+            BookNodeView view = BookNodeView.from(node);
             res.add(view);
         }
         return res;
     }
+
+
 }
