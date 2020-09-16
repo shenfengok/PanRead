@@ -92,7 +92,7 @@ public class URLParser {
         return this;
     }
 
-    public String toURL() throws UnsupportedEncodingException {
+    private String toURL(boolean encode) throws UnsupportedEncodingException {
         if (!this.compiled) {
             compile();
         }
@@ -110,13 +110,25 @@ public class URLParser {
             }
             builder.append(k);
             builder.append("=");
-            builder.append(URLEncoder.encode(this.parsedParams.get(k)));
+            if(encode){
+                builder.append(URLEncoder.encode(this.parsedParams.get(k),charset));
+            }else {
+                builder.append(this.parsedParams.get(k));
+            }
+
         }
         if (this.label != null) {
             builder.append("#");
             builder.append(this.label);
         }
         return builder.toString();
+    }
+
+    public String toUrlRaw() throws UnsupportedEncodingException {
+        return toURL(false);
+    }
+    public String toUrlEnc() throws UnsupportedEncodingException {
+        return toURL(true);
     }
 
 

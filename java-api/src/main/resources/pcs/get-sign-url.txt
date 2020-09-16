@@ -1,0 +1,1 @@
+https://pan.baidu.com/api/gettemplatevariable?fields=[%22sign1%22,%22sign2%22,%22sign3%22,%22timestamp%22]&channel=chunlei&web=1&app_id=250528&bdstoken=76a23c8a21e6c271212959693edc1b46&logid=M0E1NjA2REEwQjAzMUQ0QTMyNDdGOEE2Q0YzQ0ExMzk6Rkc9MQ==&clienttype=0

@@ -7,7 +7,7 @@ import lombok.Data;
 public class ReNewForm {
     public static String PCS_TOKEN;
     public static String PCS_COOKIE;
-    public static String PCS_LOGID;
+//    public static String PCS_LOGID;
     public static String FROM_UK;
 
     private String yunDataTxt;
@@ -19,6 +19,6 @@ public class ReNewForm {
         PCS_COOKIE = cookie;
         PCS_TOKEN = yunData.getString("MYBDSTOKEN");
         FROM_UK = yunData.getString("SHARE_UK");
-        PCS_LOGID = logId;
+//        PCS_LOGID = logId;
     }
 }
