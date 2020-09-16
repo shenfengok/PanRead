@@ -17,23 +17,25 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 @Component
 public class MyHttpClient {
     HttpClient httpClient;
 
     @PostConstruct
-    void init() {
-        CookieStore store = getCookieStore();
+    void init() throws UnsupportedEncodingException {
+//        CookieStore store = getCookieStore();
 
-        httpClient = HttpClientBuilder.create().setDefaultCookieStore(store).build();
+        httpClient = HttpClientBuilder.create().build();
     }
 
     public JSONObject get(String url) {
         String result = "{}";
         try {
             HttpGet request = new HttpGet(url);
-
+            request.setHeader("Cookie",PcsConst.cookie);
             HttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -45,13 +47,13 @@ public class MyHttpClient {
         return JSON.parseObject(result);
     }
 
-    public CookieStore getCookieStore() {
+    public CookieStore getCookieStore() throws UnsupportedEncodingException {
         CookieStore result = new BasicCookieStore();
         String[] cookiestrs = PcsConst.cookie.split(";");
         Cookie[] cookies = new Cookie[cookiestrs.length];
         for (int i = 0; i < cookies.length; i++) {
             String[] onecookie = cookiestrs[i].split("=");
-            result.addCookie(new BasicClientCookie(onecookie[0],onecookie[1]));
+            result.addCookie(new BasicClientCookie(onecookie[0], URLDecoder.decode(onecookie[1],"utf-8")));
         }
         return result;
     }
