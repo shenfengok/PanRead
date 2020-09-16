@@ -7,10 +7,16 @@ import java.io.*;
 public class PcsConst {
     public static String cookie = "";
     public static String shareUrl= "";
+    public static String transferUlr = "";
+    public static String transferForm = "";
+    public static final String basePath = "/apps/Cloud+Sync/";
 
     static{
         cookie = readTxt("pcs/cookie.txt");
         shareUrl = readTxt("pcs/share-url.txt");
+        transferUlr = readTxt("pcs/transfer-url.txt");
+        transferForm = readTxt("pcs/transfer-form.txt");
+
     }
 
     private static String readTxt(String txtLoc){

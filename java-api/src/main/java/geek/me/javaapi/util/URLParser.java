@@ -1,5 +1,6 @@
 package geek.me.javaapi.util;
 
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -8,9 +9,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class URLParser {
     protected byte type;
+    protected static final byte TYPE_URL = 1;
+    protected static final byte TYPE_QUERY_STRING = 2;
     protected String url;
     protected String baseUrl;
     protected String queryString;
@@ -35,6 +37,20 @@ public class URLParser {
         parser.label = (split2.length > 1 ? split2[1] : null);
 
         return parser;
+    }
+
+    public static URLParser fromQueryString(String queryString) {
+        URLParser parser = new URLParser();
+
+        parser.type = 2;
+        parser.queryString = queryString;
+
+        return parser;
+    }
+
+    public URLParser useCharset(String charset) {
+        this.charset = charset;
+        return this;
     }
 
     public URLParser compile() throws UnsupportedEncodingException {
@@ -81,7 +97,9 @@ public class URLParser {
             compile();
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(this.baseUrl);
+        if (this.type == 1) {
+            builder.append(this.baseUrl);
+        }
         boolean first = true;
         for (String k : this.parsedParams.keySet()) {
             if(first){
@@ -100,6 +118,7 @@ public class URLParser {
         }
         return builder.toString();
     }
+
 
 
 }
