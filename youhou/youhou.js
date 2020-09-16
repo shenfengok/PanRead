@@ -22,7 +22,7 @@
 const BASE_URL = 'http://localhost:8080';
 const QUERY_NODE_TYPE = '/api/node/queryType';
 const QUERY_CHILD_TYPE = '/api/node/queryChildType';
-const MARK_PARENT_TYPE = '/api/node/markParentType';
+const MARK_NODE_TYPE = '/api/node/markNodeType';
 const UPDATE_PARENT = '/api/node/updateParent';
 const SYNC_PARENT = '/api/node/syncParent';
 const REFRESH_TOKEN = '/api/refreshToken';
@@ -56,6 +56,7 @@ unsafeWindow.PARENT_LIST = [];
  */
 const parent_span = 'li[node-type=sharelist-history-list] span:last';
 const hack_id = 'fid-hack';
+const hack_name = 'name-hack';
 /**
  * 所有的item对应的标签
  * @type {string}
@@ -80,6 +81,10 @@ const BUTTON_WHEN_NODE_TYPE_LIB_OR_SERIES = '<space>&nbsp;</space><button>sync</
 
 function get_parent_id() {
     return do_for_element(parent_span, x => x.attr(hack_id));
+}
+
+function get_parent_name() {
+    return do_for_element(parent_span, x => x.attr(hack_name));
 }
 
 
@@ -132,7 +137,7 @@ function fill_button_by_type(type, x) {
     x.children('button').remove();
     x.children('space').remove();
     x.children('font').remove();
-    x.append('<font>('+ type+')</font>');
+    x.append('<font>(' + type + ')</font>');
     if ('none' === type) {
         x.append(BUTTON_WHEN_NODE_TYPE_NONE);
     } else if ('lib' === type || 'series' === type) {
@@ -149,14 +154,15 @@ function fill_button_by_type(type, x) {
  */
 async function listenNodeClick() {
     $('.sharelist-item-title a').unbind('click').bind('click', async function () {
-        var item = $(this);
+        let item = $(this);
         let fid = get_fsid_for_item(item);
         let tile = item.attr('title');
         //标记到his导航栏a上
         do_job_steps(function () {
             let his = $('.sharelist-history a:contains("' + tile + '")');
             if (his.length > 0) {
-                his.attr('fid-hack', fid);
+                his.attr(hack_id, fid);
+                his.attr(hack_name, tile);
 
                 return true;
             }
@@ -167,7 +173,8 @@ async function listenNodeClick() {
         do_job_steps(function () {
             let his2 = $('li[node-type=sharelist-history-list] span[title="' + tile + '"]');
             if (his2.length > 0) {
-                his2.attr('fid-hack', fid);
+                his2.attr(hack_id, fid);
+                his2.attr(hack_name, tile);
 
                 return false;
             }
@@ -187,6 +194,15 @@ function get_fsid_for_item(it) {
 }
 
 /**
+ * 为item获取title
+ * @param it
+ * @returns {undefined|*|null}
+ */
+function get_title_for_item(it) {
+    return it.siblings('a').attr('title');
+}
+
+/**
  * 监听button点击
  */
 async function listenButtonClick() {
@@ -195,7 +211,9 @@ async function listenButtonClick() {
             let btn = $(this);
             let type = btn.text();
             if ('lib' === type || 'none' === type) {
-                await markNodeType(get_fsid_for_item(btn), type);
+                let name = get_title_for_item(btn);
+                let fsid = get_fsid_for_item(btn);
+                await markNodeType(fsid, type, name);
                 fill_button_by_type(type, btn.parent('span'));
             }
             if ('update' === type) {
@@ -239,28 +257,14 @@ let Toast = Swal.mixin({
 })
 
 //------远程业务处理--------
-/**
- * 更新父Node 类型
- * @param type
- * @returns {Promise<void>}
- */
-async function markParentType(type) {
-    let parent_id = get_parent_id();
-
-    if (parent_id) {
-        let res = await post(MARK_PARENT_TYPE, {fsId: parent_id, type: type});
-        checkRes(res, '更新Node类型');
-    }
-    return true;
-}
 
 /**
  * 更新父Node 类型
  * @param type
  * @returns {Promise<void>}
  */
-async function markNodeType(fsid, type) {
-    let res = await post(MARK_PARENT_TYPE, {fsId: fsid, type: type});
+async function markNodeType(fsid, type, name) {
+    let res = await post(MARK_NODE_TYPE, {fsId: fsid, type: type, name});
     checkRes(res, '更新Node类型');
     return true;
 }
@@ -327,13 +331,13 @@ async function checkParentType() {
 
     //跳过条件，所有的job都有跳过条件
     if (do_for_element(parent_span, x => x.attr(NODE_TYPE) === "1")) {
-        return ;
+        return;
     }
     let parent_id = get_parent_id();
+    let parent_name = get_parent_name();
+    if (parent_id && parent_name) {
 
-    if (parent_id) {
-
-        let res = await post(QUERY_NODE_TYPE, {fsId: parent_id});
+        let res = await post(QUERY_NODE_TYPE, {fsId: parent_id, name:parent_name });
         if (res) {
             if (res.data && res.data.nodeType) {
                 let type = res.data.nodeType;
@@ -356,13 +360,13 @@ async function checkParentType() {
 async function checkChildType() {
 
     //跳过条件
-    if($(BUTTON_GROUP).length === $(BUTTON_GROUP + '> button.mark').length ){
-        return ;
+    if ($(BUTTON_GROUP).length === $(BUTTON_GROUP + '> button.mark').length) {
+        return;
     }
     let parent_id = get_parent_id();
-
+    let parent_name = get_parent_name();
     if (parent_id) {
-        let res = await post(QUERY_CHILD_TYPE, {fsId: parent_id});
+        let res = await post(QUERY_CHILD_TYPE, {fsId: parent_id, name: parent_name});
         if (res) {
             if (res.data && res.data.length > 0) {
                 let map = {};

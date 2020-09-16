@@ -1,6 +1,8 @@
 package geek.me.javaapi.entity;
 
+import com.sun.istack.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import javax.persistence.*;
         @Index(name = "my_index_type", columnList="nodeType")})
 public class BookNodeEntity extends BaseEntity {
 
+    @NotNull
     private String name;
 
     private String fsid;
