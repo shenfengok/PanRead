@@ -22,11 +22,18 @@ class JavaApiApplicationTests {
 	}
 
 	@Test
-	void dlinkTest() throws InterruptedException, ScriptException, NoSuchMethodException {
+	void dlinkTest() throws Exception {
 		List<String> list = new ArrayList<>();
 //		list.add("477988620064680");//08丨Flink集群资源管理器支持.mp4
 		list.add("17345280166692");
 		String res = pcsTransferService.dlink(list);
+		Assert.isTrue(!StringUtils.isEmpty(res));
+	}
+
+	@Test
+	void netDisklinkTest() throws Exception {
+//		String res = pcsTransferService.netdiskLink("/apps/Cloud Sync/test/08丨Flink集群资源管理器支持.mp4","08丨Flink集群资源管理器支持.mp4");
+		String res = pcsTransferService.netdiskLink("/apps/Cloud Sync/test/期末测试丨一套习题，测试你的掌握程度.pdf","期末测试丨一套习题，测试你的掌握程度.pdf");
 		Assert.isTrue(!StringUtils.isEmpty(res));
 	}
 

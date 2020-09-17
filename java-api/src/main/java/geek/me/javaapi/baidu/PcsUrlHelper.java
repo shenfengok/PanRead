@@ -1,12 +1,13 @@
 package geek.me.javaapi.baidu;
 
 import com.alibaba.fastjson.JSON;
-import geek.me.javaapi.baidu.dto.PcsItem;
 import geek.me.javaapi.baidu.js.JsFunc;
 import geek.me.javaapi.util.URLParser;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 import static geek.me.javaapi.dto.form.ReNewForm.PCS_TOKEN;
@@ -80,6 +81,17 @@ public class PcsUrlHelper {
 
         return builder.toString();
     }
+    /**
+     * netdisk下载链接
+     * @param path
+     * @return
+     */
+    public static String getnetdiskDownUrl(String path) throws UnsupportedEncodingException {
+        StringBuilder builder = new StringBuilder();
+        builder.append(PcsConst.netdiskDownUrl);
+        builder.append(URLEncoder.encode(path,"utf-8"));
+        return builder.toString();
+    }
 
     private static String getFidListStr(List<String> fidList){
         return "["+ String.join(",",fidList) + "]";
@@ -106,6 +118,9 @@ public class PcsUrlHelper {
         return builder.toString();
     }
 
+    private void timestatmpIt(URLParser u) throws UnsupportedEncodingException {
+        u.setParameter("timestamp",String.valueOf(new Date().getTime()/1000));
+    }
 
 
     public static String getShareUrl2(String fsid, Integer page) {

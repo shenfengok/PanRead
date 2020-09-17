@@ -97,10 +97,20 @@ public class BookNodeService {
             if(node.getNodeType() == null || node.getNodeType() == NodeTypeEnum.none){
                 markType(node,item.decideType());
             }
+            updateNode(node,item);
             BookNodeView view = BookNodeView.from(node);
             res.add(view);
         }
         return res;
+    }
+
+    /**
+     * 使用前使用queryOne确保存在
+     */
+    private void updateNode(BookNodeEntity node,PcsItem item) {
+
+        node.setFileName(item.getServer_filename());
+        bookNodeDao.saveAndFlush(node);
     }
 
 

@@ -21,6 +21,7 @@ public class BookNodeEntity extends BaseEntity {
     private String path;
     private NodeTypeEnum nodeType;
     private String mediaLink;
+    private String fileName;
     private String nodeId;
     private boolean ifFinish;
 

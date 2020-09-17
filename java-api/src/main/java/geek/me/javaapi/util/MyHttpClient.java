@@ -36,6 +36,7 @@ public class MyHttpClient {
         try {
             HttpGet request = new HttpGet(url);
             request.setHeader("Cookie",PcsConst.cookie);
+            request.setHeader("User-Agent","netdisk;P2SP;2.2.60.26");
             HttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
