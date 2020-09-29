@@ -25,3 +25,6 @@ lnmp nginx reload
 群晖
 /etc/nginx/app.d
 sudo synoservicecfg --restart nginx
+
+
+https://github.com/based2/hibernate-generic-dao/blob/master/dao/src/main/java/com/googlecode/genericdao/dao/DAOUtil.java
