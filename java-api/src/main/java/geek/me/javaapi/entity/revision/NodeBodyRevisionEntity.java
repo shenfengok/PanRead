@@ -21,4 +21,6 @@ public class NodeBodyRevisionEntity {
     private int delta=0;
     private long revision_id;
     private String bundle = "book";
+    private String langcode ="en";
+    private String body_summary = "";
 }

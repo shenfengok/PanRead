@@ -65,7 +65,7 @@ public class BookService {
     public boolean sync(SyncForm form) throws InterruptedException {
 
         List<Long> path = new ArrayList<>();
-        NodeEntity aBook = createRoot(form.getFsId(),form.getName(),0,path,1, form.getBasePath(),"");
+        NodeEntity aBook = createRoot(form.getFsId(),form.getName(),1,path,1, form.getBasePath(),"");
 
 
         return true;
@@ -233,8 +233,8 @@ public class BookService {
             book = new BookEntity();
         }
         book.setNid(bookId);
-        if(depth > 0){
-            book.setPid(path.get(depth - 1));
+        if(depth >= 2){
+            book.setPid(path.get(depth - 2));
         }else{
             book.setPid(0);
         }
@@ -246,7 +246,7 @@ public class BookService {
             setN(book, i, path.get(i));
         }
         //更新当前node的nid
-        setN(book, depth + 1, book.getNid());
+        setN(book, depth , book.getNid());
         return bookDao.save(book);
     }
 
