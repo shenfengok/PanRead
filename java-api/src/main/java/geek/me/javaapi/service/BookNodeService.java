@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Service
+//@Service
+@Deprecated
 public class BookNodeService {
 
-    @Autowired
+//    @Autowired
     private BookNodeDao bookNodeDao;
 
     @Autowired
@@ -43,8 +44,8 @@ public class BookNodeService {
             one.setFsid(fsId);
             one.setName(name);
             one.setNodeType(NodeTypeEnum.none);
-            BookNodeEntity newOne = bookNodeDao.save(one);
-            one.setId(newOne.getId());
+//            BookNodeEntity newOne = bookNodeDao.save(one);
+//            one.setId(newOne.getId());
         }
 
         return one;
@@ -66,7 +67,8 @@ public class BookNodeService {
      */
     private BookNodeEntity markType(BookNodeEntity node,NodeTypeEnum type){
         node.setNodeType(type);
-        return bookNodeDao.saveAndFlush(node);
+//        return bookNodeDao.saveAndFlush(node);
+        return null;
     }
 
     public BookNodeView updateParent(String fsId) {
@@ -110,7 +112,7 @@ public class BookNodeService {
     private void updateNode(BookNodeEntity node,PcsItem item) {
 
         node.setFileName(item.getServer_filename());
-        bookNodeDao.saveAndFlush(node);
+//        bookNodeDao.saveAndFlush(node);
     }
 
 

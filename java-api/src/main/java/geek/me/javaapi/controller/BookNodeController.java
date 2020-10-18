@@ -1,22 +1,21 @@
 package geek.me.javaapi.controller;
 
 import geek.me.javaapi.dto.CommonResult;
-import geek.me.javaapi.dto.form.NodeTypeForm;
+import geek.me.javaapi.dto.form.SyncForm;
 import geek.me.javaapi.dto.query.NodeTypeQuery;
 import geek.me.javaapi.dto.view.BookNodeView;
 import geek.me.javaapi.service.BookNodeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+//@RestController
 @RequestMapping("api/node")
+@Deprecated
 public class BookNodeController {
 
-    @Autowired
+//    @Autowired
     private BookNodeService bookNodeService;
 
     @RequestMapping("queryType")
@@ -33,20 +32,20 @@ public class BookNodeController {
 
 
     @RequestMapping("markNodeType")
-    public CommonResult markNodeType(@RequestBody NodeTypeForm form){
+    public CommonResult markNodeType(@RequestBody SyncForm form){
 
         BookNodeView res = bookNodeService.markNodeType(form.getFsId(),form.getName(),form.getType());
         return CommonResult.success(res);
     }
 
     @RequestMapping("updateParent")
-    public CommonResult updateParent( @RequestBody NodeTypeForm form){
+    public CommonResult updateParent( @RequestBody SyncForm form){
         BookNodeView res = bookNodeService.updateParent(form.getFsId());
         return CommonResult.success();
     }
 
     @RequestMapping("syncParent")
-    public CommonResult syncParent( @RequestBody NodeTypeForm form){
+    public CommonResult syncParent( @RequestBody SyncForm form){
         BookNodeView res = bookNodeService.syncParent(form.getFsId());
         return CommonResult.success();
     }

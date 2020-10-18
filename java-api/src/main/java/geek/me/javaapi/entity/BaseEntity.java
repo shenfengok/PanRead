@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Data
+@Deprecated
 public class BaseEntity {
 
     @CreatedDate

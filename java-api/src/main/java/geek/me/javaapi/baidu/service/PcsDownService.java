@@ -1,17 +1,13 @@
 package geek.me.javaapi.baidu.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import geek.me.javaapi.baidu.PcsConst;
 import geek.me.javaapi.baidu.PcsUrlHelper;
 import geek.me.javaapi.baidu.js.JsFunc;
-import geek.me.javaapi.util.MyHttpClient;
+import geek.me.javaapi.util.BaiduHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import javax.script.ScriptException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -19,7 +15,7 @@ import java.util.List;
 public class PcsDownService {
 
     @Autowired
-    private MyHttpClient myHttpClient;
+    private BaiduHttpClient myHttpClient;
 
     /**
      * 获取"/apps/Cloud Sync/"下的下载连接

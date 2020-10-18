@@ -7,10 +7,11 @@ import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 @Data
-@Table(indexes = {@Index(name = "myunique",  columnList="fsid",unique = true),
-        @Index(name = "my_index_type", columnList="nodeType")})
+//@Table(indexes = {@Index(name = "myunique",  columnList="fsid",unique = true),
+//        @Index(name = "my_index_type", columnList="nodeType")})
+@Deprecated
 public class BookNodeEntity extends BaseEntity {
 
     @NotNull

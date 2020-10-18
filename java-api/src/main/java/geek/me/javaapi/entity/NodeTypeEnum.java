@@ -1,5 +1,6 @@
 package geek.me.javaapi.entity;
 
+@Deprecated
 public enum NodeTypeEnum {
     none,
     libOut,
