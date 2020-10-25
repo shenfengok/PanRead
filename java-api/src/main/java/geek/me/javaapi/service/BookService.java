@@ -125,8 +125,14 @@ public class BookService {
                 x.attr("src",imgLink);
                 x.removeAttr("data-savepage-src");
             });
-            String con =  doc.getElementsByClass("_29HP61GA_0").get(0).html();
-            return con;
+            if(doc.getElementsByClass("_29HP61GA_0").size() > 0){
+                String con =  doc.getElementsByClass("_29HP61GA_0").get(0).html();
+                return con;
+            }else if(doc.getElementsByClass("_2c4hPkl9").size() > 0){
+                String con =  doc.getElementsByClass("_2c4hPkl9").get(0).html();
+                return con;
+            }
+            return  "";
         }catch (Exception e){
             System.out.println(e);
         }
