@@ -34,19 +34,19 @@ public class BookNodeController {
     @RequestMapping("markNodeType")
     public CommonResult markNodeType(@RequestBody SyncForm form){
 
-        BookNodeView res = bookNodeService.markNodeType(form.getFsId(),form.getName(),form.getType());
+        BookNodeView res = bookNodeService.markNodeType(form.getFsId().toString(),form.getName(),form.getType());
         return CommonResult.success(res);
     }
 
     @RequestMapping("updateParent")
     public CommonResult updateParent( @RequestBody SyncForm form){
-        BookNodeView res = bookNodeService.updateParent(form.getFsId());
+        BookNodeView res = bookNodeService.updateParent(form.getFsId().toString());
         return CommonResult.success();
     }
 
     @RequestMapping("syncParent")
     public CommonResult syncParent( @RequestBody SyncForm form){
-        BookNodeView res = bookNodeService.syncParent(form.getFsId());
+        BookNodeView res = bookNodeService.syncParent(form.getFsId().toString());
         return CommonResult.success();
     }
 

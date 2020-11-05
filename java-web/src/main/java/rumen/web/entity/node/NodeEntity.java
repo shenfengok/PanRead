@@ -13,9 +13,4 @@ public class NodeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long nid;
-
-    private String type ="book";
-    private String uuid ;
-    private long vid =1;
-    private String langcode ="en";
 }

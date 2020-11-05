@@ -24,7 +24,7 @@ const QUERY_NODE_TYPE = '/api/node/queryType';
 const QUERY_CHILD_TYPE = '/api/node/queryChildType';
 const MARK_NODE_TYPE = '/api/node/markNodeType';
 const UPDATE_PARENT = '/api/node/updateParent';
-const SYNC_PARENT = '/api/node/syncParent';
+const SYNC_PARENT = '/api/book/sync';
 const REFRESH_TOKEN = '/api/refreshToken';
 const NODE_TYPE = 'nodeType';
 
@@ -216,6 +216,7 @@ function get_base_path_for_item(it) {
         return  this.text.indexOf('...') > 0 ?$(this).attr('title') : this.text  ;
     }).get();
     a.shift();
+    a.shift();
     return a.join('/');
 }
 
@@ -241,7 +242,7 @@ async function listenButtonClick() {
             if ('sync' === type) {
                 let name = get_title_for_item(btn);
                 let fsid = get_fsid_for_item(btn);
-                let basePath = get_base_path_for_item(btn);
+                let basePath = get_base_path_for_item(btn) +"/" + get_parent_name() +"/";
                 await syncParent(fsid,name,basePath);
             }
         })

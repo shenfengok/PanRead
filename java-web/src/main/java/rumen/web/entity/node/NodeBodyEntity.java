@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
-@Table(name = "node__body")
+@Table(name = "node__body_new")
 @Entity
 public class NodeBodyEntity {
     @Id
@@ -16,11 +16,16 @@ public class NodeBodyEntity {
     private long nid;
     @Column(name = "body_value")
     private String body;
-    @Column(name = "body_format")
-    private String format ="full_html";
-    private int delta=0;
-    private long revision_id;
-    private String bundle = "book";
-    private String langcode ="en";
-    private String body_summary = "";
+
+    @Column(name = "body_summary")
+    private String summary ;
+
+    @Column(name = "body_image")
+    private String image;
+
+    @Column(name = "body_comment")
+    private String comment;
+
+    @Column(name = "body_media")
+    private String media;
 }

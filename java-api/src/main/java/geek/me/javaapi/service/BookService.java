@@ -1,10 +1,14 @@
 package geek.me.javaapi.service;
 
 import geek.me.javaapi.baidu.PcsApi;
+import geek.me.javaapi.baidu.PcsConst;
 import geek.me.javaapi.baidu.dto.PcsItem;
 import geek.me.javaapi.baidu.dto.PcsItemView;
+import geek.me.javaapi.baidu.service.PcsDownService;
+import geek.me.javaapi.baidu.service.PcsTransService;
 import geek.me.javaapi.dao.*;
 import geek.me.javaapi.dto.form.SyncForm;
+import geek.me.javaapi.entity.QueueEntity;
 import geek.me.javaapi.entity.node.*;
 import geek.me.javaapi.entity.revision.NodeBodyRevisionEntity;
 import geek.me.javaapi.entity.revision.NodeFieldFsidRevisionEntity;
@@ -56,16 +60,30 @@ public class BookService {
     @Autowired
     private NodeBodyRevisionDao nodeBodyRevisionDao;
 
+    @Autowired
+    private PcsTransService pcsTransService;
+
+    @Autowired
+    private QueueDao queueDao;
+
+    @Autowired
+    private PcsDownService pcsDownService;
+
 
 
     public List<BookEntity> listAll() {
         return bookDao.findAll();
     }
 
-    public boolean sync(SyncForm form) throws InterruptedException {
+    public boolean syncBook(QueueEntity qe) throws InterruptedException {
 
-        List<Long> path = new ArrayList<>();
-        NodeEntity aBook = createRoot(form.getFsId(),form.getName(),1,path,1, form.getBasePath(),"");
+//        pcsTransService.del(qe.getName());
+//        Thread.sleep(3000);
+//        List<String > fsids = new ArrayList<>();
+//        fsids.add(String.valueOf(qe.getFsid()));
+//        pcsTransService.transfer(fsids,qe.getName());
+//        Thread.sleep(3000);
+        NodeEntity aBook = createRoot(String.valueOf(qe.getFsid()),qe.getName(),1,new ArrayList<>(),1, qe.getBase_path(),"");
 
 
         return true;
@@ -80,6 +98,7 @@ public class BookService {
      * @return
      */
     private NodeEntity createRoot(String fsid,String title,int depth,List<Long> parentPath,int hasChild,String basePath,String content) throws InterruptedException {
+
 
         NodeEntity node1 = creatOneNode(fsid);
 
@@ -115,10 +134,10 @@ public class BookService {
         }
 
         try{
-            String path = "Z:\\pan\\zhuanlan\\" + item.getContentPath();
-
-            File htmlf=new File(path);
-            Document doc= Jsoup.parse(htmlf, "UTF-8");
+            String path = PcsConst.basePath + item.getContentPath();
+            String netDownUrl = pcsDownService.netdiskLink(path,item.getTitle());
+//            File htmlf=new File(path);
+            Document doc= Jsoup.connect(netDownUrl).timeout(30000).execute().parse();
             Elements els =doc.getElementsByTag("img");
             els.forEach(x->{
                 String imgLink = x.attr("data-savepage-src");
@@ -292,5 +311,22 @@ public class BookService {
                 be.setP5(value);
                 break;
         }
+    }
+
+    public void addQueue(SyncForm form) {
+        QueueEntity entity = new QueueEntity();
+        entity.setFsid(form.getFsId());
+        entity.setBase_path(form.getBasePath());
+        entity.setName(form.getName());
+        queueDao.saveAndFlush(entity);
+    }
+
+    public void transfer() throws InterruptedException {
+        //first of first 同步到百度盘
+        List<QueueEntity> list = queueDao.findAll();
+        for(QueueEntity q:list) {
+            syncBook(q);
+        }
+
     }
 }

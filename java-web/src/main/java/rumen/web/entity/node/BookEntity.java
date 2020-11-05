@@ -21,7 +21,4 @@ public class BookEntity {
     private long p5;
     private int weight;
     private int depth;
-
-//    @OneToOne
-//    private BookFieldFsid bookFieldFsid;
 }

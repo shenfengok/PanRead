@@ -25,9 +25,19 @@ public class BookController {
     }
     @RequestMapping("sync")
     public CommonResult sync( @RequestBody SyncForm form) throws InterruptedException {
-        boolean res = bookService.sync(form);
+        //仅仅加入队列
+        bookService.addQueue(form);
+        //boolean res = bookService.sync(form);
 
         return CommonResult.success();
     }
 
+    @RequestMapping("transfer")
+    public CommonResult transfer() throws InterruptedException {
+        //同步到pan
+        bookService.transfer();
+        //boolean res = bookService.sync(form);
+
+        return CommonResult.success();
+    }
 }

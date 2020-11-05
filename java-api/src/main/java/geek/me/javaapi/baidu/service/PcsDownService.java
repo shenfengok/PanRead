@@ -59,7 +59,6 @@ public class PcsDownService {
         throw new Exception("getCapture");
     }
 
-    @Cacheable(value = "signObject")
     private JSONObject getSignObject (){
         String signUrl = PcsUrlHelper.getSignUrl();
         JSONObject sj = myHttpClient.get(signUrl);

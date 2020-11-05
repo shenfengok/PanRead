@@ -49,7 +49,7 @@ public class PcsApi {
                     view.setIsdir(0);
                     PcsItem contentItem = listMap.get(title+".html");
                     if(null != contentItem){
-                        view.setContentPath(contentItem.getPath().substring(basePath.length()));
+                        view.setContentPath(contentItem.getPath().substring(contentItem.getPath().indexOf(basePath) + basePath.length()));
                     }
 
                     result.add(view);

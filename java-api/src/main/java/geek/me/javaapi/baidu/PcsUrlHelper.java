@@ -118,6 +118,23 @@ public class PcsUrlHelper {
         return builder.toString();
     }
 
+    public static String getDelUrl() {
+        StringBuilder builder = new StringBuilder();
+        try {
+            URLParser u = URLParser.fromURL(PcsConst.delFolderUrl);
+            if (!StringUtils.isEmpty(PCS_TOKEN)) {
+                u.setParameter("bdstoken", PCS_TOKEN);
+            }
+            u.setParameter("logid",JsFunc.getLogId());
+            String url = u.toUrlEnc();
+            return url;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        return builder.toString();
+    }
+
     private void timestatmpIt(URLParser u) throws UnsupportedEncodingException {
         u.setParameter("timestamp",String.valueOf(new Date().getTime()/1000));
     }

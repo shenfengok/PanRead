@@ -11,6 +11,7 @@ public class PcsConst {
     public static String appDownUlr = "";
     public static String getSignUlr = "";
     public static String transferForm = "";
+    public static String delFolderUrl = "";
     public static String signJson = "";
     public static final String basePath = "/apps/Cloud Sync/";
     public static final String netdiskDownUrl = "http://pcs.baidu.com/rest/2.0/pcs/file?app_id=778750&ver=2.0&method=locatedownload&path=";
@@ -23,6 +24,7 @@ public class PcsConst {
         getSignUlr = readTxt("pcs/get-sign-url.txt");
         transferForm = readTxt("pcs/transfer-form.txt");
         signJson = readTxt("pcs/sign-json.txt");
+        delFolderUrl = readTxt("pcs/del-folder-url.txt");
 
     }
 
