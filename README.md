@@ -28,3 +28,12 @@ sudo synoservicecfg --restart nginx
 
 
 https://github.com/based2/hibernate-generic-dao/blob/master/dao/src/main/java/com/googlecode/genericdao/dao/DAOUtil.java
+
+ss  下载
+https://github.com/shadowsocks/shadowsocks-windows/releases/tag/4.3.2.0
+
+
+安装
+5：wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocksR.sh && chmod +x shadowsocksR.sh
+
+6：./shadowsocksR.sh

@@ -17,7 +17,7 @@ public class NodeFieldRevisionEntity {
     private long  vid =1;
     private long uid =1;
     private String title;
-    private String langcode = "en";
+    private String langcode = "zh-hans";
     private long created;
     private long changed;
     private int promote = 0;

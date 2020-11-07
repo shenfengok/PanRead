@@ -14,15 +14,12 @@ import geek.me.javaapi.entity.revision.NodeBodyRevisionEntity;
 import geek.me.javaapi.entity.revision.NodeFieldFsidRevisionEntity;
 import geek.me.javaapi.entity.revision.NodeFieldRevisionEntity;
 import geek.me.javaapi.entity.revision.NodeRevisionEntity;
-import org.apache.tomcat.util.ExceptionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +72,7 @@ public class BookService {
         return bookDao.findAll();
     }
 
-    public boolean syncBook(QueueEntity qe) throws InterruptedException {
+    public boolean syncBook(QueueEntity qe) throws Exception {
 
 //        pcsTransService.del(qe.getName());
 //        Thread.sleep(3000);
@@ -83,7 +80,12 @@ public class BookService {
 //        fsids.add(String.valueOf(qe.getFsid()));
 //        pcsTransService.transfer(fsids,qe.getName());
 //        Thread.sleep(3000);
-        NodeEntity aBook = createRoot(String.valueOf(qe.getFsid()),qe.getName(),1,new ArrayList<>(),1, qe.getBase_path(),"");
+        PcsItemView view = new PcsItemView();
+        view.setFsid(String.valueOf(qe.getFsid()));
+        view.setTitle(qe.getName());
+        view.setContent("");
+        view.setIsdir(1);
+        NodeEntity aBook = createRoot(view,1,new ArrayList<>(), qe.getBase_path());
 
 
         return true;
@@ -94,49 +96,53 @@ public class BookService {
     /**
      * 创建一本书
      *
-     * @param fsid
+     * @param pv
      * @return
      */
-    private NodeEntity createRoot(String fsid,String title,int depth,List<Long> parentPath,int hasChild,String basePath,String content) throws InterruptedException {
+    private NodeEntity createRoot(PcsItemView pv,int depth,List<Long> parentPath,String basePath) throws Exception {
 
 
-        NodeEntity node1 = creatOneNode(fsid);
+        NodeEntity node1 = creatOneNode(pv.getFsid());
 
         long nid = node1.getNid();
         long vid = node1.getVid();
-        createOneFsidEntity(fsid, nid,vid);
+        createOneFsidEntity(pv.getFsid(), nid,vid);
 
         List<Long> newPath = new ArrayList<>();
         newPath.addAll(parentPath);
         newPath.add(nid);
-        createOneBookEntity(nid, depth, newPath,hasChild);
+        createOneBookEntity(nid, depth, newPath,pv.getIsdir());
 
 
-        createOneNodeBody(nid,content,vid);
+        createOneNodeBody(nid,pv.getContent(),vid);
 
-        createOneFieldData(nid,title,vid);
+        createOneFieldData(nid,pv.getTitle(),vid);
 
 
-        if(hasChild == 1){
-            List<PcsItemView> list = pcsApi.getChildItemView(fsid,basePath);
+        if(pv.getIsdir() == 1){
+            List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(),basePath);
             for (PcsItemView item : list) {
-                String newCon = getCon(item);
-                createRoot(String.valueOf(item.getFsid()),item.getTitle(),depth + 1,newPath,item.getIsdir(),basePath,newCon);
+                fillCon(item);
+                String mediaUrl = pcsDownService.netdiskLink(item.getMediaPath(),item.getMediaTitle());
+                item.setMedia(mediaUrl);
+
+                createRoot(item,depth + 1,newPath,basePath);
             }
         }
 
         return node1;
     }
 
-    private String getCon(PcsItemView item) {
+    private void fillCon(PcsItemView item) {
         if(item.getIsdir() == 1){
-            return "";
+
+            return ;
         }
 
         try{
             String path = PcsConst.basePath + item.getContentPath();
             String netDownUrl = pcsDownService.netdiskLink(path,item.getTitle());
-//            File htmlf=new File(path);
+
             Document doc= Jsoup.connect(netDownUrl).timeout(30000).execute().parse();
             Elements els =doc.getElementsByTag("img");
             els.forEach(x->{
@@ -144,18 +150,32 @@ public class BookService {
                 x.attr("src",imgLink);
                 x.removeAttr("data-savepage-src");
             });
+
+            String con = "";// 内容
             if(doc.getElementsByClass("_29HP61GA_0").size() > 0){
-                String con =  doc.getElementsByClass("_29HP61GA_0").get(0).html();
-                return con;
+                con =  doc.getElementsByClass("_29HP61GA_0").get(0).html();
             }else if(doc.getElementsByClass("_2c4hPkl9").size() > 0){
-                String con =  doc.getElementsByClass("_2c4hPkl9").get(0).html();
-                return con;
+                con =  doc.getElementsByClass("_2c4hPkl9").get(0).html();
             }
-            return  "";
+            item.setContent(con);
+
+            String thumb = "";//封面图片
+            if(doc.getElementsByClass("_3Jbcj4Iu_0").size() > 0){
+                 thumb = doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").get(0).attr("src");
+            }
+
+            item.setThumb(thumb);
+
+            String comment = "";//评论内容
+
+            if(doc.getElementsByClass("_1qhD3bdE_0").size() > 0){
+                comment = doc.getElementsByClass("_1qhD3bdE_0").get(0).getElementsByTag("ul").html();
+            }
+            item.setComment(comment);
+
         }catch (Exception e){
             System.out.println(e);
         }
-        return "";
     }
 
     private NodeFiledDataEntity createOneFieldData(long nid, String title, long vid) {

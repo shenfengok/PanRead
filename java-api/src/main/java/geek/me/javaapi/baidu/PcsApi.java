@@ -41,24 +41,32 @@ public class PcsApi {
                 view.setIsdir(1);
                 result.add(view);
             }else{
-                if("mp3".equals(FileNameUtil.getExtensionName(item.getServer_filename()))){
+                if("mp3".equals(FileNameUtil.getExtensionName(item.getServer_filename())) || "m4a".equals(FileNameUtil.getExtensionName(item.getServer_filename()))){
                     String title = FileNameUtil.getFileNameNoEx(item.getServer_filename());
                     PcsItemView view = new PcsItemView();
                     view.setTitle(title);
                     view.setFsid(String.valueOf(item.getFs_id()));
                     view.setIsdir(0);
+                    view.setMediaPath(getPath(item.getPath(),basePath));
+                    view.setMediaTitle(item.getServer_filename());
                     PcsItem contentItem = listMap.get(title+".html");
                     if(null != contentItem){
-                        view.setContentPath(contentItem.getPath().substring(contentItem.getPath().indexOf(basePath) + basePath.length()));
+                        view.setContentPath(getPath(contentItem.getPath(),basePath));
                     }
+
 
                     result.add(view);
                 }
+
             }
 
         }
 
         return result;
+    }
+
+    private String getPath(String path,String base){
+        return path.substring(path.indexOf(base) + base.length());
     }
 
 

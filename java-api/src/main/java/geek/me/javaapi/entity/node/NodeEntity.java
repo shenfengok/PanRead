@@ -17,5 +17,5 @@ public class NodeEntity {
     private String type ="book";
     private String uuid ;
     private long vid =1;
-    private String langcode ="en";
+    private String langcode ="zh-hans";
 }
