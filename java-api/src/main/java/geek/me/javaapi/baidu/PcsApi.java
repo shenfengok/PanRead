@@ -29,9 +29,9 @@ public class PcsApi {
     }
 
 
-    public List<PcsItemView> getChildItemView(String fsid,String basePath) throws InterruptedException {
+    public List<PcsItemView> getChildItemView(String fsid,String basePath) throws Exception {
         List<PcsItem> list = getChildItem(fsid);
-        Map<String,PcsItem> listMap = list.stream().collect(Collectors.toMap(x->x.getServer_filename(),x->x));
+        Map<String,PcsItem> listMap = list.stream().collect(Collectors.toMap(x->compressName(x.getServer_filename()),x->x));
         List<PcsItemView> result = new ArrayList<>();
         for(PcsItem item :list){
             if(item.getIsdir() == 1){
@@ -49,10 +49,19 @@ public class PcsApi {
                     view.setIsdir(0);
                     view.setMediaPath(getPath(item.getPath(),basePath));
                     view.setMediaTitle(item.getServer_filename());
-                    PcsItem contentItem = listMap.get(title+".html");
+                    PcsItem contentItem = listMap.get(compressName(title)+".html");
+                    String contentPath = null;
                     if(null != contentItem){
-                        view.setContentPath(getPath(contentItem.getPath(),basePath));
+                        contentPath = getPath(contentItem.getPath(),basePath);
+                    }else{
+                        //hack
+
                     }
+
+                    if(contentPath == null ){
+                        throw new Exception("无法获取网页内容");
+                    }
+                    view.setContentPath(contentPath);
 
 
                     result.add(view);
@@ -63,6 +72,11 @@ public class PcsApi {
         }
 
         return result;
+    }
+
+    private String compressName(String name){
+        //"12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf" -> "PcsItem(category=4, fs_id=686810862764976, isdir=0, local_ctime=1567056356, local_mtime=1567056358, path=/00-资源文件/14-极客时间/01-专栏课/01-50/47-Java性能调优实战/04-模块三· 多线程性能调优 (1讲)/12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf, server_ctime=1567182414, server_filename=12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf, server_mtime=1582452345, size=4196635, parentType=null)"
+        return name.replaceAll(" ","").replaceAll("丨","");
     }
 
     private String getPath(String path,String base){

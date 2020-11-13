@@ -48,7 +48,7 @@ class BookOutlineStorage implements BookOutlineStorageInterface {
     $query->condition('b.nid', $nids, 'IN');
 
     if ($access) {
-      $query->addTag('node_access');
+      // $query->addTag('node_access');
       $query->addMetaData('base_table', 'book');
     }
 

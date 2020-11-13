@@ -45,8 +45,13 @@ public class PcsDownService {
      * @return
      * @throws InterruptedException
      */
-    @Cacheable(key = "#path",value = "netLink")
+//    @Cacheable(key = "#path",value = "netLink")
     public String netdiskLink(String path,String fileName) throws Exception {
+        if(path.contains("null")){
+            int a = 0;
+        }
+
+        System.out.println(fileName);
 
         String url = PcsUrlHelper.getnetdiskDownUrl(path);
         JSONObject response = myHttpClient.get(url);
@@ -58,6 +63,12 @@ public class PcsDownService {
         }
         throw new Exception("getCapture");
     }
+
+    public String netContent(String url) throws Exception {
+
+        return myHttpClient.httpGet(url);
+    }
+
 
     private JSONObject getSignObject (){
         String signUrl = PcsUrlHelper.getSignUrl();

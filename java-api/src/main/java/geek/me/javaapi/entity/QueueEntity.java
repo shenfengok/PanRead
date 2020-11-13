@@ -16,4 +16,7 @@ public class QueueEntity {
     private long fsid;
     private String name;
     private String base_path;
+
+    private int todo;
+    private int force;
 }

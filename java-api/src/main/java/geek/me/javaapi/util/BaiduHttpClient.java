@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 @Component
 public class BaiduHttpClient {
@@ -46,6 +47,25 @@ public class BaiduHttpClient {
             System.out.println(e);
         }
         return JSON.parseObject(result);
+    }
+
+    public String httpGet(String url) {
+        // get请求返回结果
+        String strResult = "";
+        try {
+            // 发送get请求
+            HttpGet request = new HttpGet(url);
+            HttpResponse response = httpClient.execute(request);
+
+            /** 请求发送成功，并得到响应 **/
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                /** 读取服务器返回过来的json字符串数据 **/
+                strResult = EntityUtils.toString(response.getEntity(), Charset.forName("utf-8"));
+            }
+        } catch (Exception e) {
+            System.out.println("get请求提交失败:" + url);
+        }
+        return strResult;
     }
 
     public CookieStore getCookieStore() throws UnsupportedEncodingException {

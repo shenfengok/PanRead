@@ -33,7 +33,7 @@ public class BookController {
     }
 
     @RequestMapping("transfer")
-    public CommonResult transfer() throws InterruptedException {
+    public CommonResult transfer() throws Exception {
         //同步到pan
         bookService.transfer();
         //boolean res = bookService.sync(form);

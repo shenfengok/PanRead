@@ -1,0 +1,4 @@
+  
+D:\code\PanRead\data\htdocs\core\modules\book\src\BookOutlineStorage.php
+  $query->addTag('node_access');
+      $query->addMetaData('base_table', 'book');
