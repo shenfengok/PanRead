@@ -171,8 +171,6 @@ public class BookService {
 
             return;
         }
-        if(1==1)
-        return;
 
         String path = PcsConst.basePath + item.getContentPath();
         String netDownUrl = pcsDownService.netdiskLink(path, item.getTitle());
