@@ -19,4 +19,5 @@ public class BookFieldCommentEntity {
     private long bookId;
     private long revision_id;
     private int delta =0;
+    private String langcode = "zh-hans";
 }

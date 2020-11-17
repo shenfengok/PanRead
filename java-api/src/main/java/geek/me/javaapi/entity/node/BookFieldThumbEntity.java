@@ -19,4 +19,5 @@ public class BookFieldThumbEntity {
     private long bookId;
     private long revision_id;
     private int delta =0;
+    private String langcode = "zh-hans";
 }
