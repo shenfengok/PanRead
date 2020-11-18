@@ -108,7 +108,7 @@ public class BookService {
         view.setTitle(qe.getName());
         view.setContent("");
         view.setIsdir(1);
-        NodeEntity aBook = createRoot(view, 1, new ArrayList<>(), qe.getBase_path(),qe.getForce());
+        NodeEntity aBook = createRoot(view, 1, new ArrayList<>(), qe.getBase_path(),0);
 
 
         return true;
@@ -501,12 +501,31 @@ public class BookService {
         }
     }
 
-    public void addQueue(SyncForm form) {
+    public void queOne(SyncForm form) {
         QueueEntity entity = new QueueEntity();
         entity.setFsid(form.getFsId());
         entity.setBase_path(form.getBasePath());
         entity.setName(form.getName());
+        entity.setTodo(1);
         queueDao.saveAndFlush(entity);
+    }
+
+    public void queList(SyncForm form) throws Exception {
+
+
+        //这里都是目录，base path不用传
+        List<PcsItemView> list = pcsApi.getChildItemView(form.getFsId().toString(), "");
+        for (PcsItemView item : list) {
+            QueueEntity entity = new QueueEntity();
+            entity.setFsid(Long.valueOf(item.getFsid()));
+
+            entity.setBase_path(form.getBasePath() +  form.getName() +"/");
+            entity.setName(item.getTitle());
+            entity.setTodo(1);
+            queueDao.save(entity);
+        }
+
+
     }
 
     public void transfer() throws Exception {

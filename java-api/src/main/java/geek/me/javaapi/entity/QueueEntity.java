@@ -18,5 +18,5 @@ public class QueueEntity {
     private String base_path;
 
     private int todo;
-    private int force;
+//    private int force;
 }

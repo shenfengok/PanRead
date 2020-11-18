@@ -23,10 +23,19 @@ public class BookController {
         List<BookEntity> res = bookService.listAll();
         return CommonResult.success(res);
     }
-    @RequestMapping("sync")
-    public CommonResult sync( @RequestBody SyncForm form) throws InterruptedException {
+    @RequestMapping("queOne")
+    public CommonResult queOne( @RequestBody SyncForm form) throws InterruptedException {
         //仅仅加入队列
-        bookService.addQueue(form);
+        bookService.queOne(form);
+        //boolean res = bookService.sync(form);
+
+        return CommonResult.success();
+    }
+
+    @RequestMapping("queList")
+    public CommonResult queList( @RequestBody SyncForm form) throws Exception {
+        //仅仅加入队列
+        bookService.queList(form);
         //boolean res = bookService.sync(form);
 
         return CommonResult.success();

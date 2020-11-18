@@ -1,0 +1,354 @@
+2020-11-19 07:17:42.468 INFO  geek.me.javaapi.JavaApiApplication Line:651 - No active profile set, falling back to default profiles: default
+2020-11-19 07:17:42.818 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-11-19 07:17:42.903 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 80ms. Found 19 JPA repository interfaces.
+2020-11-19 07:17:43.022 INFO  org.springframework.cloud.context.scope.GenericScope Line:295 - BeanFactory id=712cf88e-c083-3907-88de-02f90b8f246d
+2020-11-19 07:17:43.274 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8080 (http)
+2020-11-19 07:17:43.285 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Initializing ProtocolHandler ["http-nio-8080"]
+2020-11-19 07:17:43.285 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2020-11-19 07:17:43.285 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.37]
+2020-11-19 07:17:43.356 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2020-11-19 07:17:43.356 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:285 - Root WebApplicationContext: initialization completed in 875 ms
+2020-11-19 07:17:43.488 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-19 07:17:43.496 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2020-11-19 07:17:43.589 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2020-11-19 07:17:43.681 INFO  org.hibernate.jpa.internal.util.LogHelper Line:31  - HHH000204: Processing PersistenceUnitInfo [name: default]
+2020-11-19 07:17:43.723 INFO  org.hibernate.Version Line:44  - HHH000412: Hibernate ORM core version 5.4.20.Final
+2020-11-19 07:17:43.827 INFO  org.hibernate.annotations.common.Version Line:49  - HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2020-11-19 07:17:43.897 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-19 07:17:43.902 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-19 07:17:43.916 INFO  org.hibernate.dialect.Dialect Line:170 - HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2020-11-19 07:17:44.478 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator Line:52  - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2020-11-19 07:17:44.485 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:416 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-11-19 07:17:45.305 INFO  org.springframework.cloud.commons.util.InetUtils Line:170 - Cannot determine local hostname
+2020-11-19 07:17:45.415 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Starting ProtocolHandler ["http-nio-8080"]
+2020-11-19 07:17:45.431 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8080 (http) with context path ''
+2020-11-19 07:17:46.529 INFO  org.springframework.cloud.commons.util.InetUtils Line:170 - Cannot determine local hostname
+2020-11-19 07:17:46.534 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:49  - Triggering deferred initialization of Spring Data repositories…
+2020-11-19 07:17:46.943 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:53  - Spring Data repositories initialized!
+2020-11-19 07:17:46.948 INFO  geek.me.javaapi.JavaApiApplication Line:61  - Started JavaApiApplication in 7.236 seconds (JVM running for 8.088)
+2020-11-19 07:17:47.259 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-19 07:17:47.259 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2020-11-19 07:17:47.265 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 6 ms
+2020-11-19 07:18:12.783 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.force 
+as force3_18_0_, queueentit0_.name as name4_18_0_, queueentit0_.todo as todo5_18_0_ from queue_new 
+queueentit0_ where queueentit0_.item_id=459081746926346 
+ {executed in 0 msec}
+2020-11-19 07:18:12.788 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|------|-----|-----|
+|item_id |base_path |force |name |todo |
+|--------|----------|------|-----|-----|
+|--------|----------|------|-----|-----|
+
+2020-11-19 07:22:09.992 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:598 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-11-19 07:22:09.993 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:218 - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-11-19 07:22:09.993 INFO  com.zaxxer.hikari.HikariDataSource Line:350 - HikariPool-1 - Shutdown initiated...
+2020-11-19 07:22:09.998 INFO  com.zaxxer.hikari.HikariDataSource Line:352 - HikariPool-1 - Shutdown completed.
+2020-11-19 07:22:36.603 INFO  geek.me.javaapi.JavaApiApplication Line:651 - No active profile set, falling back to default profiles: default
+2020-11-19 07:22:36.948 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-11-19 07:22:37.027 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 73ms. Found 19 JPA repository interfaces.
+2020-11-19 07:22:37.146 INFO  org.springframework.cloud.context.scope.GenericScope Line:295 - BeanFactory id=712cf88e-c083-3907-88de-02f90b8f246d
+2020-11-19 07:22:37.402 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8080 (http)
+2020-11-19 07:22:37.408 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Initializing ProtocolHandler ["http-nio-8080"]
+2020-11-19 07:22:37.409 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2020-11-19 07:22:37.409 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.37]
+2020-11-19 07:22:37.482 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2020-11-19 07:22:37.482 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:285 - Root WebApplicationContext: initialization completed in 866 ms
+2020-11-19 07:22:37.615 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-19 07:22:37.622 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2020-11-19 07:22:37.718 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2020-11-19 07:22:37.808 INFO  org.hibernate.jpa.internal.util.LogHelper Line:31  - HHH000204: Processing PersistenceUnitInfo [name: default]
+2020-11-19 07:22:37.852 INFO  org.hibernate.Version Line:44  - HHH000412: Hibernate ORM core version 5.4.20.Final
+2020-11-19 07:22:37.958 INFO  org.hibernate.annotations.common.Version Line:49  - HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2020-11-19 07:22:38.030 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-19 07:22:38.034 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-19 07:22:38.044 INFO  org.hibernate.dialect.Dialect Line:170 - HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2020-11-19 07:22:38.616 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator Line:52  - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2020-11-19 07:22:38.623 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:416 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-11-19 07:22:39.447 INFO  org.springframework.cloud.commons.util.InetUtils Line:170 - Cannot determine local hostname
+2020-11-19 07:22:39.514 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Starting ProtocolHandler ["http-nio-8080"]
+2020-11-19 07:22:39.530 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8080 (http) with context path ''
+2020-11-19 07:22:39.745 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-19 07:22:39.745 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2020-11-19 07:22:39.751 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 5 ms
+2020-11-19 07:22:40.629 INFO  org.springframework.cloud.commons.util.InetUtils Line:170 - Cannot determine local hostname
+2020-11-19 07:22:40.634 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:49  - Triggering deferred initialization of Spring Data repositories…
+2020-11-19 07:22:41.141 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:53  - Spring Data repositories initialized!
+2020-11-19 07:22:41.146 INFO  geek.me.javaapi.JavaApiApplication Line:61  - Started JavaApiApplication in 7.377 seconds (JVM running for 8.231)
+2020-11-19 07:23:37.458 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=459081746926346 
+ {executed in 1 msec}
+2020-11-19 07:23:37.467 INFO  jdbc.resultsettable Line:610 - 
+|---------|-------------------------------|--------------------|-----|
+|item_id  |base_path                      |name                |todo |
+|---------|-------------------------------|--------------------|-----|
+|[unread] |00-资源文件/14-极客时间/01-专栏课/051-99/ |99-JavaScript核心原理解析 |1    |
+|---------|-------------------------------|--------------------|-----|
+
+2020-11-19 07:23:37.477 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=626896109933850 
+ {executed in 0 msec}
+2020-11-19 07:23:37.478 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.486 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'98-设计模式之美', 1, 626896109933850) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.493 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=621195835058382 
+ {executed in 0 msec}
+2020-11-19 07:23:37.494 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.495 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'97-项目管理实战20讲', 1, 621195835058382) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.499 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=936433950782588 
+ {executed in 0 msec}
+2020-11-19 07:23:37.500 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.501 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'95-苏杰的产品创新课', 1, 936433950782588) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.506 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=855137735533744 
+ {executed in 0 msec}
+2020-11-19 07:23:37.507 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.508 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'94-DDD实战课', 1, 855137735533744) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.513 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=952316731239648 
+ {executed in 1 msec}
+2020-11-19 07:23:37.513 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.514 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'92-DevOps实战笔记', 1, 952316731239648) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.519 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=876595205877896 
+ {executed in 0 msec}
+2020-11-19 07:23:37.520 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.521 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'91-说透中台', 1, 876595205877896) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.526 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=861073733380654 
+ {executed in 1 msec}
+2020-11-19 07:23:37.526 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.528 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'90-分布式技术原理与算法解析', 1, 861073733380654) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.533 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=476330106989327 
+ {executed in 0 msec}
+2020-11-19 07:23:37.533 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.535 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'88-高并发系统设计40问', 1, 476330106989327) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.539 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=283828550600385 
+ {executed in 0 msec}
+2020-11-19 07:23:37.540 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.541 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'87-全栈工程师修炼指南', 1, 283828550600385) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.545 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=789557280998655 
+ {executed in 0 msec}
+2020-11-19 07:23:37.546 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.547 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'86-即时消息技术剖析与实战', 1, 789557280998655) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.551 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=1004252009859251 
+ {executed in 0 msec}
+2020-11-19 07:23:37.552 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.553 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'85-研发效率破局之道', 1, 1004252009859251) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.557 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=877479874575179 
+ {executed in 0 msec}
+2020-11-19 07:23:37.558 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.560 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'83-编译原理之美', 1, 877479874575179) 
+ {executed in 2 msec}
+2020-11-19 07:23:37.565 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=1009872364102685 
+ {executed in 1 msec}
+2020-11-19 07:23:37.565 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.566 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'81-浏览器工作原理与实践', 1, 1009872364102685) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.571 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=787964344536295 
+ {executed in 1 msec}
+2020-11-19 07:23:37.571 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.572 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'80-网络编程实战', 1, 787964344536295) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.578 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=1022101157981678 
+ {executed in 1 msec}
+2020-11-19 07:23:37.578 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.580 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'79-消息队列高手课', 1, 1022101157981678) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.584 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=409602706903658 
+ {executed in 0 msec}
+2020-11-19 07:23:37.585 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.586 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'77-从0打造音视频直播系统', 1, 409602706903658) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.590 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=781941951179116 
+ {executed in 0 msec}
+2020-11-19 07:23:37.590 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.591 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'75-编辑训练营', 1, 781941951179116) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.596 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=823812106395779 
+ {executed in 0 msec}
+2020-11-19 07:23:37.596 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.598 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'74-Flutter核心技术与实战', 1, 823812106395779) 
+ {executed in 1 msec}
+2020-11-19 07:23:37.601 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=954967934009220 
+ {executed in 0 msec}
+2020-11-19 07:23:37.601 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.603 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'73-黄勇的OKR实战笔记', 1, 954967934009220) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.606 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=773737007105338 
+ {executed in 0 msec}
+2020-11-19 07:23:37.607 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.608 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'53-OpenResty从入门到实战', 1, 773737007105338) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.611 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=300655922831157 
+ {executed in 0 msec}
+2020-11-19 07:23:37.612 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.613 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'52-透视HTTP协议', 1, 300655922831157) 
+ {executed in 0 msec}
+2020-11-19 07:23:37.616 INFO  jdbc.sqltiming Line:373 - select queueentit0_.item_id as item_id1_18_0_, queueentit0_.base_path as base_pat2_18_0_, queueentit0_.name 
+as name3_18_0_, queueentit0_.todo as todo4_18_0_ from queue_new queueentit0_ where queueentit0_.item_id=390535478164697 
+ {executed in 0 msec}
+2020-11-19 07:23:37.617 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------|-----|-----|
+|item_id |base_path |name |todo |
+|--------|----------|-----|-----|
+|--------|----------|-----|-----|
+
+2020-11-19 07:23:37.618 INFO  jdbc.sqltiming Line:373 - insert into queue_new (base_path, name, todo, item_id) values ('00-资源文件/14-极客时间/01-专栏课/051-99/', 
+'51-白话法律42讲', 1, 390535478164697) 
+ {executed in 0 msec}
+2020-11-19 07:27:46.068 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:598 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-11-19 07:27:46.069 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:218 - Shutting down ExecutorService 'applicationTaskExecutor'
+2020-11-19 07:27:46.069 INFO  com.zaxxer.hikari.HikariDataSource Line:350 - HikariPool-1 - Shutdown initiated...
+2020-11-19 07:27:46.074 INFO  com.zaxxer.hikari.HikariDataSource Line:352 - HikariPool-1 - Shutdown completed.
