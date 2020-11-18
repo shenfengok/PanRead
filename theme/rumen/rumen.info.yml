@@ -1,0 +1,18 @@
+type: theme
+core_version_requirement: ^8 || ^9
+
+name: 'rumen'
+description: 'rumen custom'
+package: 'rumen'
+base theme: stable
+libraries:
+  - rumen/global-styling
+
+regions:
+  navigation: 'Navigation'
+  header: 'Top Bar'
+  content: 'Content'
+  sidebar_first: 'Primary'
+  sidebar_second: 'Secondary'
+  footer: 'Footer'
+  page_top: 'Page top'

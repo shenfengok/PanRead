@@ -1,0 +1,87 @@
+{#
+/**
+ * @file
+ * Theme override for a field.
+ *
+ * To override output, copy the "field.html.twig" from the templates directory
+ * to your theme's directory and customize it, just like customizing other
+ * Drupal templates such as page.html.twig or node.html.twig.
+ *
+ * Instead of overriding the theming for all fields, you can also just override
+ * theming for a subset of fields using
+ * @link themeable Theme hook suggestions. @endlink For example,
+ * here are some theme hook suggestions that can be used for a field_foo field
+ * on an article node type:
+ * - field--node--field-foo--article.html.twig
+ * - field--node--field-foo.html.twig
+ * - field--node--article.html.twig
+ * - field--field-foo.html.twig
+ * - field--text-with-summary.html.twig
+ * - field.html.twig
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - label_hidden: Whether to show the field label or not.
+ * - title_attributes: HTML attributes for the title.
+ * - label: The label for the field.
+ * - multiple: TRUE if a field can contain multiple items.
+ * - items: List of all the field items. Each item contains:
+ *   - attributes: List of HTML attributes for each item.
+ *   - content: The field item's content.
+ * - entity_type: The entity type to which the field belongs.
+ * - field_name: The name of the field.
+ * - field_type: The type of the field.
+ * - label_display: The display settings for the label.
+ *
+ *
+ * @see template_preprocess_field()
+ */
+#}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'field--type-' ~ field_type|clean_class,
+    'field--label-' ~ label_display,
+    label_display == 'inline' ? 'clearfix',
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+
+{% if label_hidden %}
+  {% if multiple %}
+    <div{{ attributes.addClass(classes, 'field__items') }}>
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+    </div>
+  {% else %}
+    {% for item in items %}
+      <div{{ attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div>
+    {% endfor %}
+  {% endif %}
+{% else %}
+  <div{{ attributes.addClass(classes) }}>
+    {# <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div> #}
+    {% if multiple %}
+      <div class="field__items">
+    {% endif %}
+    {% for item in items %}
+      <div{{ item.attributes.addClass('field__item') }}>
+     
+      {# <audio  id="myaudio" src="{{ item.content }}" controls="controls"> #}
+      <audio  id="myaudio" src="http://qdall01.baidupcs.com/file/e963a09b7f344feb0b44897bde4abed0?bkt=en-2a4ba40c42c88fabf0c417bf7a488b331a7b7c774983c8cd22d35ba768d66286ba088c4ac0cdbe4f6eb42fdc2adb2837cf85df9011645aa63f44b13a62f3c061&fid=3757516097-778750-537652463931367&time=1605657327&sign=FDTAXUGERLQlBHSKfWqir-DCb740ccc5511e5e8fedcff06b081203-3jJHlh44CCwL4W1%2BtXESlUD8ECM%3D&to=d0,34&size=3790823&sta_dx=3790823&sta_cs=6485&sta_ft=mp3&sta_ct=7&sta_mt=3&fm2=MH%2CQingdao%2CAnywhere%2C%2Cshanghai%2Ccnc&ctime=1567182420&mtime=1604579114&resv0=-1&resv1=0&resv2=rlim&resv3=5&resv4=3790823&vuk=3757516097&iv=0&htype=&randtype=em&newver=1&newfm=1&secfm=1&flow_ver=3&pkey=en-d27ca866161327785d79a0c15eb82f0b7f24835edb107b921f9b9f73efdc0b52d169085d20eadf86802d93a2023c63a6505d9953e4826913305a5e1275657320&sl=76480590&expires=8h&rt=pr&r=583903051&mlogid=7475746755509349807&vbdid=64799653&fin=%E5%8A%A0%E9%A4%90%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%9A%84%E5%BC%BA%E3%80%81%E5%BC%B1%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F.mp3&bflag=34-34&rtype=1&devuid=O%7Cd41d8cd98f00b204e9800998ecf8427e&dp-logid=7475746755509349807&dp-callid=0.1.1&tsl=80&csl=80&fsl=-1&csign=yVzLQPCt4DblfMLqd2BCjd2RnqQ%3D&so=1&ut=6&uter=0&serv=0&uc=1069429310&ti=ea6f6f2a9b6afb7ae8b7efd7765b36cde1391d76c599397e&hflag=30&adg=c_0f3c8fb981bae1fdae375754a6f1d609&reqlabel=778750_l_eeb31e180410b8be0e62f686c2b42c5d_-1_43d73532db4f9890a29565ef474ca519&ibp=1&by=themis&filename=%E5%8A%A0%E9%A4%90%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%9A%84%E5%BC%BA%E3%80%81%E5%BC%B1%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F.mp3" controls="controls">
+      
+
+   </audio>
+    {% endfor %}
+    {% if multiple %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
