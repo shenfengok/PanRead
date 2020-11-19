@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -112,7 +110,10 @@ public class BookService {
         view.setTitle(qe.getName());
         view.setContent("");
         view.setIsdir(1);
-        NodeEntity aBook = createRoot(view, 1, new ArrayList<>(), qe.getBase_path(), 0);
+        view.setDepth(1);
+//        List<Long> path = new ArrayList<>();
+        saveCon(view, new ArrayList<>());
+        createChild(String.valueOf(qe.getFsid()),view.getCurrentPath(), qe.getBase_path());
 
 
         return true;
@@ -160,11 +161,11 @@ public class BookService {
         if (pv.getIsdir() == 1) {
             List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
             int time = 1;
-            while (time < 3){
-                time ++;
-                try{
+            while (time < 3) {
+                time++;
+                try {
                     list = pcsApi.getChildItemView(pv.getFsid(), basePath);
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println(e);
                     Thread.sleep(3000);
                     continue;
@@ -183,6 +184,81 @@ public class BookService {
 
         return node1;
     }
+
+    /**
+     * 创建子book
+     *
+     * @return
+     */
+    private void createChild(String parentFsid, List<Long> parentPath, String basePath) throws Exception {
+
+
+        List<PcsItemView> originList = null;
+        int time = 1;
+        while (time < 3) {
+            time++;
+            try {
+                originList = pcsApi.getChildItemView(parentFsid, basePath);
+            } catch (Exception e) {
+                System.out.println(e);
+                Thread.sleep(3000);
+                continue;
+            }
+            break;
+        }
+        if (null == originList) return;//这里直接跳过到下一本
+
+        List<PcsItemView> list = originList.stream().sorted(Comparator.comparing(PcsItemView::getTitle)).collect(Collectors.toList());
+        for (PcsItemView item : list) {
+            fillCon(item);
+            saveCon(item, parentPath);
+        }
+
+        for (PcsItemView item : list) {
+            if (item.getIsdir() == 1) {
+                createChild(item.getFsid(), item.getCurrentPath(), basePath);
+            }
+
+        }
+
+    }
+
+    private NodeEntity saveCon(PcsItemView pv, List<Long> parentPath) {
+
+        NodeEntity node1 = creatOneNode(pv.getFsid());
+
+        long nid = node1.getNid();
+        long vid = node1.getVid();
+        pv.setNid(nid);
+        createOneFsidEntity(pv.getFsid(), nid, vid);
+
+        List<Long> currentPath = new ArrayList<>();
+        currentPath.addAll(parentPath);
+        currentPath.add(nid);
+        pv.setCurrentPath(currentPath);
+        pv.setDepth(parentPath.size() + 1);
+
+        createOneBook(pv, currentPath);
+
+
+        String empty = "";
+        boolean isDir = pv.getIsdir() == 1;
+
+        createOneNodeBody(nid, isDir ? empty : pv.getContent(), vid);
+
+        createOneFieldData(nid, pv.getTitle(), vid);
+
+        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
+
+        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
+
+        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
+
+        createOneFeileiEntity(1, nid, vid);
+
+        return node1;
+    }
+
 
     private void fillCon(PcsItemView item) throws Exception {
         if (item.getIsdir() == 1) {
@@ -520,6 +596,28 @@ public class BookService {
         return bookDao.save(book);
     }
 
+    private BookEntity createOneBook(PcsItemView item, List<Long> currentPath) {
+        BookEntity book = bookDao.findByNid(item.getNid());
+        if (null == book) {
+            book = new BookEntity();
+        }
+        book.setNid(item.getNid());
+        int depth = item.getDepth();
+        if (depth > 1) {
+            book.setPid(currentPath.get(depth - 2));
+        } else {
+            book.setPid(0);
+        }
+
+        book.setBid(currentPath.get(0));
+        book.setHasChildren(item.getIsdir());
+        book.setDepth(depth);
+        for (int i = 0; i < currentPath.size(); i++) {
+            setN(book, i + 1, currentPath.get(i));
+        }
+        return bookDao.save(book);
+    }
+
 
     private void createChild(String fsid, String name, int depth, List<Long> path) throws InterruptedException {
 
@@ -587,7 +685,7 @@ public class BookService {
 
     public void transfer() throws Exception {
         //first of first 同步到百度盘
-        List<QueueEntity> list = queueDao.findByTodo(1);
+        List<QueueEntity> list = queueDao.findByTodoOrderByName(1);
         for (QueueEntity q : list) {
             syncBook(q);
         }

@@ -10,5 +10,5 @@ import java.util.List;
 public interface QueueDao extends JpaRepository<QueueEntity,Long> {
     QueueEntity findByFsid(long fsid);
 
-    List<QueueEntity> findByTodo(int i);
+    List<QueueEntity> findByTodoOrderByName(int i);
 }
