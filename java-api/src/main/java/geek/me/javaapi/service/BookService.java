@@ -159,6 +159,19 @@ public class BookService {
 
         if (pv.getIsdir() == 1) {
             List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+            int time = 1;
+            while (time < 3){
+                time ++;
+                try{
+                    list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+                }catch (Exception e){
+                    System.out.println(e);
+                    Thread.sleep(3000);
+                    continue;
+                }
+                break;
+            }
+
             for (PcsItemView item : list) {
 
                 fillCon(item);
