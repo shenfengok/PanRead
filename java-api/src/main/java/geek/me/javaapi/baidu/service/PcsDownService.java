@@ -61,7 +61,7 @@ public class PcsDownService {
             dlink+= "&filename=" + URLEncoder.encode(fileName,"utf-8");
             return dlink;
         }
-        throw new Exception("getCapture");
+        throw new Exception("获取下载链接失败"+ path);
     }
 
     public String netContent(String url) throws Exception {

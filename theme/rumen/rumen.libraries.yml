@@ -2,5 +2,4 @@ global-styling:
   version: 1.x
   css:
     theme:
-      css/bootstrap.css: {}
-      css/use.css: {}
+      css/highlight.css: {}

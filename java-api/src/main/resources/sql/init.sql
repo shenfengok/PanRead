@@ -32,3 +32,13 @@ CREATE TABLE `queue_new` (
   KEY `name_created` (`name`,`created`),
   KEY `expire` (`expire`)
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COMMENT='Stores items in queues.';
+
+DROP TABLE IF EXISTS `book_check`;
+CREATE TABLE `book_check` (
+  `item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary Key: Unique item ID.',
+  `fsid` varchar(100) NOT NULL DEFAULT '',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `got` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`item_id`),
+  UNIQUE KEY `id_name_uni` (`name`,`fsid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='Stores items in queues.';

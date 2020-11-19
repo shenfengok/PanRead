@@ -21,4 +21,5 @@ public class NodeFieldCommentRevisionEntity {
     private long revision_id;
     private int delta =0;
     private String langcode = "zh-hans";
+    private String field_comment_format = "full_html";
 }

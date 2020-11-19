@@ -42,6 +42,8 @@ public class BaiduHttpClient {
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 result = EntityUtils.toString(response.getEntity(), "utf-8");
+            }else{
+                System.out.println(response);
             }
         } catch (Exception e) {
             System.out.println(e);

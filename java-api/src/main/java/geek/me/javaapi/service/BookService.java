@@ -8,6 +8,7 @@ import geek.me.javaapi.baidu.service.PcsDownService;
 import geek.me.javaapi.baidu.service.PcsTransService;
 import geek.me.javaapi.dao.*;
 import geek.me.javaapi.dto.form.SyncForm;
+import geek.me.javaapi.entity.BookCheckEntity;
 import geek.me.javaapi.entity.QueueEntity;
 import geek.me.javaapi.entity.node.*;
 import geek.me.javaapi.entity.revision.*;
@@ -90,6 +91,9 @@ public class BookService {
     @Autowired
     private NodeFiledMediaRevisionDao nodeFiledMediaRevisionDao;
 
+    @Autowired
+    private BookCheckDao bookCheckDao;
+
 
     public List<BookEntity> listAll() {
         return bookDao.findAll();
@@ -97,18 +101,18 @@ public class BookService {
 
     public boolean syncBook(QueueEntity qe) throws Exception {
 
-//        pcsTransService.del(qe.getName());
-//        Thread.sleep(3000);
-//        List<String > fsids = new ArrayList<>();
-//        fsids.add(String.valueOf(qe.getFsid()));
-//        pcsTransService.transfer(fsids,qe.getName());
-//        Thread.sleep(3000);
+        pcsTransService.del(qe.getName());
+        Thread.sleep(3000);
+        List<String> fsids = new ArrayList<>();
+        fsids.add(String.valueOf(qe.getFsid()));
+        pcsTransService.transfer(fsids, qe.getName());
+        Thread.sleep(3000);
         PcsItemView view = new PcsItemView();
         view.setFsid(String.valueOf(qe.getFsid()));
         view.setTitle(qe.getName());
         view.setContent("");
         view.setIsdir(1);
-        NodeEntity aBook = createRoot(view, 1, new ArrayList<>(), qe.getBase_path(),0);
+        NodeEntity aBook = createRoot(view, 1, new ArrayList<>(), qe.getBase_path(), 0);
 
 
         return true;
@@ -121,9 +125,10 @@ public class BookService {
      * @param pv
      * @return
      */
-    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath,int force) throws Exception {
+    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) throws Exception {
 
-
+//        BookCheckEntity entity = bookCheckDao.findByFsidAndName(714389511080L, "media");
+//        List<BookCheckEntity> lst = bookCheckDao.findAll();
         NodeEntity node1 = creatOneNode(pv.getFsid());
 
         long nid = node1.getNid();
@@ -159,7 +164,7 @@ public class BookService {
                 fillCon(item);
 
 
-                createRoot(item, depth + 1, newPath, basePath,force);
+                createRoot(item, depth + 1, newPath, basePath, force);
             }
         }
 
@@ -171,66 +176,105 @@ public class BookService {
 
             return;
         }
+        //这里发现有了就退出，后面判断为空不会更新到数据库---hack
 
-        String path = PcsConst.basePath + item.getContentPath();
-        String netDownUrl = pcsDownService.netdiskLink(path, item.getTitle());
-        boolean noError ;
-        int i = 0;
-        Document doc = null;
+        boolean isSuccess = false;
+        try {
+            if (!checkExist(item.getFsid(), "net_content")) {
+                String path = PcsConst.basePath + item.getContentPath();
+                String netDownUrl = pcsDownService.netdiskLink(path, item.getTitle());
+                boolean noError;
+                int i = 0;
+                Document doc = null;
 
-        do {
+                do {
+                    try {
+                        String con = pcsDownService.netContent(netDownUrl);
+                        doc = Jsoup.parse(con);
+                        noError = true;
+                        Thread.sleep(3000);
+                    } catch (Exception e) {
+                        noError = false;
+                        i++;
+                    }
+                    if (doc == null) {
+                        int a = 1;
+                    }
+                } while (!noError && i < 3);
+
+
+                Elements els = doc.getElementsByTag("img");
+                els.forEach(x -> {
+                    String imgLink = x.attr("data-savepage-src");
+                    x.attr("src", imgLink);
+                    x.removeAttr("data-savepage-src");
+                });
+
+                String con = "";// 内容
+                if (doc.getElementsByClass("_29HP61GA_0").size() > 0) {
+                    con = doc.getElementsByClass("_29HP61GA_0").get(0).html();
+                } else if (doc.getElementsByClass("_2c4hPkl9").size() > 0) {
+                    con = doc.getElementsByClass("_2c4hPkl9").get(0).html();
+                }
+                item.setContent(con);
+
+                String thumb = "";//封面图片
+                if (doc.getElementsByClass("_3Jbcj4Iu_0").size() > 0) {
+                    if (doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").size() > 0) {
+                        thumb = doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").get(0).attr("src");
+                    } else {
+                        thumb = "";
+                        System.out.println(path + "无封面");
+                    }
+
+                }
+
+                item.setThumb(thumb);
+
+                String comment = "";//评论内容
+
+                if (doc.getElementsByClass("_1qhD3bdE_0").size() > 0) {
+                    comment = doc.getElementsByClass("_1qhD3bdE_0").get(0).getElementsByTag("ul").html();
+                }
+                item.setComment(comment);
+
+
+                isSuccess = !StringUtils.isEmpty(con) && !StringUtils.isEmpty(comment) && !StringUtils.isEmpty(thumb);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            markIfExist(item.getFsid(), "net_content", isSuccess ? 1 : 0);
+        }
+        if (!checkExist(item.getFsid(), "media")) {
+            String mediaUrl = "";
             try {
-                String con = pcsDownService.netContent(netDownUrl);
-                doc = Jsoup.parse(con);
-                noError = true;
-                Thread.sleep(3000);
+                mediaUrl = pcsDownService.netdiskLink(PcsConst.basePath + item.getMediaPath(), item.getMediaTitle());
             } catch (Exception e) {
-                noError = false;
-                i++;
+                System.out.println(e);
             }
-            if (doc == null) {
-                int a = 1;
-            }
-        } while (!noError && i < 3);
-
-
-        Elements els = doc.getElementsByTag("img");
-        els.forEach(x -> {
-            String imgLink = x.attr("data-savepage-src");
-            x.attr("src", imgLink);
-            x.removeAttr("data-savepage-src");
-        });
-
-        String con = "";// 内容
-        if (doc.getElementsByClass("_29HP61GA_0").size() > 0) {
-            con = doc.getElementsByClass("_29HP61GA_0").get(0).html();
-        } else if (doc.getElementsByClass("_2c4hPkl9").size() > 0) {
-            con = doc.getElementsByClass("_2c4hPkl9").get(0).html();
-        }
-        item.setContent(con);
-
-        String thumb = "";//封面图片
-        if (doc.getElementsByClass("_3Jbcj4Iu_0").size() > 0) {
-            if (doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").size() > 0) {
-                thumb = doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").get(0).attr("src");
-            } else {
-                thumb = "";
-                System.out.println(path + "无封面");
-            }
-
+            item.setMedia(mediaUrl);
+            markIfExist(item.getFsid(), "media", !StringUtils.isEmpty(mediaUrl) ? 1 : 0);
         }
 
-        item.setThumb(thumb);
 
-        String comment = "";//评论内容
+    }
 
-        if (doc.getElementsByClass("_1qhD3bdE_0").size() > 0) {
-            comment = doc.getElementsByClass("_1qhD3bdE_0").get(0).getElementsByTag("ul").html();
+    private void markIfExist(String fsid, String name, int got) {
+        BookCheckEntity bookCheckEntity = bookCheckDao.findByFsidAndName(fsid, name);
+        if (null == bookCheckEntity) {
+            bookCheckEntity = new BookCheckEntity();
         }
-        item.setComment(comment);
+        bookCheckEntity.setFsid(fsid);
+        bookCheckEntity.setGot(got);
+        bookCheckEntity.setName(name);
+        bookCheckDao.saveAndFlush(bookCheckEntity);
+    }
 
-        String mediaUrl = pcsDownService.netdiskLink(PcsConst.basePath + item.getMediaPath(), item.getMediaTitle());
-        item.setMedia(mediaUrl);
+    private boolean checkExist(String fsid, String name) {
+        BookCheckEntity entity = bookCheckDao.findByFsidAndName(fsid, name);
+        return null != entity && 1 == entity.getGot();
     }
 
     private NodeFiledDataEntity createOneFieldData(long nid, String title, long vid) {
@@ -268,10 +312,10 @@ public class BookService {
         if (null == nodeBodyEntity) {
             nodeBodyEntity = new NodeBodyEntity();
         }
-        if(!StringUtils.isEmpty(content) ){
+        if (!StringUtils.isEmpty(content)) {
             nodeBodyEntity.setBody(content);
         }
-        if(null == nodeBodyEntity.getBody()){
+        if (null == nodeBodyEntity.getBody()) {
             nodeBodyEntity.setBody("");
         }
 
@@ -311,15 +355,15 @@ public class BookService {
 
         BookFieldMediaEntity entity = bookFieldMediaDao.findByBookId(nid);
 
-        if(null == entity){
+        if (null == entity) {
             entity = new BookFieldMediaEntity();
         }
         entity.setBookId(nid);
-        if(!StringUtils.isEmpty(media) ){
+        if (!StringUtils.isEmpty(media)) {
             entity.setMedia(media);
         }
 
-        if(entity.getMedia() == null){
+        if (entity.getMedia() == null) {
             entity.setMedia("");
         }
         entity.setRevision_id(vid);
@@ -340,15 +384,15 @@ public class BookService {
     private BookFieldCommentEntity createOneCommentEntity(String comment, long nid, long vid) {
         BookFieldCommentEntity entity = bookFieldCommentDao.findByBookId(nid);
 
-        if(null == entity){
+        if (null == entity) {
             entity = new BookFieldCommentEntity();
         }
         entity.setBookId(nid);
 
-        if(!StringUtils.isEmpty(comment) ){
+        if (!StringUtils.isEmpty(comment)) {
             entity.setComment(comment);
         }
-        if(null == entity.getComment()){
+        if (null == entity.getComment()) {
             entity.setComment("");
         }
 
@@ -388,14 +432,14 @@ public class BookService {
 
     private BookFieldThumbEntity createOneThumbEntity(String thumb, long nid, long vid) {
         BookFieldThumbEntity entity = bookFieldThumbDao.findByBookId(nid);
-        if(null == entity){
+        if (null == entity) {
             entity = new BookFieldThumbEntity();
         }
         entity.setBookId(nid);
-        if(!StringUtils.isEmpty(thumb) ){
+        if (!StringUtils.isEmpty(thumb)) {
             entity.setThumb(thumb);
         }
-        if(null == entity.getThumb()){
+        if (null == entity.getThumb()) {
             entity.setThumb("");
         }
         entity.setRevision_id(vid);
@@ -456,7 +500,7 @@ public class BookService {
         book.setHasChildren(hasChild);
         book.setDepth(depth);
         for (int i = 0; i < path.size(); i++) {
-            setN(book, i+1, path.get(i));
+            setN(book, i + 1, path.get(i));
         }
         //更新当前node的nid
 //        setN(book, depth, book.getNid());
@@ -519,7 +563,7 @@ public class BookService {
             QueueEntity entity = new QueueEntity();
             entity.setFsid(Long.valueOf(item.getFsid()));
 
-            entity.setBase_path(form.getBasePath() +  form.getName() +"/");
+            entity.setBase_path(form.getBasePath() + form.getName() + "/");
             entity.setName(item.getTitle());
             entity.setTodo(1);
             queueDao.save(entity);
