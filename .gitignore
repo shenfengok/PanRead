@@ -1,3 +1,4 @@
 server/node_modules/*
 .idea/*
 java-web/target/
+java-api/logs/*

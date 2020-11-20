@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -51,12 +52,18 @@ public class BaiduHttpClient {
         return JSON.parseObject(result);
     }
 
-    public String httpGet(String url) {
+    public String httpGet(String url,int time) throws InterruptedException {
         // get请求返回结果
         String strResult = "";
+        HttpGet request = null;
         try {
             // 发送get请求
-            HttpGet request = new HttpGet(url);
+             request = new HttpGet(url);
+
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectTimeout(time).setConnectionRequestTimeout(time)
+                    .setSocketTimeout(time).build();
+            request.setConfig(requestConfig);
             HttpResponse response = httpClient.execute(request);
 
             /** 请求发送成功，并得到响应 **/
@@ -66,6 +73,12 @@ public class BaiduHttpClient {
             }
         } catch (Exception e) {
             System.out.println("get请求提交失败:" + url);
+            Thread.sleep(1000);
+        }
+        finally {
+            if(null != request){
+                request.releaseConnection();
+            }
         }
         return strResult;
     }

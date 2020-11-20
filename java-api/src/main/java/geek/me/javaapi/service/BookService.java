@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -100,11 +101,11 @@ public class BookService {
     public boolean syncBook(QueueEntity qe) throws Exception {
 
         pcsTransService.del(qe.getName());
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         List<String> fsids = new ArrayList<>();
         fsids.add(String.valueOf(qe.getFsid()));
         pcsTransService.transfer(fsids, qe.getName());
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         PcsItemView view = new PcsItemView();
         view.setFsid(String.valueOf(qe.getFsid()));
         view.setTitle(qe.getName());
@@ -167,7 +168,7 @@ public class BookService {
                     list = pcsApi.getChildItemView(pv.getFsid(), basePath);
                 } catch (Exception e) {
                     System.out.println(e);
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                     continue;
                 }
                 break;
@@ -201,7 +202,7 @@ public class BookService {
                 originList = pcsApi.getChildItemView(parentFsid, basePath);
             } catch (Exception e) {
                 System.out.println(e);
-                Thread.sleep(3000);
+                Thread.sleep(1000);
                 continue;
             }
             break;
@@ -267,7 +268,7 @@ public class BookService {
         }
         //这里发现有了就退出，后面判断为空不会更新到数据库---hack
 
-        boolean isSuccess = false;
+        boolean isSuccess = true;
         try {
             if (!checkExist(item.getFsid(), "net_content")) {
                 String path = PcsConst.basePath + item.getContentPath();
@@ -280,17 +281,20 @@ public class BookService {
                     try {
                         String con = pcsDownService.netContent(netDownUrl);
                         doc = Jsoup.parse(con);
-                        noError = true;
-                        Thread.sleep(3000);
+                        noError = !StringUtils.isEmpty(con);
+
                     } catch (Exception e) {
                         noError = false;
+                        isSuccess = false;
                         i++;
                     }
                     if (doc == null) {
                         int a = 1;
                     }
                 } while (!noError && i < 3);
+                if(noError){
 
+                }
 
                 Elements els = doc.getElementsByTag("img");
                 els.forEach(x -> {
@@ -333,21 +337,23 @@ public class BookService {
 
         } catch (Exception e) {
             System.out.println(e);
+            isSuccess = false;
         } finally {
             markIfExist(item.getFsid(), "net_content", isSuccess ? 1 : 0);
         }
-        if (!checkExist(item.getFsid(), "media")) {
-            String mediaUrl = "";
-            try {
-                mediaUrl = pcsDownService.netdiskLink(PcsConst.basePath + item.getMediaPath(), item.getMediaTitle());
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-            item.setMedia(mediaUrl);
-            markIfExist(item.getFsid(), "media", !StringUtils.isEmpty(mediaUrl) ? 1 : 0);
-        }
+        //fixme  暂时不采集
+//        if (!checkExist(item.getFsid(), "media")) {
+//            String mediaUrl = "";
+//            try {
+//                mediaUrl = pcsDownService.netdiskLink(PcsConst.basePath + item.getMediaPath(), item.getMediaTitle());
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            }
+//            item.setMedia(mediaUrl);
+//            markIfExist(item.getFsid(), "media", !StringUtils.isEmpty(mediaUrl) ? 1 : 0);
+//        }
 
-
+        item.setMedia("");
     }
 
     private void markIfExist(String fsid, String name, int got) {
@@ -683,6 +689,7 @@ public class BookService {
 
     }
 
+//    @Async
     public void transfer() throws Exception {
         //first of first 同步到百度盘
         List<QueueEntity> list = queueDao.findByTodoOrderByName(1);
