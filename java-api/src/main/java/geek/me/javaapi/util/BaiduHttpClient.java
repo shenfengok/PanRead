@@ -59,7 +59,8 @@ public class BaiduHttpClient {
         try {
             // 发送get请求
              request = new HttpGet(url);
-
+            request.setHeader("Cookie",PcsConst.cookie);
+            request.setHeader("User-Agent","netdisk;P2SP;2.2.60.26");
             RequestConfig requestConfig = RequestConfig.custom()
                     .setConnectTimeout(time).setConnectionRequestTimeout(time)
                     .setSocketTimeout(time).build();
