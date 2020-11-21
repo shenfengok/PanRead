@@ -9,9 +9,12 @@ import javax.persistence.*;
 @Data
 public class BookCheckEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long item_id;
+    @Column(name = "item_id")
+    private long id;
     private String fsid;
     private String name;
+    private String path;
+    private String title;
+    private Long vid;
     private int got;
 }

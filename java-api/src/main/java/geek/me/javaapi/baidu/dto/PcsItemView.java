@@ -19,6 +19,7 @@ public class PcsItemView {
 
     private int depth;
     private long nid;
+    private long vid;
 
     private List<Long> currentPath;
 //    private String basePath;

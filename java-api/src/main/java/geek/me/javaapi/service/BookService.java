@@ -16,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -113,77 +115,82 @@ public class BookService {
         view.setIsdir(1);
         view.setDepth(1);
 //        List<Long> path = new ArrayList<>();
-        saveCon(view, new ArrayList<>());
-        createChild(String.valueOf(qe.getFsid()),view.getCurrentPath(), qe.getBase_path());
+        saveOutline(view,new ArrayList<>());
+        saveCon(view);
+        createChild(String.valueOf(qe.getFsid()), view.getCurrentPath(), qe.getBase_path());
 
 
         return true;
     }
 
 
-    /**
-     * 创建一本书
-     *
-     * @param pv
-     * @return
-     */
-    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) throws Exception {
+//    /**
+//     * 创建一本书
+//     *
+//     * @param pv
+//     * @return
+//     */
+//    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) throws Exception {
+//
+////        BookCheckEntity entity = bookCheckDao.findByFsidAndName(714389511080L, "media");
+////        List<BookCheckEntity> lst = bookCheckDao.findAll();
+//        NodeEntity node1 = creatOneNode(pv.getFsid());
+//
+//        long nid = node1.getNid();
+//        long vid = node1.getVid();
+//        createOneFsidEntity(pv.getFsid(), nid, vid);
+//
+//        List<Long> newPath = new ArrayList<>();
+//        newPath.addAll(parentPath);
+//        newPath.add(nid);
+//        createOneBookEntity(nid, depth, newPath, pv.getIsdir());
+//
+//
+//        String empty = "";
+//        boolean isDir = pv.getIsdir() == 1;
+//
+//        createOneNodeBody(nid, isDir ? empty : pv.getContent(), vid);
+//
+//        createOneFieldData(nid, pv.getTitle(), vid);
+//
+//        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
+//
+//        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
+//
+//        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
+//
+//        createOneFeileiEntity(1, nid, vid);
+//
+//
+//        if (pv.getIsdir() == 1) {
+//            List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+//            int time = 1;
+//            while (time < 3) {
+//                time++;
+//                try {
+//                    list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+//                } catch (Exception e) {
+//                    System.out.println(e);
+//                    Thread.sleep(1000);
+//                    continue;
+//                }
+//                break;
+//            }
+//
+//            for (PcsItemView item : list) {
+//
+//                fillCon(item);
+//
+//
+//                createRoot(item, depth + 1, newPath, basePath, force);
+//            }
+//        }
+//
+//        return node1;
+//    }
+//
+    private void createContent (PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force){
 
-//        BookCheckEntity entity = bookCheckDao.findByFsidAndName(714389511080L, "media");
-//        List<BookCheckEntity> lst = bookCheckDao.findAll();
-        NodeEntity node1 = creatOneNode(pv.getFsid());
-
-        long nid = node1.getNid();
-        long vid = node1.getVid();
-        createOneFsidEntity(pv.getFsid(), nid, vid);
-
-        List<Long> newPath = new ArrayList<>();
-        newPath.addAll(parentPath);
-        newPath.add(nid);
-        createOneBookEntity(nid, depth, newPath, pv.getIsdir());
-
-
-        String empty = "";
-        boolean isDir = pv.getIsdir() == 1;
-
-        createOneNodeBody(nid, isDir ? empty : pv.getContent(), vid);
-
-        createOneFieldData(nid, pv.getTitle(), vid);
-
-        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
-
-        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
-
-        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
-
-        createOneFeileiEntity(1, nid, vid);
-
-
-        if (pv.getIsdir() == 1) {
-            List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
-            int time = 1;
-            while (time < 3) {
-                time++;
-                try {
-                    list = pcsApi.getChildItemView(pv.getFsid(), basePath);
-                } catch (Exception e) {
-                    System.out.println(e);
-                    Thread.sleep(1000);
-                    continue;
-                }
-                break;
-            }
-
-            for (PcsItemView item : list) {
-
-                fillCon(item);
-
-
-                createRoot(item, depth + 1, newPath, basePath, force);
-            }
-        }
-
-        return node1;
     }
 
     /**
@@ -212,7 +219,9 @@ public class BookService {
         List<PcsItemView> list = originList.stream().sorted(Comparator.comparing(PcsItemView::getTitle)).collect(Collectors.toList());
         for (PcsItemView item : list) {
             fillCon(item);
-            saveCon(item, parentPath);
+//            saveCon(item, parentPath);
+            saveOutline(item,parentPath);
+            saveCon(item);
         }
 
         for (PcsItemView item : list) {
@@ -223,14 +232,14 @@ public class BookService {
         }
 
     }
-
-    private NodeEntity saveCon(PcsItemView pv, List<Long> parentPath) {
-
+ //先这个，创建node
+    private void saveOutline(PcsItemView pv, List<Long> parentPath){
         NodeEntity node1 = creatOneNode(pv.getFsid());
 
         long nid = node1.getNid();
         long vid = node1.getVid();
         pv.setNid(nid);
+        pv.setVid(vid);
         createOneFsidEntity(pv.getFsid(), nid, vid);
 
         List<Long> currentPath = new ArrayList<>();
@@ -240,6 +249,12 @@ public class BookService {
         pv.setDepth(parentPath.size() + 1);
 
         createOneBook(pv, currentPath);
+    }
+
+    private void saveCon(PcsItemView pv) {
+
+        long nid = pv.getNid();
+        long vid = pv.getVid();
 
 
         String empty = "";
@@ -257,7 +272,7 @@ public class BookService {
 
         createOneFeileiEntity(1, nid, vid);
 
-        return node1;
+
     }
 
 
@@ -292,7 +307,7 @@ public class BookService {
                         int a = 1;
                     }
                 } while (!noError && i < 3);
-                if(noError){
+                if (noError) {
 
                 }
 
@@ -339,7 +354,7 @@ public class BookService {
             System.out.println(e);
             isSuccess = false;
         } finally {
-            markIfExist(item.getFsid(), "net_content", isSuccess ? 1 : 0);
+            markIfExist(item.getNid(),item.getVid(),item.getFsid(), "net_content", item.getContentPath(),item.getTitle(), isSuccess ? 1 : 0);
         }
         //fixme  暂时不采集
 //        if (!checkExist(item.getFsid(), "media")) {
@@ -356,14 +371,14 @@ public class BookService {
         item.setMedia("");
     }
 
-    private void markIfExist(String fsid, String name, int got) {
-        BookCheckEntity bookCheckEntity = bookCheckDao.findByFsidAndName(fsid, name);
-        if (null == bookCheckEntity) {
-            bookCheckEntity = new BookCheckEntity();
-        }
+    private void markIfExist(Long nid,Long vid,String fsid, String name,String path,String title, int got) {
+        BookCheckEntity bookCheckEntity = new BookCheckEntity();
         bookCheckEntity.setFsid(fsid);
+        bookCheckEntity.setPath(path);
+        bookCheckEntity.setTitle(title);
         bookCheckEntity.setGot(got);
         bookCheckEntity.setName(name);
+        bookCheckEntity.setVid(vid);
         bookCheckDao.saveAndFlush(bookCheckEntity);
     }
 
@@ -689,13 +704,66 @@ public class BookService {
 
     }
 
-//    @Async
+    private String lastFsid() {
+
+        //最后一个没找到
+        BookCheckEntity entity = bookCheckDao.findFirstByGotOrderByIdDesc(0);
+        if(null != entity){
+            Long lastNid= entity.getId();
+            BookEntity bookEntity = bookDao.findByNid(lastNid);
+            long lastBookId = bookEntity.getBid();
+            BookFieldFsidEntity bookFieldFsidEntity = bookFieldFsidDao.findByBookId(lastBookId);
+            return bookFieldFsidEntity.getFsid();
+        }
+
+
+        return "";
+    }
+
+    //    @Async
     public void transfer() throws Exception {
+        fixLost();
+        String fsidLast = lastFsid();
+        boolean found = false;
+        if (StringUtils.isEmpty(fsidLast)) {
+            fsidLast = "";
+            found = true;
+        }
         //first of first 同步到百度盘
         List<QueueEntity> list = queueDao.findByTodoOrderByName(1);
         for (QueueEntity q : list) {
+            if (!found && fsidLast.equals(q.getFsid())) {
+                continue;
+            }
+            found = true;
             syncBook(q);
         }
 
+    }
+
+    private void fixBookCheck(BookCheckEntity bookCheckEntity) throws Exception {
+        PcsItemView pcsItemView = new PcsItemView();
+        pcsItemView.setVid(bookCheckEntity.getVid());
+        pcsItemView.setNid(bookCheckEntity.getId());
+        pcsItemView.setContentPath(bookCheckEntity.getPath());
+        pcsItemView.setTitle(bookCheckEntity.getTitle());
+        pcsItemView.setFsid(bookCheckEntity.getFsid());
+        fillCon(pcsItemView);
+        saveCon(pcsItemView);
+
+    }
+
+    private void fixLost() throws Exception{
+
+        for(int i = 1;i< 10000;i ++){
+            PageRequest request = PageRequest.of(i,20);
+            Page<BookCheckEntity> bookChecks = bookCheckDao.findAllByGot(0,request);
+            if(bookChecks.getContent().size() <=0){
+                break;
+            }
+            for(BookCheckEntity bookCheckEntity : bookChecks){
+                fixBookCheck(bookCheckEntity);
+            }
+        }
     }
 }

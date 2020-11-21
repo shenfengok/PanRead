@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookFieldFsidDao extends JpaRepository<BookFieldFsidEntity,Long> {
     BookFieldFsidEntity findByFsid(String fsid);
+    BookFieldFsidEntity findByBookId(long bookId);
 }

@@ -24,22 +24,23 @@ import java.nio.charset.Charset;
 
 @Component
 public class BaiduHttpClient {
-    HttpClient httpClient;
-
-    @PostConstruct
-    void init() throws UnsupportedEncodingException {
-//        CookieStore store = getCookieStore();
-
-        httpClient = HttpClientBuilder.create().build();
-    }
+//    HttpClient httpClient;
+//
+//    @PostConstruct
+//    void init() throws UnsupportedEncodingException {
+////        CookieStore store = getCookieStore();
+//
+//        httpClient = HttpClientBuilder.create().build();
+//    }
 
     public JSONObject get(String url) {
         String result = "{}";
+
         try {
             HttpGet request = new HttpGet(url);
             request.setHeader("Cookie",PcsConst.cookie);
             request.setHeader("User-Agent","netdisk;P2SP;2.2.60.26");
-            HttpResponse response = httpClient.execute(request);
+            HttpResponse response = HttpClientFactory.createHttpClient().execute(request);
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 result = EntityUtils.toString(response.getEntity(), "utf-8");
@@ -65,7 +66,7 @@ public class BaiduHttpClient {
                     .setConnectTimeout(time).setConnectionRequestTimeout(time)
                     .setSocketTimeout(time).build();
             request.setConfig(requestConfig);
-            HttpResponse response = httpClient.execute(request);
+            HttpResponse response = HttpClientFactory.createHttpClient().execute(request);
 
             /** 请求发送成功，并得到响应 **/
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -77,9 +78,9 @@ public class BaiduHttpClient {
             Thread.sleep(1000);
         }
         finally {
-            if(null != request){
-                request.releaseConnection();
-            }
+//            if(null != request){
+//                request.releaseConnection();
+//            }
         }
         return strResult;
     }

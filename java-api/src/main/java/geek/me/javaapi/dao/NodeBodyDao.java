@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NodeBodyDao extends JpaRepository<NodeBodyEntity,Long> {
     NodeBodyEntity findByNid(long nid);
+    NodeBodyEntity findFirstByBodyNotOrderByNidDesc(String empty);
 }
