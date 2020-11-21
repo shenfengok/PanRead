@@ -379,6 +379,7 @@ public class BookService {
         bookCheckEntity.setGot(got);
         bookCheckEntity.setName(name);
         bookCheckEntity.setVid(vid);
+        bookCheckEntity.setId(nid);
         bookCheckDao.saveAndFlush(bookCheckEntity);
     }
 
