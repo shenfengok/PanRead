@@ -218,9 +218,10 @@ public class BookService {
 
         List<PcsItemView> list = originList.stream().sorted(Comparator.comparing(PcsItemView::getTitle)).collect(Collectors.toList());
         for (PcsItemView item : list) {
+
+            saveOutline(item,parentPath);
             fillCon(item);
 //            saveCon(item, parentPath);
-            saveOutline(item,parentPath);
             saveCon(item);
         }
 
