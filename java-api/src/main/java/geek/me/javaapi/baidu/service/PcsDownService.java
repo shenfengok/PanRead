@@ -66,7 +66,7 @@ public class PcsDownService {
 
     public String netContent(String url) throws Exception {
 
-        return myHttpClient.httpGet(url,30000);
+        return myHttpClient.httpGet(url,90000);
     }
 
 

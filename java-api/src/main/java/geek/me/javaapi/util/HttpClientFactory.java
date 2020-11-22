@@ -20,10 +20,10 @@ import org.apache.http.protocol.HttpContext;
 public class HttpClientFactory {
 
     private static final Integer MAX_TOTAL = 300;             //连接池最大连接数
-    private static final Integer MAX_PER_ROUTE = 50;          //单个路由默认最大连接数
-    private static final Integer REQ_TIMEOUT =  30 * 1000;     //请求超时时间ms
-    private static final Integer CONN_TIMEOUT = 5 * 1000;     //连接超时时间ms
-    private static final Integer SOCK_TIMEOUT = 30 * 1000;    //读取超时时间ms
+    private static final Integer MAX_PER_ROUTE = 100;          //单个路由默认最大连接数
+    private static final Integer REQ_TIMEOUT =  90 * 1000;     //请求超时时间ms
+    private static final Integer CONN_TIMEOUT = 30 * 1000;     //连接超时时间ms
+    private static final Integer SOCK_TIMEOUT = 90 * 1000;    //读取超时时间ms
     private static HttpClientConnectionMonitorThread thread;  //HTTP链接管理器线程
 
     public static HttpClientConnectionMonitorThread getThread() {

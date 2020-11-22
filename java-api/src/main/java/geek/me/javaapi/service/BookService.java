@@ -758,7 +758,7 @@ public class BookService {
 
     private void fixLost() throws Exception{
 
-        for(int i = 1;i< 10000;i ++){
+        for(int i = 0;i< 10000;i ++){
             PageRequest request = PageRequest.of(i,20);
             Page<BookCheckEntity> bookChecks = bookCheckDao.findAllByGot(0,request);
             if(bookChecks.getContent().size() <=0){

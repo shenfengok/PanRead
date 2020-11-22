@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.cookie.BasicClientCookie;
@@ -24,14 +25,14 @@ import java.nio.charset.Charset;
 
 @Component
 public class BaiduHttpClient {
-//    HttpClient httpClient;
-//
-//    @PostConstruct
-//    void init() throws UnsupportedEncodingException {
-////        CookieStore store = getCookieStore();
-//
-//        httpClient = HttpClientBuilder.create().build();
-//    }
+    HttpClient httpClient;
+
+    @PostConstruct
+    void init() throws UnsupportedEncodingException {
+//        CookieStore store = getCookieStore();
+
+        httpClient = HttpClientFactory.createHttpClient();
+    }
 
     public JSONObject get(String url) {
         String result = "{}";
@@ -40,7 +41,7 @@ public class BaiduHttpClient {
             HttpGet request = new HttpGet(url);
             request.setHeader("Cookie",PcsConst.cookie);
             request.setHeader("User-Agent","netdisk;P2SP;2.2.60.26");
-            HttpResponse response = HttpClientFactory.createHttpClient().execute(request);
+            HttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 result = EntityUtils.toString(response.getEntity(), "utf-8");
@@ -57,6 +58,7 @@ public class BaiduHttpClient {
         // get请求返回结果
         String strResult = "";
         HttpGet request = null;
+        HttpResponse response = null;
         try {
             // 发送get请求
              request = new HttpGet(url);
@@ -66,7 +68,7 @@ public class BaiduHttpClient {
                     .setConnectTimeout(time).setConnectionRequestTimeout(time)
                     .setSocketTimeout(time).build();
             request.setConfig(requestConfig);
-            HttpResponse response = HttpClientFactory.createHttpClient().execute(request);
+            response = httpClient.execute(request);
 
             /** 请求发送成功，并得到响应 **/
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -81,6 +83,19 @@ public class BaiduHttpClient {
             if(null != request){
                 request.releaseConnection();
             }
+
+            try{
+                if (response != null) {
+                    EntityUtils.consume(response.getEntity());
+                }
+                if (url.startsWith("https") && httpClient != null && httpClient instanceof CloseableHttpClient) {
+                    ((CloseableHttpClient) httpClient).close();
+                }
+            }catch (Exception e){
+
+            }
+
+
         }
         return strResult;
     }
