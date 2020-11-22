@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -46,6 +50,23 @@ public class BookController {
         //同步到pan
         bookService.transfer();
         //boolean res = bookService.sync(form);
+
+        return CommonResult.success();
+    }
+
+    @RequestMapping("export")
+    public CommonResult export(HttpServletResponse response){
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html");
+        response.setHeader("Content-Disposition", "attachment;fileName=export.sql");
+        String content =  bookService.genSql();;
+        try {
+            OutputStream os = response.getOutputStream();
+            os.write(content.getBytes(StandardCharsets.UTF_8));
+            os.close();
+        } catch (IOException e) {
+            System.out.println("文件下载失败"+ e);
+        }
 
         return CommonResult.success();
     }

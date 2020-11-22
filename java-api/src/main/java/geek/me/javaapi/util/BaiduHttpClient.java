@@ -78,9 +78,9 @@ public class BaiduHttpClient {
             Thread.sleep(1000);
         }
         finally {
-//            if(null != request){
-//                request.releaseConnection();
-//            }
+            if(null != request){
+                request.releaseConnection();
+            }
         }
         return strResult;
     }

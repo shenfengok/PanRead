@@ -12,6 +12,7 @@ import geek.me.javaapi.entity.BookCheckEntity;
 import geek.me.javaapi.entity.QueueEntity;
 import geek.me.javaapi.entity.node.*;
 import geek.me.javaapi.entity.revision.*;
+import geek.me.javaapi.util.SqlTextUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -767,5 +768,15 @@ public class BookService {
                 fixBookCheck(bookCheckEntity);
             }
         }
+    }
+
+    public String genSql() {
+        StringBuilder sb = new StringBuilder();
+        SqlTextUtil<BookEntity> utilBook = new SqlTextUtil<>();
+        String bookStr = utilBook.reflect(bookDao);
+        sb.append(bookStr);
+
+        return sb.toString();
+
     }
 }
