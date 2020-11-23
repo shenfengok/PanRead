@@ -17,4 +17,6 @@ public class BookCheckEntity {
     private String title;
     private Long vid;
     private int got;
+    private int parsed;
+    private String parse_fail;
 }

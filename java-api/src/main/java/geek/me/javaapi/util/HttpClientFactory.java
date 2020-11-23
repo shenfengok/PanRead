@@ -62,11 +62,13 @@ public class HttpClientFactory {
         PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager();
         poolingHttpClientConnectionManager.setMaxTotal(MAX_TOTAL);
         poolingHttpClientConnectionManager.setDefaultMaxPerRoute(MAX_PER_ROUTE);
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(REQ_TIMEOUT)
-                .setConnectTimeout(CONN_TIMEOUT).setSocketTimeout(SOCK_TIMEOUT)
-                .build();
+//        RequestConfig requestConfig = RequestConfig.custom()
+//                .setConnectionRequestTimeout(REQ_TIMEOUT)
+//                .setConnectTimeout(CONN_TIMEOUT).setSocketTimeout(SOCK_TIMEOUT)
+//                .build();
         HttpClientFactory.thread=new HttpClientConnectionMonitorThread(poolingHttpClientConnectionManager); //管理 http连接池
-        return HttpClients.custom().setKeepAliveStrategy(myStrategy).setConnectionManager(poolingHttpClientConnectionManager).setDefaultRequestConfig(requestConfig).build();
+        return HttpClients.custom().setKeepAliveStrategy(myStrategy).setConnectionManager(poolingHttpClientConnectionManager)
+//                .setDefaultRequestConfig(requestConfig)
+                .build();
     }
 }

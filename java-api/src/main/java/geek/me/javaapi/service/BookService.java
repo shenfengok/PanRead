@@ -23,6 +23,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -286,32 +289,32 @@ public class BookService {
         //这里发现有了就退出，后面判断为空不会更新到数据库---hack
 
         boolean isSuccess = true;
+        boolean parseFull = true;
+        StringBuilder fails = new StringBuilder();
         try {
             if (!checkExist(item.getFsid(), "net_content")) {
                 String path = PcsConst.basePath + item.getContentPath();
                 String netDownUrl = pcsDownService.netdiskLink(path, item.getTitle());
-                boolean noError;
-                int i = 0;
                 Document doc = null;
 
-                do {
-                    try {
-                        String con = pcsDownService.netContent(netDownUrl);
-                        doc = Jsoup.parse(con);
-                        noError = !StringUtils.isEmpty(con);
+//                do {
+//                    try {
+                        String conx = pcsDownService.netContent(netDownUrl);
+                        doc = Jsoup.parse(conx);
+                        isSuccess = !StringUtils.isEmpty(conx);
 
-                    } catch (Exception e) {
-                        noError = false;
-                        isSuccess = false;
-                        i++;
-                    }
-                    if (doc == null) {
-                        int a = 1;
-                    }
-                } while (!noError && i < 3);
-                if (noError) {
-
-                }
+//                    } catch (Exception e) {
+//                        noError = false;
+//                        isSuccess = false;
+//                        i++;
+//                    }
+//                    if (doc == null) {
+//                        int a = 1;
+//                    }
+//                } while (!noError && i < 3);
+//                if (noError) {
+//
+//                }
 
                 Elements els = doc.getElementsByTag("img");
                 els.forEach(x -> {
@@ -325,19 +328,18 @@ public class BookService {
                     con = doc.getElementsByClass("_29HP61GA_0").get(0).html();
                 } else if (doc.getElementsByClass("_2c4hPkl9").size() > 0) {
                     con = doc.getElementsByClass("_2c4hPkl9").get(0).html();
+                }else if (doc.getElementsByClass("_1kh1ihh6_0").size() >0){
+                    con = con = doc.getElementsByClass("_1kh1ihh6_0").get(0).html();
                 }
                 item.setContent(con);
 
-                String thumb = "";//封面图片
-                if (doc.getElementsByClass("_3Jbcj4Iu_0").size() > 0) {
-                    if (doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").size() > 0) {
-                        thumb = doc.getElementsByClass("_3Jbcj4Iu_0").get(0).getElementsByTag("img").get(0).attr("src");
-                    } else {
-                        thumb = "";
-                        System.out.println(path + "无封面");
-                    }
+                String thumb = getThumByDivClassName(doc,"_3Jbcj4Iu_0");//封面图片
+                if (StringUtils.isEmpty(thumb)) {
+                    thumb = getThumByDivClassName(doc,"_3-9A2Wmt_0");
 
                 }
+
+
 
                 item.setThumb(thumb);
 
@@ -349,14 +351,41 @@ public class BookService {
                 item.setComment(comment);
 
 
-                isSuccess = !StringUtils.isEmpty(con) && !StringUtils.isEmpty(comment) && !StringUtils.isEmpty(thumb);
+                parseFull = !StringUtils.isEmpty(con) && !StringUtils.isEmpty(comment) && !StringUtils.isEmpty(thumb);
+
+                if(StringUtils.isEmpty(con)){
+                    fails.append("con_");
+                }
+                if(StringUtils.isEmpty(comment)){
+                    fails.append("comment_");
+                }
+                if(StringUtils.isEmpty(thumb)){
+                    fails.append("thumb");
+                }
+                if(isSuccess){
+
+                    //D:\code\node-html
+                    File file = new File("D:\\code\\node-html\\" + item.getNid() + ".html");
+                    if(!file.exists()){
+                        if(!parseFull){
+                            file.createNewFile();
+                            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+                            BufferedWriter bw = new BufferedWriter(fileWriter);
+                            bw.write(conx);
+                            bw.close();
+                        }else{
+                            file.delete();
+                        }
+
+                    }
+                }
             }
 
         } catch (Exception e) {
             System.out.println(e);
             isSuccess = false;
         } finally {
-            markIfExist(item.getNid(),item.getVid(),item.getFsid(), "net_content", item.getContentPath(),item.getTitle(), isSuccess ? 1 : 0);
+            markIfExist(item.getNid(),item.getVid(),item.getFsid(), "net_content", item.getContentPath(),item.getTitle(), isSuccess ? 1 : 0,parseFull?1:0,fails.toString());
         }
         //fixme  暂时不采集
 //        if (!checkExist(item.getFsid(), "media")) {
@@ -373,7 +402,18 @@ public class BookService {
         item.setMedia("");
     }
 
-    private void markIfExist(Long nid,Long vid,String fsid, String name,String path,String title, int got) {
+    private String getThumByDivClassName(Document doc,String className){
+        if (doc.getElementsByClass(className).size() > 0 && doc.getElementsByClass(className).get(0).getElementsByTag("img").size() > 0) {
+            return doc.getElementsByClass(className).get(0).getElementsByTag("img").get(0).attr("src");
+        }
+        return "";
+    }
+
+//    private String getConByClassName(Document doc,String className){
+//
+//    }
+
+    private void markIfExist(Long nid,Long vid,String fsid, String name,String path,String title, int got,int parsed,String fails) {
         BookCheckEntity bookCheckEntity = new BookCheckEntity();
         bookCheckEntity.setFsid(fsid);
         bookCheckEntity.setPath(path);
@@ -382,6 +422,8 @@ public class BookService {
         bookCheckEntity.setName(name);
         bookCheckEntity.setVid(vid);
         bookCheckEntity.setId(nid);
+        bookCheckEntity.setParsed(parsed);
+        bookCheckEntity.setParse_fail(fails);
         bookCheckDao.saveAndFlush(bookCheckEntity);
     }
 
