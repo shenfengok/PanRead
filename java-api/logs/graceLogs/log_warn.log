@@ -68,3 +68,7 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2020-11-23 07:38:17.098 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
 2020-11-23 07:38:17.119 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
 2020-11-23 07:38:17.306 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-11-23 08:27:38.991 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2020-11-23 08:27:39.003 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 08:27:39.024 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 08:27:39.292 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning

@@ -803,3 +803,61 @@ and bookchecke0_.name='net_content'
 |255     |[unread] |[unread] |[unread] |[unread] |[unread] |[unread] |
 |--------|---------|---------|---------|---------|---------|---------|
 
+2020-11-23 08:27:30.048 INFO  geek.me.javaapi.JavaApiApplication Line:651 - No active profile set, falling back to default profiles: default
+2020-11-23 08:27:32.318 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:127 - Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-11-23 08:27:32.879 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:187 - Finished Spring Data repository scanning in 521ms. Found 20 JPA repository interfaces.
+2020-11-23 08:27:33.622 INFO  org.springframework.cloud.context.scope.GenericScope Line:295 - BeanFactory id=a57235e8-b792-3882-8d3a-8bc20defb1fe
+2020-11-23 08:27:35.178 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8080 (http)
+2020-11-23 08:27:35.219 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Initializing ProtocolHandler ["http-nio-8080"]
+2020-11-23 08:27:35.223 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2020-11-23 08:27:35.224 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.37]
+2020-11-23 08:27:35.729 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2020-11-23 08:27:35.730 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:285 - Root WebApplicationContext: initialization completed in 5603 ms
+2020-11-23 08:27:36.496 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-23 08:27:36.542 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2020-11-23 08:27:37.048 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2020-11-23 08:27:37.504 INFO  org.hibernate.jpa.internal.util.LogHelper Line:31  - HHH000204: Processing PersistenceUnitInfo [name: default]
+2020-11-23 08:27:37.766 INFO  org.hibernate.Version Line:44  - HHH000412: Hibernate ORM core version 5.4.20.Final
+2020-11-23 08:27:38.498 INFO  org.hibernate.annotations.common.Version Line:49  - HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2020-11-23 08:27:39.004 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-23 08:27:39.025 INFO  com.netflix.config.sources.URLConfigurationSource Line:122 - To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2020-11-23 08:27:39.111 INFO  org.hibernate.dialect.Dialect Line:170 - HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2020-11-23 08:27:41.704 INFO  org.apache.coyote.http11.Http11NioProtocol Line:173 - Starting ProtocolHandler ["http-nio-8080"]
+2020-11-23 08:27:41.821 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8080 (http) with context path ''
+2020-11-23 08:27:42.599 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:49  - Triggering deferred initialization of Spring Data repositories…
+2020-11-23 08:27:42.693 INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator Line:52  - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2020-11-23 08:27:42.740 INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean Line:416 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-11-23 08:27:45.475 INFO  org.springframework.data.repository.config.DeferredRepositoryInitializationListener Line:53  - Spring Data repositories initialized!
+2020-11-23 08:27:45.499 INFO  geek.me.javaapi.JavaApiApplication Line:61  - Started JavaApiApplication in 20.024 seconds (JVM running for 24.228)
+2020-11-23 08:28:11.040 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-23 08:28:11.041 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2020-11-23 08:28:11.071 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 29 ms
+2020-11-23 08:28:12.484 INFO  jdbc.sqltiming Line:373 - select bookchecke0_.item_id as item_id1_2_, bookchecke0_.fsid as fsid2_2_, bookchecke0_.got 
+as got3_2_, bookchecke0_.name as name4_2_, bookchecke0_.path as path5_2_, bookchecke0_.title 
+as title6_2_, bookchecke0_.vid as vid7_2_ from book_check bookchecke0_ where bookchecke0_.got=0 
+limit 20 
+ {executed in 3 msec}
+2020-11-23 08:28:12.548 INFO  jdbc.resultsettable Line:610 - 
+|--------|----------------|----|------------|--------------------------------------------------------------------|---------------------------------|----|
+|item_id |fsid            |got |name        |path                                                                |title                            |vid |
+|--------|----------------|----|------------|--------------------------------------------------------------------|---------------------------------|----|
+|255     |271709464768915 |0   |net_content |05-趣谈/11-答疑与加餐 (9讲)/协议专栏特别福利丨答疑解惑第四期.html                           |协议专栏特别福利丨答疑解惑第四期                 |255 |
+|326     |544198939695359 |0   |net_content |07-重学前端/03-模块二：HTML和CSS (16讲)/38丨CSS动画与交互：为什么动画要用贝塞尔曲线这么奇怪的东西？.html |38丨CSS动画与交互：为什么动画要用贝塞尔曲线这么奇怪的东西？ |326 |
+|503     |450178057673708 |0   |net_content |101-后端技术面试38讲/03丨架构的核心原理 (14讲)/答疑丨互联网需要解决的技术问题是什么？.html             |答疑丨互联网需要解决的技术问题是什么？              |503 |
+|522     |694246907336670 |0   |net_content |102-现代C++实战30讲/00丨课前必读 (2讲)/00丨课前必读丨有关术语发音及环境要求.html                |00丨课前必读丨有关术语发音及环境要求              |522 |
+|523     |281669144632986 |0   |net_content |102-现代C++实战30讲/01丨基础篇 (9讲)/01丨堆、栈、RAII：C++里该如何管理资源？.html            |01丨堆、栈、RAII：C++里该如何管理资源？         |523 |
+|524     |608380538525428 |0   |net_content |102-现代C++实战30讲/01丨基础篇 (9讲)/02丨自己动手，实现C++的智能指针.html                  |02丨自己动手，实现C++的智能指针               |524 |
+|--------|----------------|----|------------|--------------------------------------------------------------------|---------------------------------|----|
+
+2020-11-23 08:28:18.118 INFO  jdbc.sqltiming Line:373 - select bookchecke0_.item_id as item_id1_2_, bookchecke0_.fsid as fsid2_2_, bookchecke0_.got 
+as got3_2_, bookchecke0_.name as name4_2_, bookchecke0_.path as path5_2_, bookchecke0_.title 
+as title6_2_, bookchecke0_.vid as vid7_2_ from book_check bookchecke0_ where bookchecke0_.fsid='271709464768915' 
+and bookchecke0_.name='net_content' 
+ {executed in 12 msec}
+2020-11-23 08:28:18.163 INFO  jdbc.resultsettable Line:610 - 
+|--------|---------|---------|---------|---------|---------|---------|
+|item_id |fsid     |got      |name     |path     |title    |vid      |
+|--------|---------|---------|---------|---------|---------|---------|
+|255     |[unread] |[unread] |[unread] |[unread] |[unread] |[unread] |
+|--------|---------|---------|---------|---------|---------|---------|
+

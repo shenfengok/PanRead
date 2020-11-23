@@ -31,7 +31,8 @@ public class BaiduHttpClient {
     void init() throws UnsupportedEncodingException {
 //        CookieStore store = getCookieStore();
 
-        httpClient = HttpClientFactory.createHttpClient();
+//        httpClient = HttpClientFactory.createHttpClient();
+        httpClient =  HttpClientBuilder.create().build();
     }
 
     public JSONObject get(String url) {
