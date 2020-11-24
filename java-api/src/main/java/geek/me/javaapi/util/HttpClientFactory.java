@@ -21,9 +21,9 @@ public class HttpClientFactory {
 
     private static final Integer MAX_TOTAL = 300;             //连接池最大连接数
     private static final Integer MAX_PER_ROUTE = 100;          //单个路由默认最大连接数
-    private static final Integer REQ_TIMEOUT =  90 * 1000;     //请求超时时间ms
+    private static final Integer REQ_TIMEOUT =  300 * 1000;     //请求超时时间ms
     private static final Integer CONN_TIMEOUT = 30 * 1000;     //连接超时时间ms
-    private static final Integer SOCK_TIMEOUT = 90 * 1000;    //读取超时时间ms
+    private static final Integer SOCK_TIMEOUT = 300 * 1000;    //读取超时时间ms
     private static HttpClientConnectionMonitorThread thread;  //HTTP链接管理器线程
 
     public static HttpClientConnectionMonitorThread getThread() {
@@ -62,13 +62,13 @@ public class HttpClientFactory {
         PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager();
         poolingHttpClientConnectionManager.setMaxTotal(MAX_TOTAL);
         poolingHttpClientConnectionManager.setDefaultMaxPerRoute(MAX_PER_ROUTE);
-//        RequestConfig requestConfig = RequestConfig.custom()
-//                .setConnectionRequestTimeout(REQ_TIMEOUT)
-//                .setConnectTimeout(CONN_TIMEOUT).setSocketTimeout(SOCK_TIMEOUT)
-//                .build();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(REQ_TIMEOUT)
+                .setConnectTimeout(CONN_TIMEOUT).setSocketTimeout(SOCK_TIMEOUT)
+                .build();
         HttpClientFactory.thread=new HttpClientConnectionMonitorThread(poolingHttpClientConnectionManager); //管理 http连接池
         return HttpClients.custom().setKeepAliveStrategy(myStrategy).setConnectionManager(poolingHttpClientConnectionManager)
-//                .setDefaultRequestConfig(requestConfig)
+                .setDefaultRequestConfig(requestConfig)
                 .build();
     }
 }

@@ -25,6 +25,7 @@ import javax.servlet.http.Cookie;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -36,8 +37,8 @@ public class BaiduHttpClient {
     void init() throws UnsupportedEncodingException {
 //        CookieStore store = getCookieStore();
 
-//        httpClient = HttpClientFactory.createHttpClient();
-        httpClient =  HttpClientBuilder.create().build();
+        httpClient = HttpClientFactory.createHttpClient();
+//        httpClient =  HttpClientBuilder.create().build();
     }
 
     public JSONObject get(String url) {
@@ -74,15 +75,15 @@ public class BaiduHttpClient {
 //                    .setConnectTimeout(time).setConnectionRequestTimeout(time)
 //                    .setSocketTimeout(time).build();
 //            request.setConfig(requestConfig);
-//            request.setProtocolVersion(HttpVersion.HTTP_1_0);//org.apache.http.ConnectionClosedException: Premature end of Content-Length delimited message body
-//            request.addHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
+            request.setProtocolVersion(HttpVersion.HTTP_1_0);//org.apache.http.ConnectionClosedException: Premature end of Content-Length delimited message body
+            request.addHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
             response = httpClient.execute(request);
 
             /** 请求发送成功，并得到响应 **/
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 /** 读取服务器返回过来的json字符串数据 **/
-                strResult = EntityUtils.toString(response.getEntity(),Charset.defaultCharset());
-//                strResult = readContent(response.getEntity());
+//                strResult = EntityUtils.toString(response.getEntity(),Charset.defaultCharset());
+                strResult = readContent(response.getEntity());
             }
         }
 //        catch (Exception e) {
@@ -126,13 +127,13 @@ public class BaiduHttpClient {
     private String readContent(HttpEntity entity) throws IOException {
         final InputStream instream = entity.getContent();
         try {
-            final ContentType contentType = ContentType.getOrDefault(entity);
-            Charset charset = contentType.getCharset();
-            if (charset == null)
-
-            {
-                charset = HTTP.DEF_CONTENT_CHARSET;
-            }
+            final ContentType contentType =  ContentType.getOrDefault(entity);
+            Charset charset = StandardCharsets.UTF_8;//contentType.getCharset();
+//            if (charset == null)
+//
+//            {
+//                charset = HTTP.DEF_CONTENT_CHARSET;
+//            }
             final StringBuilder b = new StringBuilder();
             final char[] tmp = new char[1024];
             final Reader reader = new InputStreamReader(instream, charset);
@@ -143,7 +144,7 @@ public class BaiduHttpClient {
                 {
                     b.append(tmp, 0, l);
                 }
-            } catch (final ConnectionClosedException ignore) {
+            } catch (final Exception ignore) {//忽略超时，关闭等，读取字符串，一直等待，其实内容已经到了，没有标注的那么多内容
                 int a =0;
             }
             return b.toString();
