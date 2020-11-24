@@ -36,8 +36,8 @@ public class BaiduHttpClient {
     void init() throws UnsupportedEncodingException {
 //        CookieStore store = getCookieStore();
 
-        httpClient = HttpClientFactory.createHttpClient();
-//        httpClient =  HttpClientBuilder.create().build();
+//        httpClient = HttpClientFactory.createHttpClient();
+        httpClient =  HttpClientBuilder.create().build();
     }
 
     public JSONObject get(String url) {
@@ -81,7 +81,8 @@ public class BaiduHttpClient {
             /** 请求发送成功，并得到响应 **/
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 /** 读取服务器返回过来的json字符串数据 **/
-                strResult = readContent(response.getEntity());
+                strResult = EntityUtils.toString(response.getEntity(),Charset.defaultCharset());
+//                strResult = readContent(response.getEntity());
             }
         }
 //        catch (Exception e) {

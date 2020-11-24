@@ -199,3 +199,11 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 2020-11-23 22:00:06.304 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
 2020-11-23 22:00:06.323 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
 2020-11-23 22:00:06.531 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-11-23 22:04:09.514 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2020-11-23 22:04:09.526 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 22:04:09.546 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 22:04:09.749 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-11-23 22:05:07.551 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2020-11-23 22:05:07.563 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 22:05:07.583 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2020-11-23 22:05:07.791 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
