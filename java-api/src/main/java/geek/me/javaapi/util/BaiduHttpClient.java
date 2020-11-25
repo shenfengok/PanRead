@@ -95,8 +95,12 @@ public class BaiduHttpClient {
             e.printStackTrace();
             throw e;
         } catch (IOException e) {
+            if("Remote host closed connection during handshake".equals(e.getMessage())){
+
+            }
+
             e.printStackTrace();
-            throw e;
+//            throw e;
         } finally {
             if (null != request) {
                 request.releaseConnection();

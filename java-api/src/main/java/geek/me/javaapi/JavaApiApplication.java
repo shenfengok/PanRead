@@ -36,7 +36,7 @@ public class JavaApiApplication {
 //		}
 //		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2,SSLv3");
 //		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
-		System.setProperty("https.protocols", "SSLv3");
+		System.setProperty("https.protocols", "TLSv1.2");
 		SpringApplication.run(JavaApiApplication.class, args);
 	}
 
