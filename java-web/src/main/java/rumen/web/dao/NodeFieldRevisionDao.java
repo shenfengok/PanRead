@@ -1,6 +1,6 @@
 package rumen.web.dao;
 
-import rumen.web.entity.revision.NodeFieldRevisionEntity;
+import geek.me.javaapi.entity.revision.NodeFieldRevisionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
