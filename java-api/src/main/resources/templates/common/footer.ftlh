@@ -10,14 +10,20 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.staticfile.org/jquery/3.5.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?b99796e69e1732b9c29e725851718c40";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+   function ruku(){
+       
+   }
+   
+   function rukuList() {
+       
+   }
+
+   function postIt(obj){
+
+   }
 </script>
 
 

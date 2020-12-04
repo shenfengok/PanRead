@@ -2,6 +2,10 @@
     <li  class="list-group-item d-flex">
         <a href="/zhuanlan/">极客专栏</a>
     </li>
+
+    <li  class="list-group-item d-flex">
+        <a href="/zhuanlangx/">极客专栏(更新)</a>
+    </li>
     <li  class="list-group-item d-flex">
         <a href="/video/">极客视频</a>
     </li>
