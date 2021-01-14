@@ -28,6 +28,9 @@ public class PcsApi {
         return pcsItemService.getChildItem(fsid);
     }
 
+    public List<PcsItemView> getAllChild(String fsid) throws Exception {
+        return getChildItemView(fsid,"");
+    }
 
     public List<PcsItemView> getChildItemView(String fsid,String basePath) throws Exception {
         List<PcsItem> list = getChildItem(fsid);
@@ -39,6 +42,8 @@ public class PcsApi {
                 view.setTitle(item.getServer_filename());
                 view.setFsid(String.valueOf(item.getFs_id()));
                 view.setIsdir(1);
+                view.setFullPath(item.getPath());
+                view.setParentPath(item.getPath().replaceAll(item.getServer_filename(),""));
                 result.add(view);
             }else{
                 if("mp3".equals(FileNameUtil.getExtensionName(item.getServer_filename())) || "m4a".equals(FileNameUtil.getExtensionName(item.getServer_filename()))){
@@ -50,6 +55,8 @@ public class PcsApi {
                     view.setMediaPath(getPath(item.getPath(),basePath));
                     view.setMediaTitle(item.getServer_filename());
                     PcsItem contentItem = listMap.get(compressName(title)+".html");
+                    view.setFullPath(item.getPath());
+                    view.setParentPath(item.getPath().replaceAll(item.getServer_filename(),""));
                     String contentPath = null;
                     if(null != contentItem){
                         contentPath = getPath(contentItem.getPath(),basePath);

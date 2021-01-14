@@ -3,6 +3,7 @@ package geek.me.javaapi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
@@ -11,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 
 @SpringBootApplication
 @EnableCaching
+@EnableScheduling
 public class JavaApiApplication {
 
 	public static void main(String[] args) throws Exception {

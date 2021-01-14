@@ -23,4 +23,8 @@ public class PcsItemView {
 
     private List<Long> currentPath;
 //    private String basePath;
+
+    private String parentPath;
+
+    private String fullPath;
 }

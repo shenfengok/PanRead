@@ -1,0 +1,1 @@
+update book_check set got =0 where item_id in (select entity_id from node__body where body_value = '')

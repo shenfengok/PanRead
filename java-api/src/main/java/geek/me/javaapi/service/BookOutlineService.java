@@ -30,8 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Deprecated
-public class BookService {
+public class BookOutlineService {
     @Autowired
     private BookDao bookDao;
 
@@ -104,88 +103,6 @@ public class BookService {
     private QueueRepository queueRepository;
 
 
-    public List<BookEntity> listAll() {
-        return bookDao.findAll();
-    }
-
-    public boolean syncBook(QueueEntity qe) throws Exception {
-
-//        pcsTransService.del(qe.getName());
-//        Thread.sleep(2000);
-//
-//
-        return true;
-    }
-
-
-    //    /**
-//     * 创建一本书
-//     *
-//     * @param pv
-//     * @return
-//     */
-//    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) throws Exception {
-//
-////        BookCheckEntity entity = bookCheckDao.findByFsidAndName(714389511080L, "media");
-////        List<BookCheckEntity> lst = bookCheckDao.findAll();
-//        NodeEntity node1 = creatOneNode(pv.getFsid());
-//
-//        long nid = node1.getNid();
-//        long vid = node1.getVid();
-//        createOneFsidEntity(pv.getFsid(), nid, vid);
-//
-//        List<Long> newPath = new ArrayList<>();
-//        newPath.addAll(parentPath);
-//        newPath.add(nid);
-//        createOneBookEntity(nid, depth, newPath, pv.getIsdir());
-//
-//
-//        String empty = "";
-//        boolean isDir = pv.getIsdir() == 1;
-//
-//        createOneNodeBody(nid, isDir ? empty : pv.getContent(), vid);
-//
-//        createOneFieldData(nid, pv.getTitle(), vid);
-//
-//        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
-//
-//        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
-//
-//        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
-//
-//        createOneFeileiEntity(1, nid, vid);
-//
-//
-//        if (pv.getIsdir() == 1) {
-//            List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
-//            int time = 1;
-//            while (time < 3) {
-//                time++;
-//                try {
-//                    list = pcsApi.getChildItemView(pv.getFsid(), basePath);
-//                } catch (Exception e) {
-//                    System.out.println(e);
-//                    Thread.sleep(1000);
-//                    continue;
-//                }
-//                break;
-//            }
-//
-//            for (PcsItemView item : list) {
-//
-//                fillCon(item);
-//
-//
-//                createRoot(item, depth + 1, newPath, basePath, force);
-//            }
-//        }
-//
-//        return node1;
-//    }
-//
-    private void createContent(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) {
-
-    }
 
     /**
      * 创建子book
@@ -214,10 +131,7 @@ public class BookService {
         for (PcsItemView item : list) {
 
             saveOutline(item, parentPath);
-            //这里不做内容填充
-//            fillCon(item);
-//            saveCon(item, parentPath);
-            saveCon(item);
+            saveCon(item,parentPath);
         }
 
         for (PcsItemView item : list) {
@@ -249,7 +163,7 @@ public class BookService {
         return nid;
     }
 
-    private void saveCon(PcsItemView pv) {
+    private void saveCon(PcsItemView pv,List<Long> parentPath) {
 
         long nid = pv.getNid();
         long vid = pv.getVid();
@@ -259,185 +173,30 @@ public class BookService {
         boolean isDir = pv.getIsdir() == 1;
 
         //这里只保存outline ,不做内容填充
-        createOneNodeBody(nid, isDir ? empty : getFileName(nid, "body"), vid);
+        createOneNodeBody(nid, isDir ? empty : getFileName(parentPath.get(0),nid, "body"), vid);
 
         createOneFieldData(nid, pv.getTitle(), vid);
 
         createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
 
-        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
+        createOneCommentEntity(isDir ? empty : getFileName(parentPath.get(0),nid, "comment"), nid, vid);
 
-        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
+        createOneThumbEntity( empty , nid, vid);
 
         createOneFeileiEntity(1, nid, vid);
 
 
     }
 
-    private String getFileName(Long nid, String type) {
-        Long folder = nid % 64;
-        String fileName = folder.toString() + "/" + nid.toString() + "_" + type + ".txt";
+    private String getFileName(Long topId,Long nid, String type) {
+        String fileName = topId.toString() + "/" + nid.toString() + "_" + type + ".txt";
         return fileName;
     }
 
 
-    private void fillCon(PcsItemView item) throws Exception {
-        if (item.getIsdir() == 1) {
-
-            return;
-        }
-        //这里发现有了就退出，后面判断为空不会更新到数据库---hack
-
-        boolean isSuccess = true;
-        boolean parseFull = true;
-        StringBuilder fails = new StringBuilder();
-        try {
-            if (!checkExist(item.getNid())) {
-                String path = PcsConst.basePath + item.getContentPath();
-//                String netDownUrl = pcsDownService.netdiskLink(path, item.getTitle());
-                String netDownUrl = "";
-                Document doc = null;
-
-//                do {
-//                    try {
-                String conx = pcsDownService.netContent(netDownUrl, item.getTitle(), item.getContentPath());
-                doc = Jsoup.parse(conx);
-                isSuccess = !StringUtils.isEmpty(conx);
-                if (!isSuccess) {
-                    List<String> fsids = new ArrayList<>();
-                    fsids.add(String.valueOf(item.getFsid()));
-                    //transfer
-//                            pcsTransService.transfer(fsids,PcsConst.basePathSync, item.getContentPath());
-                    pcsTransService.transfer(fsids, PcsConst.basePathSync + "htmls/", item.getTitle() + ".html");
-                }
-
-//                    } catch (Exception e) {
-//                        noError = false;
-//                        isSuccess = false;
-//                        i++;
-//                    }
-//                    if (doc == null) {
-//                        int a = 1;
-//                    }
-//                } while (!noError && i < 3);
-//                if (noError) {
-//
-//                }
-
-                Elements els = doc.getElementsByTag("img");
-                els.forEach(x -> {
-                    String imgLink = x.attr("data-savepage-src");
-                    x.attr("src", imgLink);
-                    x.removeAttr("data-savepage-src");
-                });
-
-                String con = "";// 内容
-                if (doc.getElementsByClass("_29HP61GA_0").size() > 0) {
-                    con = doc.getElementsByClass("_29HP61GA_0").get(0).html();
-                } else if (doc.getElementsByClass("_2c4hPkl9").size() > 0) {
-                    con = doc.getElementsByClass("_2c4hPkl9").get(0).html();
-                } else if (doc.getElementsByClass("_1kh1ihh6_0").size() > 0) {
-                    con = con = doc.getElementsByClass("_1kh1ihh6_0").get(0).html();
-                }
-                item.setContent(con);
-
-                String thumb = getThumByDivClassName(doc, "_3Jbcj4Iu_0");//封面图片
-                if (StringUtils.isEmpty(thumb)) {
-                    thumb = getThumByDivClassName(doc, "_3-9A2Wmt_0");
-
-                }
 
 
-                item.setThumb(thumb);
 
-                String comment = "";//评论内容
-
-                if (doc.getElementsByClass("_1qhD3bdE_0").size() > 0) {
-                    comment = doc.getElementsByClass("_1qhD3bdE_0").get(0).getElementsByTag("ul").html();
-                }
-                item.setComment(comment);
-
-
-                parseFull = !StringUtils.isEmpty(con) && !StringUtils.isEmpty(comment) && !StringUtils.isEmpty(thumb);
-
-                if (StringUtils.isEmpty(con)) {
-                    fails.append("con_");
-                }
-                if (StringUtils.isEmpty(comment)) {
-                    fails.append("comment_");
-                }
-                if (StringUtils.isEmpty(thumb)) {
-                    fails.append("thumb");
-                }
-                if (isSuccess) {
-
-                    //D:\code\node-html
-                    File file = new File("D:\\dev\\code\\node-html\\" + item.getNid() + ".html");
-                    if (!file.exists()) {
-                        if (!parseFull) {
-                            file.createNewFile();
-                            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
-                            BufferedWriter bw = new BufferedWriter(fileWriter);
-                            bw.write(conx);
-                            bw.close();
-                        } else {
-                            file.delete();
-                        }
-
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-            isSuccess = false;
-        } finally {
-            markIfExist(item.getNid(), item.getVid(), item.getFsid(), "net_content", item.getContentPath(), item.getTitle(), isSuccess ? 1 : 0, parseFull ? 1 : 0, fails.toString());
-        }
-        //fixme  暂时不采集
-//        if (!checkExist(item.getFsid(), "media")) {
-//            String mediaUrl = "";
-//            try {
-//                mediaUrl = pcsDownService.netdiskLink(PcsConst.basePath + item.getMediaPath(), item.getMediaTitle());
-//            } catch (Exception e) {
-//                System.out.println(e);
-//            }
-//            item.setMedia(mediaUrl);
-//            markIfExist(item.getFsid(), "media", !StringUtils.isEmpty(mediaUrl) ? 1 : 0);
-//        }
-
-        item.setMedia("");
-    }
-
-    private String getThumByDivClassName(Document doc, String className) {
-        if (doc.getElementsByClass(className).size() > 0 && doc.getElementsByClass(className).get(0).getElementsByTag("img").size() > 0) {
-            return doc.getElementsByClass(className).get(0).getElementsByTag("img").get(0).attr("src");
-        }
-        return "";
-    }
-
-//    private String getConByClassName(Document doc,String className){
-//
-//    }
-
-    private void markIfExist(Long nid, Long vid, String fsid, String name, String path, String title, int got, int parsed, String fails) {
-        BookCheckEntity bookCheckEntity = new BookCheckEntity();
-        bookCheckEntity.setFsid(fsid);
-        bookCheckEntity.setPath(path);
-        bookCheckEntity.setTitle(title);
-        bookCheckEntity.setGot(got);
-        bookCheckEntity.setName(name);
-        bookCheckEntity.setVid(vid);
-        bookCheckEntity.setId(nid);
-        bookCheckEntity.setParsed(parsed);
-        bookCheckEntity.setParse_fail(fails);
-        bookCheckDao.saveAndFlush(bookCheckEntity);
-    }
-
-    private boolean checkExist(Long nid) {
-        BookCheckEntity entity = bookCheckDao.findFirstById(nid);
-        return null != entity && 1 == entity.getGot();
-    }
 
     private NodeFiledDataEntity createOneFieldData(long nid, String title, long vid) {
         NodeFiledDataEntity nodeFiledDataEntity = nodeFieldDataDao.findByNid(nid);
@@ -708,97 +467,8 @@ public class BookService {
         }
     }
 
-    public void queOne(SyncForm form) {
-        QueueEntity entity = new QueueEntity();
-        entity.setFsid(form.getFsId());
-        entity.setBase_path(form.getBasePath());
-        entity.setName(form.getName());
-        entity.setTodo(1);
-        queueDao.saveAndFlush(entity);
-    }
-
-    public void queList(SyncForm form) throws Exception {
 
 
-        //这里都是目录，base path不用传
-        List<PcsItemView> list = pcsApi.getChildItemView(form.getFsId().toString(), "");
-        for (PcsItemView item : list) {
-//            QueueEntity entity = new QueueEntity();
-//            entity.setFsid(item.getFsid());
-
-            String parentPath = form.getBasePath() + form.getName() + "/";
-//            entity.setName(item.getTitle());
-//            entity.setTodo(1);
-//            queueDao.save(entity);
-            queueRepository.push(item, form.getFinish());
-        }
-
-
-    }
-
-
-    //    @Async
-    public void transfer() throws Exception {
-//        fixLost();
-//        String fsidLast = lastFsid();
-//        boolean found = false;
-//        if (StringUtils.isEmpty(fsidLast)) {
-//            fsidLast = "";
-//            found = true;
-//        }
-        //first of first 同步到百度盘
-//        List<QueueEntity> list = queueDao.findByTodoOrderByName(1);
-//        List<QueueEntity> list = queueDao.findByBookIdIsNull();
-//        for (QueueEntity q : list) {
-////            if (!found && !fsidLast.equals(q.getFsid())) {
-////                continue;
-////            }
-////            found = true;
-//            syncBook(q);
-//        }
-        transferOne(123L);
-    }
-
-    private void transferOne(Long id) throws Exception {
-        QueueEntity q = queueDao.findFirstById(id);
-        syncBook(q);
-    }
-
-    private void fixBookCheck(BookCheckEntity bookCheckEntity) throws Exception {
-        PcsItemView pcsItemView = new PcsItemView();
-        pcsItemView.setVid(bookCheckEntity.getVid());
-        pcsItemView.setNid(bookCheckEntity.getId());
-        pcsItemView.setContentPath(bookCheckEntity.getPath());
-        pcsItemView.setTitle(bookCheckEntity.getTitle());
-        pcsItemView.setFsid(bookCheckEntity.getFsid());
-        fillCon(pcsItemView);
-        saveCon(pcsItemView);
-
-    }
-
-    private void fixLost() throws Exception {
-
-        for (int i = 0; i < 10000; i++) {
-            PageRequest request = PageRequest.of(i, 20);
-            Page<BookCheckEntity> bookChecks = bookCheckDao.findAllByGot(0, request);
-            if (bookChecks.getContent().size() <= 0) {
-                break;
-            }
-            for (BookCheckEntity bookCheckEntity : bookChecks) {
-                fixBookCheck(bookCheckEntity);
-            }
-        }
-    }
-
-    public String genSql() {
-        StringBuilder sb = new StringBuilder();
-        SqlTextUtil<BookEntity> utilBook = new SqlTextUtil<>();
-        String bookStr = utilBook.reflect(bookDao);
-        sb.append(bookStr);
-
-        return sb.toString();
-
-    }
 
     public Long saveBookOutLine(QueueEntity qe) throws Exception {
         List<String> fsids = new ArrayList<>();
@@ -810,7 +480,7 @@ public class BookService {
         view.setIsdir(1);
         view.setDepth(1);
         Long bookId = saveOutline(view, new ArrayList<>());
-        saveCon(view);
+        saveCon(view,new ArrayList<>());
         createChild(String.valueOf(qe.getFsid()), view.getCurrentPath(), qe.getBase_path());
         return bookId;
     }

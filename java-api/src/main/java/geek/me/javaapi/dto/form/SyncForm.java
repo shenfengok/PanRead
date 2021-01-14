@@ -5,8 +5,10 @@ import lombok.Data;
 
 @Data
 public class SyncForm {
-    private Long fsId;
+    private String fsId;
     private NodeTypeEnum type;
     private String name;
     private String basePath;
+
+    private Integer finish;
 }

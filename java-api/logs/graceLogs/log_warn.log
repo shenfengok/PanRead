@@ -1,21 +1,30 @@
-2020-11-25 04:40:30.010 WARN  com.zaxxer.hikari.pool.HikariPool Line:787 - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5h57m41s526ms406µs900ns).
-2020-11-25 04:40:45.386 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
-2020-11-25 04:40:45.388 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 04:40:45.391 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 04:40:45.431 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2020-11-25 05:29:13.788 WARN  com.zaxxer.hikari.pool.HikariPool Line:787 - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=39m28s610ms451µs300ns).
-2020-11-25 05:29:28.853 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
-2020-11-25 05:29:28.856 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 05:29:28.860 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 05:29:28.898 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2020-11-25 07:48:33.888 WARN  com.zaxxer.hikari.pool.HikariPool Line:787 - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=53m34s985ms341µs200ns).
-2020-11-25 07:48:51.337 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
-2020-11-25 07:48:51.339 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 07:48:51.343 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 07:48:51.380 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2020-11-25 08:57:15.695 WARN  org.hibernate.engine.jdbc.spi.SqlExceptionHelper Line:137 - SQL Error: 1146, SQLState: 42S02
-2020-11-25 09:31:41.039 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
-2020-11-25 09:31:41.041 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 09:31:41.045 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
-2020-11-25 09:31:41.080 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2020-11-25 10:36:11.630 WARN  org.hibernate.engine.jdbc.spi.SqlExceptionHelper Line:137 - SQL Error: 1146, SQLState: 42S02
+2021-01-14 14:53:14.159 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 14:53:14.163 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 14:53:14.167 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 14:53:14.207 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 14:55:40.144 WARN  com.zaxxer.hikari.pool.HikariPool Line:787 - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=53s354ms551µs200ns).
+2021-01-14 15:16:39.361 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 15:16:39.363 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:16:39.366 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:16:39.405 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 15:23:15.731 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 15:23:15.733 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:23:15.737 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:23:15.772 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 15:25:06.520 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 15:25:06.523 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:25:06.527 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 15:25:06.564 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 20:47:30.146 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 20:47:30.148 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:47:30.152 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:47:30.189 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 20:47:33.396 WARN  org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext Line:559 - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'queueDao': FactoryBean threw exception on object creation; nested exception is java.lang.IllegalArgumentException: Failed to create query for method public abstract java.util.List geek.me.javaapi.dao.QueueDao.findAllOrderByNameDesc()! No property desc found for type String! Traversed path: QueueEntity.name.
+2021-01-14 20:51:15.921 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 20:51:15.926 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:51:15.929 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:51:15.969 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-01-14 20:54:34.414 WARN  org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration Line:123 - No spring.application.name found, defaulting to 'application'
+2021-01-14 20:54:34.416 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:54:34.420 WARN  com.netflix.config.sources.URLConfigurationSource Line:121 - No URLs will be polled as dynamic configuration sources.
+2021-01-14 20:54:34.460 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration Line:220 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning

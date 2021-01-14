@@ -19,15 +19,15 @@ public class PcsTransService {
     private RestTemplate restTemplate;
 
     /**
-     * 移动到"/apps/Cloud+Sync/"下
+     * 移动到"/caiji/"下
      * @param fsids
      * @param path
      * @return
      * @throws InterruptedException
      */
-    public int transfer(List<String> fsids, String path) throws InterruptedException {
+    public int transfer(List<String> fsids,String basePath, String path) throws InterruptedException {
         String url = PcsUrlHelper.getTransferUrl();
-        String body = PcsUrlHelper.getTransferForm(fsids,path);
+        String body = PcsUrlHelper.getTransferForm(fsids,basePath,path);
         String response = restTemplate.postForEntity(url,body, String.class).getBody();
         JSONObject o = JSON.parseObject(response);
         return o.getInteger("errno");

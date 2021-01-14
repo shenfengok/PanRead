@@ -64,9 +64,9 @@ public class PcsDownService {
         throw new Exception("获取下载链接失败"+ path);
     }
 
-    public String netContent(String url) throws Exception {
+    public String netContent(String url,String name,String contentPath) throws Exception {
 
-        return myHttpClient.httpGet(url,90000);
+        return myHttpClient.httpGet(url,name,contentPath,90000);
     }
 
 

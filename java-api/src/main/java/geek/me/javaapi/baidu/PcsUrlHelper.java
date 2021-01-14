@@ -36,20 +36,21 @@ public class PcsUrlHelper {
     }
 
     /**
-     * 迁移文件form
+     * 迁移文件
      * @param fsids
      * @param path
      * @return
      */
-    public static String getTransferForm(List<String> fsids, String path) {
+    public static String getTransferForm(List<String> fsids,String basePath, String path) {
         StringBuilder builder = new StringBuilder();
         try {
             URLParser u = URLParser.fromURL(PcsConst.transferForm);
-            if (!StringUtils.isEmpty(path)) {
-                u.setParameter("path", PcsConst.basePath + path);
-            } else {
-                u.setParameter("path", PcsConst.basePath);
-            }
+//            if (!StringUtils.isEmpty(path)) {
+//                u.setParameter("path", PcsConst.basePath + path);
+//            } else {
+//                u.setParameter("path", PcsConst.basePath);
+//            }
+            u.setParameter("path", basePath + path);
             u.setParameter("fs_ids", JSON.toJSONString(fsids));
             String url = u.toUrlEnc();
             return url;
@@ -59,6 +60,7 @@ public class PcsUrlHelper {
 
         return builder.toString();
     }
+
 
     /**
      * 下载链接

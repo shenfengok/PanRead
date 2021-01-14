@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface BookCheckDao extends JpaRepository<BookCheckEntity,Long> {
     BookCheckEntity findByFsidAndName(String fsid,String name);
     BookCheckEntity findFirstByGotOrderByIdDesc(int got);
+    BookCheckEntity findFirstById(Long id);
     Page<BookCheckEntity> findAllByGot(int got, Pageable pagable);
 }
