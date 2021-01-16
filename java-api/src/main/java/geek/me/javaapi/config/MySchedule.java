@@ -12,9 +12,9 @@ public class MySchedule {
     private SpiderService spiderService;
 
     /**
-     * 更新极客列表
+     * 更新极客queue列表
      */
-    @Scheduled(cron = "0 0 */1 * * ?")
+//    @Scheduled(cron = "0 0 */1 * * ?")
 //    @Scheduled(cron = "*/5 * * * * ?")
     public void updateQueueList() throws Exception {
 
@@ -39,10 +39,10 @@ public class MySchedule {
     }
 
     /**
-     * 更新book列表
+     * 更新book列表,入库outline
      */
 //    @Scheduled(cron = "0 0 */1 * * ?")
-    @Scheduled(cron = "*/5 * * * * ?")
+//    @Scheduled(cron = "*/5 * * * * ?")
     public void updateBookList() throws Exception {
 
 
@@ -57,11 +57,12 @@ public class MySchedule {
      * 更新book文件
      * 每小时
      */
-    @Scheduled(cron = "0 0 */1 * * ?")
-    public void updateBookFiles() throws InterruptedException {
+//    @Scheduled(cron = "0 0 */1 * * ?")
+    @Scheduled(cron = "*/5 * * * * ?")
+    public void updateBookFiles() throws Exception {
 
 
         System.out.print("doing updating book files");
-        Thread.sleep(100000);
+        spiderService.saveFiles();
     }
 }

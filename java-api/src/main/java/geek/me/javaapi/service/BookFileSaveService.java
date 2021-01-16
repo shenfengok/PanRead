@@ -13,6 +13,7 @@ import geek.me.javaapi.entity.QueueEntity;
 import geek.me.javaapi.entity.node.*;
 import geek.me.javaapi.entity.revision.*;
 import geek.me.javaapi.repository.QueueRepository;
+import geek.me.javaapi.util.FileUtil;
 import geek.me.javaapi.util.SqlTextUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,8 +30,10 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static geek.me.javaapi.service.BookOutlineService.splitKey;
+
 @Service
-public class BookOutlineService {
+public class BookFileSaveService {
     @Autowired
     private BookDao bookDao;
 
@@ -102,9 +105,91 @@ public class BookOutlineService {
     @Autowired
     private QueueRepository queueRepository;
 
-    public static String splitKey= "=♂=";
+    public static String fileLoc = "D:\\drupal_txt\\";
 
 
+    public List<BookEntity> listAll() {
+        return bookDao.findAll();
+    }
+
+    public boolean syncBook(QueueEntity qe) throws Exception {
+
+//        pcsTransService.del(qe.getName());
+//        Thread.sleep(2000);
+//
+//
+        return true;
+    }
+
+
+    //    /**
+//     * 创建一本书
+//     *
+//     * @param pv
+//     * @return
+//     */
+//    private NodeEntity createRoot(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) throws Exception {
+//
+////        BookCheckEntity entity = bookCheckDao.findByFsidAndName(714389511080L, "media");
+////        List<BookCheckEntity> lst = bookCheckDao.findAll();
+//        NodeEntity node1 = creatOneNode(pv.getFsid());
+//
+//        long nid = node1.getNid();
+//        long vid = node1.getVid();
+//        createOneFsidEntity(pv.getFsid(), nid, vid);
+//
+//        List<Long> newPath = new ArrayList<>();
+//        newPath.addAll(parentPath);
+//        newPath.add(nid);
+//        createOneBookEntity(nid, depth, newPath, pv.getIsdir());
+//
+//
+//        String empty = "";
+//        boolean isDir = pv.getIsdir() == 1;
+//
+//        createOneNodeBody(nid, isDir ? empty : pv.getContent(), vid);
+//
+//        createOneFieldData(nid, pv.getTitle(), vid);
+//
+//        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
+//
+//        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
+//
+//        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
+//
+//        createOneFeileiEntity(1, nid, vid);
+//
+//
+//        if (pv.getIsdir() == 1) {
+//            List<PcsItemView> list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+//            int time = 1;
+//            while (time < 3) {
+//                time++;
+//                try {
+//                    list = pcsApi.getChildItemView(pv.getFsid(), basePath);
+//                } catch (Exception e) {
+//                    System.out.println(e);
+//                    Thread.sleep(1000);
+//                    continue;
+//                }
+//                break;
+//            }
+//
+//            for (PcsItemView item : list) {
+//
+//                fillCon(item);
+//
+//
+//                createRoot(item, depth + 1, newPath, basePath, force);
+//            }
+//        }
+//
+//        return node1;
+//    }
+//
+    private void createContent(PcsItemView pv, int depth, List<Long> parentPath, String basePath, int force) {
+
+    }
 
     /**
      * 创建子book
@@ -133,7 +218,10 @@ public class BookOutlineService {
         for (PcsItemView item : list) {
 
             saveOutline(item, parentPath);
-            saveCon(item,parentPath);
+            //这里不做内容填充
+//            fillCon(item);
+//            saveCon(item, parentPath);
+            saveCon(item);
         }
 
         for (PcsItemView item : list) {
@@ -165,7 +253,7 @@ public class BookOutlineService {
         return nid;
     }
 
-    private void saveCon(PcsItemView pv,List<Long> parentPath) {
+    private void saveCon(PcsItemView pv) {
 
         long nid = pv.getNid();
         long vid = pv.getVid();
@@ -173,30 +261,28 @@ public class BookOutlineService {
 
         String empty = "";
         boolean isDir = pv.getIsdir() == 1;
-        String path = isDir ?"":  pv.getContentPath() + splitKey +pv.getMediaPath() + splitKey;
 
         //这里只保存outline ,不做内容填充
-        createOneNodeBody(nid, isDir ? empty : path + getFileName(parentPath.get(0),nid), vid);
+        createOneNodeBody(nid, isDir ? empty : getFileName(nid, "body"), vid);
 
         createOneFieldData(nid, pv.getTitle(), vid);
 
-        createOneMediaEntity(isDir ? empty : pv.getMediaPath(), nid, vid);
+        createOneMediaEntity(isDir ? empty : pv.getMedia(), nid, vid);
 
-//        createOneCommentEntity(isDir ? empty : path + getFileName(parentPath.get(0),nid, "comment"), nid, vid);
-        createOneCommentEntity(empty, nid, vid);
+        createOneCommentEntity(isDir ? empty : pv.getComment(), nid, vid);
 
-        createOneThumbEntity( empty , nid, vid);
+        createOneThumbEntity(isDir ? empty : pv.getThumb(), nid, vid);
 
         createOneFeileiEntity(1, nid, vid);
 
 
     }
 
-    private String getFileName(Long topId,Long nid) {
-        String fileName = topId.toString() + "/" + nid.toString() + "_"; //+ type + ".txt";
+    private String getFileName(Long nid, String type) {
+        Long folder = nid % 64;
+        String fileName = folder.toString() + "/" + nid.toString() + "_" + type + ".txt";
         return fileName;
     }
-
 
 
 
@@ -434,22 +520,6 @@ public class BookOutlineService {
     }
 
 
-    private void createChild(String fsid, String name, int depth, List<Long> path) throws InterruptedException {
-
-        List<PcsItem> list = pcsApi.getChildItem(fsid);
-
-        for (PcsItem item : list) {
-            BookEntity bookEntity = new BookEntity();
-            bookEntity.setPid(path.get(depth - 1));
-            bookEntity.setBid(path.get(0));
-            bookEntity.setDepth(depth);
-            for (int i = 0; i < path.size(); i++) {
-                setN(bookEntity, i, path.get(i));
-            }
-            //更新当前node的nid
-            setN(bookEntity, depth + 1, bookEntity.getNid());
-        }
-    }
 
     private void setN(BookEntity be, int n, long value) {
         switch (n) {
@@ -472,20 +542,40 @@ public class BookOutlineService {
     }
 
 
+    private void saveBody(NodeBodyEntity nodeBodyEntity){
+        String[] paths = nodeBodyEntity.getBody().split(splitKey);
+        if(paths.length == 3){
+            String bodyPath = paths[0];
+            String mediaPath = paths[1];
+            String savePrefix = fileLoc +   paths[2];
+
+            ContentParser contentParser = new ContentParser(bodyPath);
+            if(contentParser.isSuccess()){
+                FileUtil.writeFile(savePrefix+"body.txt",contentParser.getBody());
+                FileUtil.writeFile(savePrefix+"comment.txt",contentParser.getComment());
+                BookFieldThumbEntity entity = bookFieldThumbDao.findByBookId(nodeBodyEntity.getNid());
+                entity.setThumb(contentParser.getThumb());
+                bookFieldThumbDao.save(entity);
+            }
 
 
-    public Long saveBookOutLine(QueueEntity qe) throws Exception {
-        List<String> fsids = new ArrayList<>();
-        fsids.add(String.valueOf(qe.getFsid()));
-        PcsItemView view = new PcsItemView();
-        view.setFsid(String.valueOf(qe.getFsid()));
-        view.setTitle(qe.getName());
-        view.setContent("");
-        view.setIsdir(1);
-        view.setDepth(1);
-        Long bookId = saveOutline(view, new ArrayList<>());
-        saveCon(view,new ArrayList<>());
-        createChild(String.valueOf(qe.getFsid()), view.getCurrentPath(), qe.getBase_path());
-        return bookId;
+        }else{
+            System.out.println("错误：" + nodeBodyEntity.getNid() +"---"+ nodeBodyEntity.getBody() );
+        }
+    }
+
+    public Integer savePage(int i) {
+        PageRequest request = PageRequest.of(i+1,20);
+        List<NodeBodyEntity> bodys = nodeBodyDao.findAllByBodyIsNotNullAndBodyIsNot("",request);
+        if(bodys == null || bodys.size() <=0){
+            return 0;
+        }
+
+        for(NodeBodyEntity en: bodys){
+            saveBody(en);
+        }
+
+        return  bodys.size();
+
     }
 }

@@ -23,6 +23,9 @@ public class SpiderService {
     private BookOutlineService bookOutlineService;
 
     @Autowired
+    private BookFileSaveService bookFileSaveService;
+
+    @Autowired
     private QueueRepository queueRepository;
 
     public void queJike() throws Exception {
@@ -83,5 +86,14 @@ public class SpiderService {
             queueRepository.update(qe);
         }
 
+    }
+
+    public void saveFiles() {
+        for(int i = 0 ; i < 20000;i++){
+           Integer count =  bookFileSaveService.savePage(i);
+           if(count <= 0){
+               break;
+           }
+        }
     }
 }
