@@ -81,6 +81,7 @@ public class PcsApi {
         return result;
     }
 
+
     private String compressName(String name){
         //"12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf" -> "PcsItem(category=4, fs_id=686810862764976, isdir=0, local_ctime=1567056356, local_mtime=1567056358, path=/00-资源文件/14-极客时间/01-专栏课/01-50/47-Java性能调优实战/04-模块三· 多线程性能调优 (1讲)/12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf, server_ctime=1567182414, server_filename=12丨多线程之锁优化（上）：深入了解Synchronized同步锁的优化方法.pdf, server_mtime=1582452345, size=4196635, parentType=null)"
         return name.replaceAll(" ","").replaceAll("丨","");

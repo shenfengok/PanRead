@@ -1,7 +1,7 @@
 package rumen.web.dao;
 
 
-import rumen.web.entity.BookNodeEntity;
+import geek.me.javaapi.entity.BookNodeEntity;
 
 //@Repository
 @Deprecated

@@ -1,7 +1,7 @@
 package rumen.web.dao;
 
 
-import rumen.web.entity.node.BookEntity;
+import geek.me.javaapi.entity.node.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

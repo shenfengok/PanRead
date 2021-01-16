@@ -2,10 +2,9 @@ package rumen.web.entity;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.NotFound;
-import org.springframework.stereotype.Indexed;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 //@Entity
 @Data

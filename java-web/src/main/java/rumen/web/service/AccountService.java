@@ -1,7 +1,7 @@
 package rumen.web.service;
 
-import rumen.web.dao.AccountDao;
-import rumen.web.entity.AccountEntity;
+import geek.me.javaapi.dao.AccountDao;
+import geek.me.javaapi.entity.AccountEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

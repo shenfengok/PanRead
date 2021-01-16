@@ -54,12 +54,21 @@ public class BookController {
         return CommonResult.success();
     }
 
+    @RequestMapping("saveMe")
+    public CommonResult saveMe() throws Exception {
+        //同步到pan
+        bookService.saveMe();
+        //boolean res = bookService.sync(form);
+
+        return CommonResult.success();
+    }
+
     @RequestMapping("export")
     public CommonResult export(HttpServletResponse response){
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
         response.setHeader("Content-Disposition", "attachment;fileName=export.sql");
-        String content =  bookService.genSql();;
+        String content =  bookService.genSql();
         try {
             OutputStream os = response.getOutputStream();
             os.write(content.getBytes(StandardCharsets.UTF_8));

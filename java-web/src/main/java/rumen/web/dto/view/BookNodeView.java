@@ -1,7 +1,7 @@
 package rumen.web.dto.view;
 
-import rumen.web.entity.BookNodeEntity;
-import rumen.web.entity.NodeTypeEnum;
+import geek.me.javaapi.entity.BookNodeEntity;
+import geek.me.javaapi.entity.NodeTypeEnum;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
