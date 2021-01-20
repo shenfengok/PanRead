@@ -1,5 +1,6 @@
 package geek.me.javaapi.entity.node;
 
+import geek.me.javaapi.util.SqlTextUtil;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,5 +18,5 @@ public class NodeEntity {
     private String type ="book";
     private String uuid ;
     private long vid =1;
-    private String langcode ="zh-hans";
+    private String langcode =SqlTextUtil.langCode;
 }

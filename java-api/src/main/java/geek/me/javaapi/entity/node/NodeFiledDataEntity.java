@@ -1,5 +1,6 @@
 package geek.me.javaapi.entity.node;
 
+import geek.me.javaapi.util.SqlTextUtil;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ public class NodeFiledDataEntity {
     private long  vid =1;
     private long uid =1;
     private String title;
-    private String langcode = "zh-hans";
+    private String langcode = SqlTextUtil.langCode;
     private long created;
     private long changed;
     private int promote = 0;

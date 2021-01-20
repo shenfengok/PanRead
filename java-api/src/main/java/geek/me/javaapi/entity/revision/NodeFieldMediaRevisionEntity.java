@@ -1,5 +1,6 @@
 package geek.me.javaapi.entity.revision;
 
+import geek.me.javaapi.util.SqlTextUtil;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -20,5 +21,5 @@ public class NodeFieldMediaRevisionEntity {
     private long bookId;
     private long revision_id;
     private int delta =0;
-    private String langcode = "zh-hans";
+    private String langcode = SqlTextUtil.langCode;
 }

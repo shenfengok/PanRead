@@ -42,7 +42,7 @@ public class MySchedule {
      * 更新book列表,入库outline
      */
 //    @Scheduled(cron = "0 0 */1 * * ?")
-//    @Scheduled(cron = "*/5 * * * * ?")
+    @Scheduled(cron = "*/5 * * * * ?")
     public void updateBookList() throws Exception {
 
 
@@ -58,7 +58,7 @@ public class MySchedule {
      * 每小时
      */
 //    @Scheduled(cron = "0 0 */1 * * ?")
-    @Scheduled(cron = "*/5 * * * * ?")
+//    @Scheduled(cron = "*/5 * * * * ?")
     public void updateBookFiles() throws Exception {
 
 

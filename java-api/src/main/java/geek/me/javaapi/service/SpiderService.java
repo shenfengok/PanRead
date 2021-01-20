@@ -2,7 +2,14 @@ package geek.me.javaapi.service;
 
 import geek.me.javaapi.baidu.PcsApi;
 import geek.me.javaapi.baidu.dto.PcsItemView;
+import geek.me.javaapi.dao.BookDao;
+import geek.me.javaapi.dao.NodeFieldDataDao;
+import geek.me.javaapi.dao.UpdateDao;
 import geek.me.javaapi.entity.QueueEntity;
+import geek.me.javaapi.entity.UpdateEntity;
+import geek.me.javaapi.entity.node.BookEntity;
+import geek.me.javaapi.entity.node.NodeBodyEntity;
+import geek.me.javaapi.entity.node.NodeFiledDataEntity;
 import geek.me.javaapi.repository.QueueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +34,15 @@ public class SpiderService {
 
     @Autowired
     private QueueRepository queueRepository;
+
+    @Autowired
+    private BookDao bookDao;
+
+    @Autowired
+    private NodeFieldDataDao  nodeFieldDataDao;
+
+    @Autowired
+    private UpdateDao updateDao;
 
     public void queJike() throws Exception {
         String jikeFinish = "";
@@ -89,11 +105,28 @@ public class SpiderService {
     }
 
     public void saveFiles() {
+        List<NodeBodyEntity> fails = new ArrayList<>();
         for(int i = 0 ; i < 20000;i++){
-           Integer count =  bookFileSaveService.savePage(i);
+           Integer count =  bookFileSaveService.savePage(i,fails);
            if(count <= 0){
                break;
            }
+        }
+        if(fails.size() > 0){
+            //todo 失败记录，用于更新猫盘
+            List<Long> nid = fails.stream().map(x->x.getNid()).collect(Collectors.toList());
+            List<BookEntity> books = bookDao.findAllById(nid);
+            List<Long> bookIds = books.stream().map(x->x.getP1()).distinct().collect(Collectors.toList());
+            List<NodeFiledDataEntity> datas = nodeFieldDataDao.findAllById(bookIds);
+            List<UpdateEntity> updates = new ArrayList<>();
+            for(NodeFiledDataEntity d : datas){
+                UpdateEntity entity = new UpdateEntity();
+                entity.setBase_path("");
+                entity.setBookId(d.getNid());
+                entity.setName(d.getTitle());
+                updates.add(entity);
+            }
+            updateDao.saveAll(updates);
         }
     }
 }

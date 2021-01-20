@@ -57,7 +57,7 @@ public class BookController {
     @RequestMapping("saveMe")
     public CommonResult saveMe() throws Exception {
         //同步到pan
-        bookService.saveMe();
+//        bookService.saveMe();
         //boolean res = bookService.sync(form);
 
         return CommonResult.success();

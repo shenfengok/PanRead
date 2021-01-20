@@ -1,5 +1,6 @@
 package geek.me.javaapi.entity.revision;
 
+import geek.me.javaapi.util.SqlTextUtil;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -21,6 +22,6 @@ public class NodeBodyRevisionEntity {
     private int delta=0;
     private long revision_id;
     private String bundle = "book";
-    private String langcode ="zh-hans";
+    private String langcode =SqlTextUtil.langCode;
     private String body_summary = "";
 }

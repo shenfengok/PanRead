@@ -15,6 +15,7 @@ import geek.me.javaapi.entity.revision.*;
 import geek.me.javaapi.repository.QueueRepository;
 import geek.me.javaapi.util.FileUtil;
 import geek.me.javaapi.util.SqlTextUtil;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -106,6 +107,7 @@ public class BookFileSaveService {
     private QueueRepository queueRepository;
 
     public static String fileLoc = "D:\\drupal_txt\\";
+    public static String fileLoc2 = "D:\\drupal_mp3\\";
 
 
     public List<BookEntity> listAll() {
@@ -542,37 +544,51 @@ public class BookFileSaveService {
     }
 
 
-    private void saveBody(NodeBodyEntity nodeBodyEntity){
+    private boolean saveBody(NodeBodyEntity nodeBodyEntity){
         String[] paths = nodeBodyEntity.getBody().split(splitKey);
-        if(paths.length == 3){
+        if(paths.length == 4){
             String bodyPath = paths[0];
             String mediaPath = paths[1];
             String savePrefix = fileLoc +   paths[2];
+            String mediaPostfix =   paths[3];
+            if(new File(savePrefix+"body.txt").exists()){
+                return true;
+            }
 
-            ContentParser contentParser = new ContentParser(bodyPath);
+            ContentParser contentParser = new ContentParser(bodyPath,mediaPath);
             if(contentParser.isSuccess()){
                 FileUtil.writeFile(savePrefix+"body.txt",contentParser.getBody());
                 FileUtil.writeFile(savePrefix+"comment.txt",contentParser.getComment());
                 BookFieldThumbEntity entity = bookFieldThumbDao.findByBookId(nodeBodyEntity.getNid());
                 entity.setThumb(contentParser.getThumb());
                 bookFieldThumbDao.save(entity);
+                FileUtil.copyFile(contentParser.getFullMediaPath(),fileLoc2 +   paths[2]+"media"+mediaPostfix);
+
+                return true;
+            }else{
+                  return false;
             }
 
 
         }else{
             System.out.println("错误：" + nodeBodyEntity.getNid() +"---"+ nodeBodyEntity.getBody() );
+            return false;
         }
+
     }
 
-    public Integer savePage(int i) {
+    public Integer savePage(int i,List<NodeBodyEntity> fails) {
         PageRequest request = PageRequest.of(i+1,20);
         List<NodeBodyEntity> bodys = nodeBodyDao.findAllByBodyIsNotNullAndBodyIsNot("",request);
         if(bodys == null || bodys.size() <=0){
             return 0;
         }
 
+
         for(NodeBodyEntity en: bodys){
-            saveBody(en);
+            if(!saveBody(en)){
+                fails.add(en);
+            }
         }
 
         return  bodys.size();

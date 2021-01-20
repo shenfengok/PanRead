@@ -10,6 +10,8 @@ import java.util.List;
 
 public class SqlTextUtil<T> {
 
+    public static String langCode ="en"; //"zh-hans" "en"
+
     public  String reflect(PagingAndSortingRepository  repository){
         StringBuilder sb = new StringBuilder();
         for(int i = 1;i< 10000;i ++){

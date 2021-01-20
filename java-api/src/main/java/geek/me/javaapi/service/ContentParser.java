@@ -24,8 +24,13 @@ public class ContentParser {
 
     private static String rootPath = "Z:\\pan\\zhuanlan\\zhuanlan\\";
 
-    public ContentParser(String content) {
-        process(content);
+    private String mediaPath;
+
+    private String fullMediaPath;
+
+    public ContentParser(String path,String mediaPath) {
+        this.mediaPath = mediaPath;
+        process(path);
     }
 
     private void process(String path) {
@@ -69,7 +74,9 @@ public class ContentParser {
         }
 
 
+
         boolean suc = !StringUtils.isEmpty(con) && !StringUtils.isEmpty(comment) && !StringUtils.isEmpty(thumb);
+        this.fullMediaPath = getFilePath(mediaPath);
         success = true;
 
     }

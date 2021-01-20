@@ -174,9 +174,10 @@ public class BookOutlineService {
         String empty = "";
         boolean isDir = pv.getIsdir() == 1;
         String path = isDir ?"":  pv.getContentPath() + splitKey +pv.getMediaPath() + splitKey;
+        String postFix = isDir ? "":  pv.getMediaPath().substring(pv.getMediaPath().lastIndexOf("."));
 
         //这里只保存outline ,不做内容填充
-        createOneNodeBody(nid, isDir ? empty : path + getFileName(parentPath.get(0),nid), vid);
+        createOneNodeBody(nid, isDir ? empty : path + getFileName(parentPath.get(0),nid) + splitKey + postFix, vid);
 
         createOneFieldData(nid, pv.getTitle(), vid);
 
